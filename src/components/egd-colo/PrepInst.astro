@@ -1,0 +1,328 @@
+---
+import Logo from '../../images/logo.png';
+import OTCMeds from './snippets/OTCMeds.astro';
+import RxMeds from './snippets/RxMeds.astro';
+import AddInst from './snippets/AddInst.astro';
+import Transpo from './snippets/Transpo.astro';
+---
+
+<div>
+    <div class="relative">
+        <img src={Logo.src} alt="logo" class="absolute -top-1 left-0 h-16" />
+    </div>
+</div>
+<!-- heading text -->
+<div class="mb-1">
+    <h1 class="mb-2 pt-2 text-center font-bold uppercase">
+        Preparation for the Colonoscopy<br />
+        <span x-text="prep"></span><br />
+         (<span x-text="prepGeneric" class="normal-case"></span>)
+    </h1>
+    <h2 class="font-bold">
+        Please read these instructions thoroughly at least one week prior to
+        your procedure. Please call us with any questions.
+    </h2>
+</div>
+<!-- ez2go kit  -->
+<p
+    x-show=" prep === 'ez2go' "
+    class="border-b"
+    x-bind:class=" instructions.length ? 'mb-1 pb-1' : 'mb-1.5 pb-1.5' ">
+    <span class="font-bold uppercase">Purchase</span> ez2go laxatives
+    (ingredients available over the counter, or kit available at our office).
+    Includes: <span class="underline">PEG 3350 ("Miralax")</span> (238 g
+    bottle), <span class="underline">Bisacodyl</span> tablets (4 each of 5 mg
+    tablets), and <span class="underline">magnesium citrate</span> (1 packet).
+    Also purchase two 28-32 oz bottles of
+    <span class="underline">Gatorade</span> (or low sugar G2 if you are
+    diabetic) (or any other electrolyte solution).
+    <span class="font-bold">No red, orange, or purple drinks!</span>
+</p>
+<!-- Golytely cannot be replaced with ez2go -->
+<p x-show=" prep !== 'Golytely' " class="mb-1 border-b pb-1">
+    Let us know if the <span x-text="prep"></span> is too expensive, or if you
+    are unable to get it for any other reason. We have an alternate
+    over-the-counter prep available in our office for $25 and a different set of
+    instructions to go along with it.
+</p>
+<div class="mb-1">
+    <OTCMeds />
+</div>
+<div>
+    <RxMeds />
+</div>
+<div x-show="instructions.length" class="mt-1">
+    <AddInst />
+</div>
+<!-- moderate diet -->
+<p
+    class="border-b border-t font-bold"
+    x-bind:class=" instructions.length ? 'my-1 py-1' : 'my-1.5 py-1.5' ">
+    <span class="uppercase">2 days before your procedure</span> (<span
+        x-text="proc2DaysPrior()"></span>): follow the moderate/soft diet (see
+    attached).
+</p>
+<!-- liquid diet -->
+<div x-bind:class=" instructions.length ? 'mb-1' : 'mb-1.5' ">
+    <p class="font-bold uppercase">
+        1 day before your procedure (<span
+            x-text="proc1DayPrior()"
+            class="normal-case"></span>):
+    </p>
+    <ul class="px-4" x-bind:class=" instructions.length ? '' : 'py-1' ">
+        <li x-show=" prep === 'Sutab' ">
+            <span class="font-bold uppercase underline"
+                >A low-residue breakfast is allowed.</span
+            > This includes white bread, biscuits, muffins (no wheat), cream of
+            wheat, grits, coffee, tea, milk, juice without pulp, eggs, fruit (no
+            skin or seeds), cornflakes, yogurt, cottage cheese.
+        </li>
+        <li>
+            <span
+                x-show=" prep !== 'Sutab' "
+                class="font-bold uppercase underline">No solid food.</span
+            >
+             This includes breakfast!
+        </li>
+        <li>
+            <span x-show=" prep === 'Sutab' " class="uppercase underline"
+                >After breakfast,</span
+            ><span class="font-bold uppercase underline"
+                >Clear liquids only</span
+            >
+             until after your procedure.
+        </li>
+        <li>
+            <span class="font-bold uppercase underline">No red</span>
+             colored drinks. <span class="italic"
+                >No orange juice, milk or dairy products, or alcohol.</span
+            >
+        </li>
+    </ul>
+    <p>
+        <span class="underline">Acceptable clear liquids include</span>: Jell-O
+        (not red), clear chicken broth or bouillon, apple juice, white grape
+        juice, Gatorade, and clear sodas such as 7-up, Sprite, and ginger-ale.
+        Tea and <span class="underline">black</span> coffee with sweetener or
+        sugar are allowed but limit caffeinated beverages to two (2) servings. <span
+            class="font-bold underline"
+            >The more liquid you drink, the better the prep</span
+        >, and the better you will feel. You are not "fasting".
+    </p>
+</div>
+<!-- prep inst -->
+<!-- 1st dose -->
+<div>
+    <div x-show=" prep === 'ez2go' ">
+        <p x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
+            Mix 1/2 of the ez2go PEG 3350 and 1/2 packet of magnesium citrate in
+            each 28-32 oz Gatorade bottle (the "prep mix").
+        </p>
+        <p>
+            <span class="font-bold uppercase">1st dose:</span>
+            <span class="underline"
+                >between 3 to 5 PM the day before your procedure</span
+            >, take 2 Bisacodyl tablets with 8 oz of clear liquid. 30 minutes
+            after taking the 2 Bisacodyl tablets, start drinking 8 oz of the
+            "prep mix" every 10-20 minutes until the first bottle (28-32 oz) is
+            completed (8 oz glasses every time, every 10-20 min).
+        </p>
+    </div>
+    <p x-show=" prep === 'Suprep' ">
+        <span class="font-bold">Suprep 1st dose, at 6 PM:</span> Pour one
+        6-ounce bottle of Suprep liquid into the mixing container. Add cool
+        drinking water or berry flavored Propel water to the 16-ounce line on
+        the container and mix. Drink all the liquid in the container. Over the
+        next hour, drink 2 more 16-ounce containers of water.
+    </p>
+    <p x-show=" prep === 'Clenpiq' ">
+        <span class="font-bold">Clenpiq 1st dose, between 5 to 7 PM:</span>
+         Drink 1 bottle of Clenpiq right from the bottle. <span
+            class="font-bold underline"
+            >Do not mix or dilute with other liquids</span
+        >. Follow with <span class="underline">five</span> 8-ounce drinks of
+        clear liquid at your own pace within the next 5 hours. You may use the
+        drinking cup provided. If you have severe discomfort or bloating, stop
+        drinking for a while or wait longer between drinking each glass until
+        the discomfort goes away.
+    </p>
+    <p x-show=" prep === 'Sutab' ">
+        <span class="font-bold">Sutab 1st dose, at 6 PM:</span> Open 1 bottle of
+        12 tablets. Fill the provided container with 16-ounces of water (to the
+        fill line). Swallow each tablet with a sip of water and drink the entire
+        amount over 15 to 20 minutes. Approximately 1 hour after the last tablet
+        is swallowed, fill the provided container a second time with 16-ounces
+        of water (to the fill line) and drink the entire amount over 30 minutes.
+        Approximately 30 minutes after finishing the second container of water,
+        drink another 16-ounces of water over 30 minutes.
+    </p>
+    <div x-show=" prep === 'Golytely' ">
+        <p class="mb-0.5">
+            Choose one of the flavor packs and add it to the one-gallon bottle.
+            If you do not receive a flavor packet, you may use lemon/lime
+            Crystal Light. Shake well to mix the flavor pack with the powder.
+            Add water to the fill line and shake well until the powder has
+            dissolved. To improve taste, you can substitute a portion of the
+            water with ginger-ale or 7-up. Refrigerate until ready to drink.
+        </p>
+        <p>
+            <span class="font-bold">1st dose, at 6 PM:</span> Begin drinking the
+            solution. Drink an 8-ounce glass every 10 to 15 minutes until you
+            have finished 2/3 of the container. Drink each glass quickly or use
+            a straw to bypass the taste buds. Bowel movements should begin
+            approximately one hour after the first glass of the solution. They
+            will continue for several hours after you finish drinking the last
+            glass. Feelings of bloating, abdominal fullness, and nausea are
+            common after the first glasses of the solution. This is temporary
+            and should subside once bowel movements begin. If you have severe
+            discomfort or bloating, stop drinking the solution for a while or
+            wait longer between drinking each glass until the discomfort goes
+            away.
+        </p>
+    </div>
+    <p x-show=" prep === 'Plenvu' ">
+        <span class="font-bold"
+            >Plenvu 1st dose, at <span x-text="proc17HoursPrior()"
+            ></span>:</span
+        > Empty Dose 1 into the mixing container, fill to line with 16 ounces of
+        water and mix with a spoon, or put lid on mixing container securely and
+        shake until completely dissolved. This may take 2 to 3 minutes. Drink
+        the entire contents slowly within 30 minutes. Refill the container with
+        16 ounces of a clear liquid and finish this within 30 minutes.
+    </p>
+</div>
+<!-- 2nd dose, early proc -->
+<div
+    x-show="isMorningProc()"
+    x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
+    <p x-show=" prep === 'ez2go' ">
+        <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose <span
+            class="underline"
+            >between 6 to 8 PM the night before your procedure</span
+        >. Take the remaining 2 Bisacodyl tablets, and 30 minutes after, start
+        drinking 8 oz of the "prep mix" every 10-20 minutes until the bottle
+        (28-32 oz) is completed (8 oz glasses every time, every 10-20 min).
+    </p>
+    <p x-show=" prep === 'Suprep' ">
+        <span class="font-bold">Suprep 2nd dose, at 10 PM:</span> Repeat the
+        above instructions using the other Suprep bottle.
+    </p>
+    <p x-show=" prep === 'Clenpiq' ">
+        <span class="font-bold">Clenpiq 2nd dose, at 10 PM:</span> Drink the
+        other bottle of Clenpiq right from the bottle. Follow with
+        <span class="underline">five</span> 8-ounce drinks of clear liquid
+        within the next 2 hours.
+    </p>
+    <p x-show=" prep === 'Sutab' ">
+        <span class="font-bold">Sutab 2nd dose, at 10 PM:</span> Repeat the
+        above instructions using the second bottle of tablets.
+    </p>
+    <p x-show=" prep === 'Golytely' ">
+        <span class="font-bold">2nd dose, at 10 PM:</span> Drink the remaining
+        1/3 of the solution, an 8-ounce glass every 10 to 15 minutes until the
+        container is empty. Your stool should look like the color of broth.
+    </p>
+</div>
+<!-- no BMs with prep -->
+<div class="my-1 font-bold">
+    <p class="mb-1">
+        Take 2 tablespoons of Milk of Magnesia if no bowel movements by <span
+            class="underline">1 hour</span
+        > after starting the prep.
+    </p>
+    <p>
+        If you do not start having bowel emptying by <span class="underline"
+            >3 hours</span
+        > after starting the prep, call us at (562) 596-5552.
+    </p>
+</div>
+<p x-show=" prep !== 'ez2go' " class="mb-1">
+    Failure to follow exact diet and clean-out instructions will result in
+    retained stool and the need to repeat the procedure.
+</p>
+<p
+    class="border-b"
+    x-bind:class=" instructions.length ? 'mb-1 pb-1' : 'mb-1.5 pb-1.5' ">
+    You may find that Vaseline, Baby Wipes, or Tucks, etc. may be soothing after
+    evacuation begins.
+</p>
+<p class="mb-0.5 font-bold uppercase">
+    Day of the procedure (<span x-text="procApptDate()" class="normal-case"
+    ></span>):
+</p>
+<!-- 2nd dose, late proc -->
+<div
+    x-show="!isMorningProc()"
+    x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
+    <p x-show=" prep === 'ez2go' ">
+        <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose
+        <span class="underline">6 hours prior to your arrival time</span>
+         (2nd dose starting time: <span x-text="proc2ndDoseTime()"></span>).
+        Take the remaining 2 Bisacodyl tablets, and 30 minutes after, start
+        drinking 8 oz of the "prep mix" every 10-20 minutes until the bottle
+        (28-32 oz) is completed (8 oz glasses every time, every 10-20 min).
+    </p>
+    <p x-show=" prep === 'Suprep' ">
+        <span class="font-bold"
+            >Suprep 2nd dose, at <span x-text="proc6HoursPrior()"></span>:</span
+        > 6 hours prior to your exam, repeat the above instructions using the
+        other Suprep bottle.
+    </p>
+    <p x-show=" prep === 'Clenpiq' ">
+        <span class="font-bold"
+            >Clenpiq 2nd dose, at <span x-text="proc6HoursPrior()"
+            ></span>:</span
+        >, drink the other bottle of Clenpiq right from the bottle. Follow with <span
+            class="underline">five</span
+        > 8-ounce drinks of clear liquid within the next 2 hours.
+    </p>
+    <p x-show=" prep === 'Sutab' ">
+        <span class="font-bold"
+            >Sutab 2nd dose, starting between <span x-text="proc8HoursPrior()"
+            ></span>
+             and <span x-text="proc5HoursPrior()"></span>:</span
+        > Repeat the above instructions using the second bottle of tablets.
+    </p>
+    <p x-show=" prep === 'Golytely' ">
+        <span class="font-bold"
+            >2nd dose, at <span x-text="proc5Hours30MinsPrior()"></span>:</span
+        > 5.5 hours before the procedure, drink the remaining 1/3 of the
+        solution, an 8-ounce glass every 10 to 15 minutes until the container is
+        empty. Your stool should look like the color of broth.
+    </p>
+</div>
+<!-- plenvu 2nd dose always day of proc -->
+<p
+    x-show=" prep === 'Plenvu' "
+    x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
+    <span class="font-bold"
+        >Plenvu 2nd dose, at <span x-text="proc5HoursPrior()"></span>:
+    </span> Empty Dose 2 (pouches A & B) into the mixing container and fill to
+    line with 16 ounces of water. Mix with a spoon or shake to completely
+    dissolve. This may take 2 to 3 minutes. Drink entire contents slowly over 30
+    minutes. Refill the container with 16 ounces of a clear liquid and finish
+    this over 30 minutes.
+</p>
+<!-- day of proc -->
+<div>
+    <p class="mb-0.5">
+        <span class="font-bold"
+            >You may drink clear liquids up to 4 hours before your procedure
+            time</span
+        > (4 hours before is <span x-text="proc4HoursPrior()" class="underline"
+        ></span>). <span class="font-bold"
+            >After that, <span class="uppercase">nothing by mouth!</span></span
+        > You may take necessary medications with a small sip of water.
+    </p>
+    <p class="mb-0.5 font-bold uppercase underline">
+        Please don't sip water up to the procedure time, your scope may be
+        cancelled.
+    </p>
+    <p class="mb-0.5">
+        Refer to the attached sheet for GI Lab location. Wear comfortable
+        clothing. Approximate time in GI lab is 2-3 hours.
+    </p>
+</div>
+<div class="mb-8">
+    <Transpo />
+</div>

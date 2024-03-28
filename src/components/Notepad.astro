@@ -1,0 +1,217 @@
+<section
+    x-data="{ noteVis: $persist(false), addNote: $persist(false), note1: $persist(''), note2: $persist('') }"
+    class="absolute right-6 top-2 w-[calc(50%-2.25rem)] print:hidden"
+>
+    <div class="flex flex-row items-start justify-end">
+        <div x-show="!noteVis" class="flex h-[130px] items-center">
+            <button
+                x-on:click="noteVis = true"
+                class="mb-0.5 mr-1 text-sm font-light text-zinc-500"
+                >Notepad</button
+            >
+        </div>
+        <div class="flex h-[130px] items-center">
+            <button
+                x-on:click="noteVis = !noteVis"
+                x-bind:title="noteVis ? 'Hide notepad' : 'Show notepad'"
+                x-bind:class="noteVis ? '-ml-1 mr-1' : '' "
+                class="text-zinc-500 hover:text-zinc-700"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="h-5 w-5"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                        x-show="noteVis"
+                        x-cloak></path>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 19.5L8.25 12l7.5-7.5"
+                        x-show="!noteVis"></path>
+                </svg>
+            </button>
+        </div>
+        <div x-show="noteVis" x-cloak class="flex grow flex-row gap-2">
+            <div class="relative w-full">
+                <textarea
+                    rows="6"
+                    placeholder="Notepad – notes here will save across pages and on refresh"
+                    x-model="note1"
+                    x-ref="notepad1"
+                    x-on:keyup.escape="$refs.notepad1.blur()"
+                    class="w-full rounded border border-zinc-400 py-1 pl-2 pr-6 text-sm placeholder:text-zinc-400"
+                ></textarea>
+                <div
+                    x-data="{ confButtons: false, }"
+                    class="absolute right-1.5 top-1.5 text-right"
+                >
+                    <button
+                        title="Clear notepad"
+                        x-on:click="confButtons = true"
+                        x-show="!confButtons"
+                        class="text-zinc-300 hover:text-zinc-600"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="h-5 w-5"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <div
+                        x-show="confButtons"
+                        x-cloak
+                        class="flex flex-col gap-1.5"
+                    >
+                        <button
+                            x-on:click="confButtons = false"
+                            class="text-zinc-500 hover:text-zinc-800"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <button
+                            x-on:click="note1 = ''; confButtons = false"
+                            x-on:click.outside="confButtons = false"
+                            class="rounded text-red-600 hover:bg-red-600 hover:text-white"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div x-show="addNote" x-cloak class="relative w-full">
+                <textarea
+                    rows="6"
+                    placeholder="Notepad #2 – notes here will save across pages and on refresh"
+                    x-model="note2"
+                    x-ref="notepad2"
+                    x-on:keyup.escape="$refs.notepad2.blur()"
+                    class="w-full rounded border border-zinc-400 py-1 pl-2 pr-3 text-sm placeholder:text-zinc-400"
+                ></textarea>
+                <div
+                    x-data="{ confButtons: false, }"
+                    class="absolute right-1.5 top-1.5 text-right"
+                >
+                    <button
+                        title="Clear notepad"
+                        x-on:click="confButtons = true"
+                        x-show="!confButtons"
+                        class="text-zinc-300 hover:text-zinc-600"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="h-5 w-5"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <div
+                        x-show="confButtons"
+                        x-cloak
+                        class="flex flex-col gap-1.5"
+                    >
+                        <button
+                            x-on:click="confButtons = false"
+                            class="text-zinc-500 hover:text-zinc-800"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <button
+                            x-on:click="note2 = ''; confButtons = false"
+                            x-on:click.outside="confButtons = false"
+                            class="rounded text-red-600 hover:bg-red-600 hover:text-white"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div x-show="noteVis" x-cloak class="flex h-[130px] items-center">
+            <button
+                x-on:click="addNote = !addNote"
+                x-bind:title="addNote ? 'Hide 2nd notepad' : 'Show 2nd notepad'"
+                class="-mr-1 p-1 text-zinc-500 hover:text-zinc-700"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-5 w-5"
+                >
+                    <path
+                        d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+                        x-show="!addNote"></path>
+                    <path
+                        fill-rule="evenodd"
+                        d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z"
+                        clip-rule="evenodd"
+                        x-show="addNote"
+                        x-cloak></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>

@@ -1,0 +1,94 @@
+---
+import Logo from '../../images/logo.png';
+---
+
+<div>
+    <div class="mb-6 flex h-24 flex-row justify-center">
+        <img src={Logo.src} alt="logo" />
+    </div>
+    <h1 class="mb-1.5 text-center font-bold uppercase leading-relaxed">
+        Moderate Diet
+    </h1>
+    <h2 class="mb-16 text-center font-bold uppercase leading-relaxed">
+        For the entire day of <span x-text="proc2DaysPrior()"></span>
+    </h2>
+    <table class="mx-auto mb-8">
+        <tr>
+            <th class="px-8 pb-5 text-start font-bold uppercase">Food Group</th>
+            <th class="px-8 pb-5 text-start font-bold uppercase"
+                >Food Allowed</th
+            >
+            <th
+                class="whitespace-nowrap px-8 pb-5 text-start font-bold uppercase"
+                >Foods to Avoid</th
+            >
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Soup</td>
+            <td class="px-8 pb-5">Cream or broth, chicken noodle</td>
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Meats, Eggs, or Cheese</td>
+            <td class="px-8 pb-5"
+                >Eggs poached or scrambled, fish, tofu, chicken, or cheese</td
+            >
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Potato or Substitute</td>
+            <td class="px-8 pb-5"
+                >Mashed white potatoes, white bread, white pasta</td
+            >
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Rice</td>
+            <td class="px-8 pb-5">White rice</td>
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Fats</td>
+            <td class="px-8 pb-5">Butter, margarine, cream, half and half</td>
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Vegetables</td>
+            <td class="px-8 pb-5"
+                >Tomato juice, vegetable juices, vegetable puree used in soup</td
+            >
+            <td class="px-8 pb-5">No fresh vegetables</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Fruits</td>
+            <td class="px-8 pb-5">Fruit juice, fruit ice, apple sauce</td>
+            <td class="px-8 pb-5">Any other</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Desserts</td>
+            <td class="px-8 pb-5"
+                >Custard, plain gelatin, plain ice cream, sherbet, plain
+                puddings, popsicles, fruit-flavored yogurt, frozen yogurt, plain
+                cookies</td
+            >
+            <td class="px-8 pb-5">No nuts, seeds, grains or fruit pieces</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Beverages</td>
+            <td class="px-8 pb-5"
+                >Carbonated beverages, tea, coffee, coffee substitute, milk and
+                milk drinks, cocoa. High protein/high calorie liquid suppliments
+                or meal replacements such as Ensure or Slim Fast.</td
+            >
+            <td class="px-8 pb-5 font-bold uppercase">No alcohol</td>
+        </tr>
+        <tr class="align-top">
+            <td class="px-8 pb-5 uppercase">Miscellaneous</td>
+            <td class="px-8 pb-5"
+                >Salt, sugar, honey, syrups, jelly, seedless jams, hard candy,
+                plain chocolate, marshmallows, plain crackers</td
+            >
+            <td class="px-8 pb-5">Spicy, heavy foods</td>
+        </tr>
+    </table>
+</div>

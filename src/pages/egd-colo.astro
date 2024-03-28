@@ -1,0 +1,859 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Instructions from '../components/ProcInst.astro';
+
+import PointerSVG from '../components/svg/PointerSVG.astro';
+import SubmitSVG from '../components/svg/SubmitSVG.astro';
+import XSVG from '../components/svg/XSVG.astro';
+import PhoneSVG from '../components/svg/PhoneSVG.astro';
+import DocumentSVG from '../components/svg/DocumentSVG.astro';
+import ShareSVG from '../components/svg/ShareSVG.astro';
+import EnvelopeSVG from '../components/svg/EnvelopeSVG.astro';
+import CopySVG from '../components/svg/CopySVG.astro';
+import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
+---
+
+<Layout title="EGD/Colo - CGIC Tools">
+    <Breadcrumbs text="EGD/colo" />
+    <div x-data="procs()">
+        <main class="pb-24 print:hidden">
+            <h1 class="pb-8 pt-28 text-2xl font-semibold">
+                EGD/colo scheduling
+            </h1>
+            <div class="grid grid-cols-2 divide-x">
+                <section class="col-span-1">
+                    <div
+                        class="flex flex-row items-center justify-between pb-6 pr-8">
+                        <div class="flex flex-row items-center gap-2">
+                            <h2 class="text-lg font-semibold">Pre-Call</h2>
+                            <PointerSVG />
+                        </div>
+                        <div>
+                            <span
+                                x-text="checkPre()"
+                                x-on:mouseover="$dispatch('hoverpre')"
+                                x-bind:class="checkPre() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
+                                class="rounded-full px-4 py-1 text-sm"></span>
+                        </div>
+                    </div>
+                    <section class="grid grid-cols-1 gap-y-8 pb-8 pr-8">
+                        <div class="grid grid-cols-2">
+                            <div>
+                                <!-- <span class="flex items-end space-x-1 pb-2"> -->
+                                <h3
+                                    x-ref="preProc"
+                                    x-on:hoverpre.window="warnPreProc()"
+                                    class="pb-2 font-medium">
+                                    <!-- remove "pb-2" in h3 if un-commenting the flex for help icon -->
+
+                                     Procedure(s)
+                                </h3>
+                                <!-- <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                        class="mb-[1px] h-5 w-5 text-zinc-400">
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </span> -->
+                                <ul>
+                                    <template
+                                        x-for="proc in procs"
+                                        :key="proc.id">
+                                        <li class="select-none pb-1 last:pb-0">
+                                            <input
+                                                type="checkbox"
+                                                x-bind:id="proc.short"
+                                                x-on:click="$nextTick(() => { warnPreProc() })"
+                                                x-model="proc.selected"
+                                                class="-mr-0.5"
+                                            />
+                                            <label
+                                                x-bind:for="proc.short"
+                                                x-text="proc.short"
+                                                x-on:click="$nextTick(() => { warnPreProc() })"
+                                                class="pl-1"></label>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="flex flex-row gap-4 pb-2">
+                                    <h3
+                                        x-ref="preSed"
+                                        x-on:hoverpre.window="warnPreSed()"
+                                        class="font-medium">
+                                        Sedation
+                                    </h3>
+                                    <div class="select-none">
+                                        <label
+                                            for="sedationTBD"
+                                            x-on:click="$nextTick(() => { warnPreSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="checkbox"
+                                                id="sedationTBD"
+                                                x-on:click="$nextTick(() => { warnPreSed() })"
+                                                x-model="sedationTBD"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             pt to choose
+                                        </label>
+                                    </div>
+                                </div>
+                                <ul x-show="!sedationTBD">
+                                    <li class="select-none pb-1">
+                                        <label
+                                            for="twilight"
+                                            x-on:click="$nextTick(() => { warnPreSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="twilight"
+                                                name="sedation"
+                                                value="twilight"
+                                                x-on:click="$nextTick(() => { warnPreSed() })"
+                                                x-model="sedation"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             twilight
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="MAC"
+                                            x-on:click="$nextTick(() => { warnPreSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="MAC"
+                                                name="sedation"
+                                                value="MAC"
+                                                x-on:click="$nextTick(() => { warnPreSed() })"
+                                                x-model="sedation"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             MAC
+                                        </label>
+                                    </li>
+                                </ul>
+                                <p x-show="sedationTBD" x-cloak>
+                                    Discuss with patient during call.
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            x-show="procs[1].selected"
+                            x-cloak
+                            class="grid grid-cols-2">
+                            <div>
+                                <h3
+                                    x-ref="prePrep"
+                                    x-on:hoverpre.window="warnPrePrep()"
+                                    class="pb-2 font-medium">
+                                    Colo Prep
+                                </h3>
+                                <select
+                                    x-on:change="$nextTick(() => { warnPrePrep() })"
+                                    x-model="prep"
+                                    class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                                    <option value="" disabled
+                                        >Select a prep</option
+                                    >
+                                    <template x-for="prep in preps">
+                                        <option x-text="prep.name"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div
+                                x-show=" prep !== '' && prep !== 'ez2go' "
+                                x-cloak>
+                                <h3
+                                    x-ref="prePrepSent"
+                                    x-on:hoverpre.window="warnPrePrepSent()"
+                                    class="pb-2 font-medium">
+                                    Was Rx Sent?
+                                </h3>
+                                <div class="select-none">
+                                    <input
+                                        type="checkbox"
+                                        id="prepSent"
+                                        x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                        x-model="prepSent"
+                                        class="-mr-0.5"
+                                    />
+                                    <label
+                                        for="prepSent"
+                                        x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                        x-text="prepSent ? 'yes' : 'no'"
+                                        class="pl-1"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="grid grid-cols-2">
+                                <div>
+                                    <div class="flex flex-row gap-4 pb-2">
+                                        <h3
+                                            x-ref="preFacility"
+                                            x-on:hoverpre.window="warnPreFacility()"
+                                            class="font-medium">
+                                            Facility
+                                        </h3>
+                                        <div class="select-none">
+                                            <label
+                                                for="facilityTBD"
+                                                x-on:click="$nextTick(() => { warnPreFacility() })"
+                                                class="p-1 pr-1.5">
+                                                <input
+                                                    type="checkbox"
+                                                    id="facilityTBD"
+                                                    x-on:click="$nextTick(() => { warnPreFacility() })"
+                                                    x-on:click="facilityIndex = ''"
+                                                    x-model="facilityTBD"
+                                                    class="-ml-1 mr-0.5"
+                                                />
+                                                 MOSCL vs PRIME
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <select
+                                        x-model="facilityIndex"
+                                        x-on:change="$nextTick(() => { warnPreFacility() })"
+                                        x-bind:disabled="facilityTBD"
+                                        x-show="!facilityTBD"
+                                        class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                                        <option value="" disabled
+                                            >Select a facility</option
+                                        >
+                                        <template
+                                            x-for="index in [...Array(facilities.length).keys()]">
+                                            <option
+                                                x-bind:value="index"
+                                                x-text="facilities[index].short"
+                                            ></option>
+                                        </template>
+                                    </select>
+                                    <p x-show="facilityTBD" x-cloak>
+                                        Discuss with patient during call.
+                                    </p>
+                                </div>
+                                <div
+                                    x-show=" facilityIndex === '1' || facilityTBD "
+                                    x-cloak>
+                                    <h3
+                                        x-ref="preQuote"
+                                        x-on:hoverpre.window="warnPreQuote()"
+                                        class="pb-2 font-medium">
+                                        PRIME Quote
+                                    </h3>
+                                    <input
+                                        type="text"
+                                        placeholder="0.00"
+                                        x-ref="PrimeQuote"
+                                        x-mask:dynamic="$money($input)"
+                                        x-on:input="$nextTick(() => { warnPreQuote() })"
+                                        x-on:keyup.enter="$refs.PrimeQuote.blur()"
+                                        x-on:keyup.escape="facilities[1].quote = '' ; $nextTick(() => { $refs.PrimeQuote.blur() }); $nextTick(() => { warnPreQuote() })"
+                                        x-model="facilities[1].quote"
+                                        class="w-28 rounded border border-zinc-400 px-2 pb-[1px] pt-0.5"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex flex-row gap-4 pb-2">
+                                <h3
+                                    x-ref="preInst"
+                                    x-on:hoverpre.window="warnPreInst()"
+                                    class="font-medium">
+                                    Additional instructions
+                                </h3>
+                                <div class="select-none">
+                                    <label
+                                        for="noInst"
+                                        x-on:click="$nextTick(() => { warnPreInst() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="checkbox"
+                                            id="noInst"
+                                            x-on:click="$nextTick(() => { warnPreInst() })"
+                                            x-model="noInst"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         none
+                                    </label>
+                                </div>
+                            </div>
+                            <div
+                                x-show="!noInst"
+                                class="mb-3 flex flex-row gap-3">
+                                <template
+                                    x-for="preset in presetInst"
+                                    :key="preset.id">
+                                    <button
+                                        x-on:click="setPreset(preset.body); $nextTick(() => { autoExpandMain() }); $refs.textarea.focus()"
+                                        x-text="preset.short"
+                                        x-bind:title="preset.description"
+                                        class="rounded-full bg-zinc-200 px-4 py-1 text-sm font-medium hover:bg-zinc-300"
+                                    ></button>
+                                </template>
+                            </div>
+                            <div
+                                x-show="!noInst"
+                                class="flex items-end rounded border border-zinc-500 focus-within:border-white focus-within:outline focus-within:outline-2 focus-within:outline-[#005FCC]">
+                                <textarea
+                                    placeholder="Type an instruction – Enter to confirm."
+                                    rows="1"
+                                    x-model="newInst"
+                                    x-ref="textarea"
+                                    x-on:input="autoExpandMain()"
+                                    x-on:keydown.enter.prevent
+                                    x-on:keyup.enter="addInst(); $nextTick(() => { autoExpandMain() })"
+                                    x-on:keyup.escape="newInst = '', $refs.textarea.blur()"
+                                    class="block h-auto min-h-[2.125rem] w-full resize-none overflow-y-hidden rounded px-2 py-1 placeholder:text-zinc-400 focus:outline-none"
+                                ></textarea>
+                                <button
+                                    x-on:click="addInst(); $nextTick(() => { autoExpandMain() })"
+                                    class="mb-[0.46875rem] mr-2"
+                                    x-bind:class=" newInst ? 'text-blue-400 hover:text-blue-500 hover:cursor-pointer' : 'text-zinc-300 hover:cursor-default' ">
+                                    <SubmitSVG />
+                                </button>
+                            </div>
+                            <div
+                                x-show="instructions.length && !noInst"
+                                x-cloak>
+                                <p class="pt-3 font-light text-zinc-500">
+                                    Double click an entry to edit. Enter to
+                                    confirm.
+                                </p>
+                                <ul>
+                                    <template
+                                        x-for="inst in instructions"
+                                        :key="inst.id">
+                                        <li
+                                            class="flex w-full items-start border-b border-zinc-300 py-1 last:border-b-0">
+                                            <button
+                                                x-on:click="deleteInst(inst)"
+                                                class="m-1 mt-1.5 text-zinc-400 hover:text-zinc-600">
+                                                <XSVG />
+                                            </button>
+                                            <span
+                                                x-on:dblclick="editInst(inst); $dispatch('editing'); $nextTick(() => { $refs.textareas.focus() })"
+                                                x-text="inst.body"
+                                                x-bind:class="{ hidden: inst == editingInst }"
+                                                class="max-w-[calc(100%-1.75rem)] cursor-text select-none break-words px-2 py-1">
+                                            </span>
+                                            <textarea
+                                                rows="1"
+                                                x-show="inst == editingInst"
+                                                x-model="inst.body"
+                                                x-ref="textareas"
+                                                x-on:editing.window="$nextTick(() => { autoExpandEdit() })"
+                                                x-on:input="autoExpandEdit()"
+                                                x-on:keydown.enter.prevent
+                                                x-on:keyup.enter="editedInst(inst); $nextTick(() => { autoExpandEdit() })"
+                                                x-on:keyup.escape="cancelEditInst(inst); $nextTick(() => { autoExpandEdit() })"
+                                                x-on:click.outside="editedInst(inst); $nextTick(() => { autoExpandEdit() })"
+                                                class="-ml-[1px] -mt-[1px] mb-[1px] mr-[1px] block h-auto min-h-[2.125rem] w-full resize-none overflow-y-hidden rounded border border-zinc-600 px-2 py-1"
+                                            ></textarea>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="pb-2 font-medium">Sched Follow-up?</h3>
+                            <ul>
+                                <li class="select-none pb-1">
+                                    <label for="schedFu" class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="schedFu"
+                                            value=""
+                                            x-model="fuTBD"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         yes
+                                    </label>
+                                </li>
+                                <li class="select-none">
+                                    <label for="noFu" class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="noFu"
+                                            value="true"
+                                            x-model="fuTBD"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         no, TBD</label
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                    <div
+                        class="flex flex-row items-center justify-between border-t pb-6 pr-8 pt-8">
+                        <div class="flex flex-row items-center gap-2">
+                            <h2 class="text-lg font-semibold">Call</h2>
+                            <PhoneSVG />
+                        </div>
+                        <div>
+                            <span
+                                x-show="checkPre() === 0"
+                                x-cloak
+                                x-on:mouseover="$dispatch('hovercall')"
+                                x-text="checkDuring()"
+                                x-bind:class="checkDuring() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
+                                class="rounded-full px-4 py-1 text-sm"></span>
+                        </div>
+                    </div>
+                    <p x-show="checkPre() !== 0">
+                        Please complete the above Pre-Call section before
+                        calling the patient.
+                    </p>
+                    <section
+                        x-show="checkPre() === 0"
+                        x-cloak
+                        class="grid grid-cols-1 gap-y-8 pr-8">
+                        <div
+                            x-show="facilityIndex === '1' || facilityTBD"
+                            x-cloak>
+                            <h3 class="pb-2 font-medium">
+                                Discuss PRIME OON Status
+                            </h3>
+                            <p>
+                                Prime's quoted amount is $<span
+                                    x-text="facilities[1].quote"></span>
+                                 (facility
+                                <span
+                                    x-text=" sedation === 'MAC' || sedationTBD ? ' + anesthesia fees' : 'fee' "
+                                ></span>).
+                            </p>
+                        </div>
+                        <div
+                            x-show="facilityTBD || sedationTBD"
+                            x-cloak
+                            class="grid grid-cols-2">
+                            <div x-show="facilityTBD" x-cloak>
+                                <h3
+                                    x-ref="callFacility"
+                                    x-on:hovercall.window="warnCallFacility()"
+                                    class="pb-2 font-medium">
+                                    Facility
+                                </h3>
+                                <p class="pb-2"></p>
+                                <select
+                                    x-on:change="warnCallFacility()"
+                                    x-model="facilityIndexFinal"
+                                    class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                                    <option value="" disabled>Select</option>
+                                    <template
+                                        x-for="index in [...Array(facilities.length).keys()]">
+                                        <option
+                                            x-bind:value="index"
+                                            x-text="facilities[index].short"
+                                        ></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div x-show="sedationTBD" x-cloak>
+                                <h3
+                                    x-ref="callSed"
+                                    x-on:hovercall.window="warnCallSed()"
+                                    class="pb-2 font-medium">
+                                    Sedation
+                                </h3>
+                                <ul>
+                                    <li class="select-none pb-1">
+                                        <label
+                                            for="twilightFinal"
+                                            x-on:click="$nextTick(() => { warnCallSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="twilightFinal"
+                                                name="sedationFinal"
+                                                value="twilight"
+                                                x-on:click="$nextTick(() => { warnCallSed() })"
+                                                x-model="sedationFinal"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             twilight
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="MACFinal"
+                                            x-on:click="$nextTick(() => { warnCallSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="MACFinal"
+                                                name="sedationFinal"
+                                                value="MAC"
+                                                x-on:click="$nextTick(() => { warnCallSed() })"
+                                                x-model="sedationFinal"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             MAC
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3
+                                x-ref="procAppt"
+                                x-on:hovercall.window="warnProcAppt()"
+                                class="pb-2 font-medium">
+                                Procedure
+                            </h3>
+                            <template x-if="selectedFacility && !procApptInput">
+                                <p class="pb-1.5">
+                                    Arrive 1 hour
+                                    <span
+                                        x-show="selectedFacility.minOffset !== 0">
+                                        and
+                                        <span
+                                            x-text="selectedFacility.minOffset"
+                                        ></span>
+                                         minutes
+                                    </span>
+                                     prior to the procedure.
+                                </p>
+                            </template>
+                            <input
+                                type="datetime-local"
+                                step="900"
+                                x-bind:min="procApptMin()"
+                                x-bind:class="procApptInput ? 'text-black' : 'text-zinc-400'"
+                                x-model="procApptInput"
+                                class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                            />
+                            <p
+                                x-show="procApptInput && selectedFacility"
+                                x-cloak
+                                class="pt-1.5">
+                                Arrive by <span x-text="procApptArrival()"
+                                ></span>.
+                            </p>
+                        </div>
+                        <div
+                            x-show=" procs[0].selected && selectedFacility.short === 'MOSCL' "
+                            x-cloak>
+                            <h3 class="pb-2 font-medium">
+                                MOSCL EGD Covid reminder
+                            </h3>
+                            <p x-text="mosclCovid[0]"></p>
+                            <!-- <h3 class="pb-2 font-medium">
+                                Vaccinated for Covid?
+                            </h3>
+                            <ul>
+                                <li class="select-none pb-1">
+                                    <label for="covidVacc" class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="covidVacc"
+                                            name="covidStatus"
+                                            value="yes"
+                                            x-model="covidStatus"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         yes
+                                    </label>
+                                </li>
+                                <li class="select-none">
+                                    <label
+                                        for="covidNotVacc"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="covidNotVacc"
+                                            name="covidStatus"
+                                            value="no"
+                                            x-model="covidStatus"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         no
+                                    </label>
+                                </li>
+                            </ul> -->
+                        </div>
+                        <div>
+                            <div x-show="!fuTBD">
+                                <h3 class="pb-2 font-medium">Follow-up</h3>
+                                <div
+                                    x-show="procApptInput"
+                                    x-cloak
+                                    class="pb-1">
+                                    <p class="text-zinc-400">
+                                        3 weeks post proc is <span
+                                            x-text="fuApptRec()"></span>
+                                    </p>
+                                </div>
+                                <input
+                                    type="datetime-local"
+                                    step="900"
+                                    x-bind:min="fuApptMin()"
+                                    x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
+                                    x-model="fuApptInput"
+                                    class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                                />
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <section class="pb-8 pl-8">
+                        <div class="flex flex-row items-center gap-2 pb-6">
+                            <h2 class="text-lg font-semibold">Summary</h2>
+                            <DocumentSVG />
+                        </div>
+                        <table class="ml-2">
+                            <tr x-show="selectedProcs.length" x-cloak>
+                                <td class="pb-2 pr-6">
+                                    <h3
+                                        x-text="(selectedProcs.length > 1) ? 'Procedures' : 'Procedure'"
+                                        class="font-medium">
+                                    </h3>
+                                </td>
+                                <td class="pb-2">
+                                    <span x-text="joinProcs()"></span>
+                                </td>
+                            </tr>
+                            <tr
+                                x-show="(sedation && !sedationTBD) || sedationFinal"
+                                x-cloak>
+                                <td class="pb-2 pr-6">
+                                    <h3 class="font-medium">Sedation</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <span x-text="selectedSedation()"></span>
+                                </td>
+                            </tr>
+                            <tr x-show="prep" x-cloak>
+                                <td class="pb-2 pr-6">
+                                    <h3 class="font-medium">Prep</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <span x-text="prep"></span>
+                                </td>
+                            </tr>
+                            <tr
+                                x-show="(facilityIndex && !facilityTBD) || facilityIndexFinal"
+                                x-cloak>
+                                <td class="pb-2 pr-6 align-text-top">
+                                    <h3 class="font-medium">Facility</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <template x-if="selectedFacility">
+                                        <ul class="space-y-1">
+                                            <li x-text="selectedFacility.long">
+                                            </li>
+                                            <li
+                                                x-text="selectedFacility.address">
+                                            </li>
+                                            <li
+                                                x-text="selectedFacility.checkin">
+                                            </li>
+                                            <li
+                                                x-show="selectedFacility.short == 'PRIME' && facilities[1].quote.trim() != '' ">
+                                                Quote: $<span
+                                                    x-text="facilities[1].quote"
+                                                ></span>
+                                                 (facility <span
+                                                    x-text=" sedation === 'MAC' ? '+ anesthesia fees)' : 'fee)' "
+                                                ></span>
+                                            </li>
+                                        </ul>
+                                    </template>
+                                </td>
+                            </tr>
+                            <tr x-show="procApptInput" x-cloak>
+                                <td class="pb-2 pr-6 align-text-top">
+                                    <h3 class="font-medium">Date</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <p class="pb-1">
+                                        <span x-text="procApptDate()"></span> at
+
+
+                                        <span x-text="procApptTime()"></span>
+                                    </p>
+                                    <p x-show="procApptArrival()">
+                                        Arrive by <span
+                                            x-text="procApptArrival()"></span>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr
+                                x-show=" procs[0].selected && (facilityIndex === '0' || facilityIndexFinal === '0') "
+                                x-cloak>
+                                <td class="pb-2 pr-6 align-text-top">
+                                    <h3 class="font-medium">COVID</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <p x-text="mosclCovid[1]"></p>
+                                </td>
+                            </tr>
+                            <tr x-show="fuApptInput || fuTBD" x-cloak>
+                                <td class="pb-2 pr-6">
+                                    <h3 class="font-medium">Follow-up</h3>
+                                </td>
+                                <td class="pb-2">
+                                    <template x-if="fuApptInput">
+                                        <p>
+                                            <span x-text="fuApptDate()"></span>
+                                             at <span x-text="fuApptTime()"
+                                            ></span>
+                                        </p>
+                                    </template>
+                                    <template x-if="fuTBD">
+                                        <p>
+                                            Follow-up to be determined based on
+                                            results of procedure.
+                                        </p>
+                                    </template>
+                                </td>
+                            </tr>
+                        </table>
+                        <div
+                            x-show="instructions.length && !noInst"
+                            x-cloak
+                            class="pt-3">
+                            <h3 class="pb-2 font-medium">
+                                Additional instructions
+                            </h3>
+                            <ul>
+                                <template
+                                    x-for="inst in instructions"
+                                    :key="inst.id">
+                                    <li
+                                        x-text="inst.body"
+                                        class="break-words pb-1.5 pl-4 last:pb-0">
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="row-span-2 border-t pl-8 pt-4">
+                        <div class="flex flex-row items-center gap-2 pb-6 pt-8">
+                            <h2 class="text-lg font-semibold">Output</h2>
+                            <ShareSVG />
+                        </div>
+                        <!-- grid?? -->
+                        <div
+                            x-show="checkPre() === 0 && checkDuring() === 0"
+                            x-cloak>
+                            <h3 class="pb-2 font-medium">Send instructions</h3>
+                            <ul>
+                                <li>
+                                    <input type="radio" />
+                                    <label for="">email</label>
+                                </li>
+                            </ul>
+                            <!-- email template -->
+                            <div class="rounded-md border border-zinc-300">
+                                <div
+                                    class="rounded-t-md border-b border-zinc-300 bg-zinc-100">
+                                    <div
+                                        class="relative border-b border-zinc-300 py-2">
+                                        <span
+                                            class="absolute bottom-2 left-6 text-zinc-300">
+                                            <EnvelopeSVG />
+                                        </span>
+                                        <h3
+                                            class="text-center text-sm text-zinc-800">
+                                            Email
+                                        </h3>
+                                    </div>
+                                    <div
+                                        class="flex flex-row items-center justify-between px-6 pb-2 pt-2.5">
+                                        <div class="flex flex-row gap-2">
+                                            <h3
+                                                class="text-sm font-light text-zinc-400">
+                                                Subject:
+                                            </h3>
+                                            <p
+                                                x-text="emailSubject()"
+                                                x-on:click="copyEmailSubject()"
+                                                class="cursor-pointer text-sm">
+                                            </p>
+                                        </div>
+                                        <button
+                                            title="Copy email subject"
+                                            x-on:click="copyEmailSubject()"
+                                            class="group">
+                                            <CopySVG />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="px-6 py-4 text-sm">
+                                    <template
+                                        x-if="checkPre() === 0 && checkDuring() === 0">
+                                        <p
+                                            x-html="emailBodyHtml()"
+                                            x-on:click="copyEmailBody()"
+                                            class="cursor-pointer">
+                                        </p>
+                                    </template>
+                                </div>
+                                <div
+                                    class="flex flex-row items-center gap-6 px-6 py-0.5 pb-2">
+                                    <button
+                                        title="Copy email body"
+                                        x-on:click="copyEmailBody()"
+                                        class="group flex flex-row gap-1 rounded-md bg-zinc-200 px-2 py-1">
+                                        <CopySVG />
+                                        <span
+                                            class="text-sm text-zinc-700 group-hover:text-black"
+                                            >Copy</span
+                                        >
+                                    </button>
+                                    <button
+                                        title="Create PDF"
+                                        x-on:click="window.print()"
+                                        class="group flex flex-row gap-x-1 rounded-md">
+                                        <PaperclipSVG />
+                                        <span
+                                            class="text-sm text-zinc-700 group-hover:text-black"
+                                            >Instructions</span
+                                        >
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- timestamp template -->
+                            <div>
+                                <p>test</p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </main>
+        <template x-if="checkPre() === 0 && checkDuring() === 0">
+            <div
+                class="-mx-12 hidden font-['Times_New_Roman'] text-sm leading-4 print:block">
+                <Instructions />
+            </div>
+        </template>
+    </div>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+    <script>
+        import Alpine from 'alpinejs';
+        import mask from '@alpinejs/mask';
+
+        Alpine.plugin(mask);
+    </script>
+    <script src="../js/procs.js"></script>
+</Layout>

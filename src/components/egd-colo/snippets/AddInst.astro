@@ -1,0 +1,6 @@
+<h2 class="font-bold underline">Additional Instructions</h2>
+<ul class="list-disc px-4">
+    <template x-for="inst in instructions" :key="inst.id">
+        <li x-text="inst.body"></li>
+    </template>
+</ul>

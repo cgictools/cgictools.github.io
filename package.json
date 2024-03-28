@@ -1,0 +1,28 @@
+{
+  "name": "tools-cgic-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@alpinejs/mask": "^3.13.2",
+    "@alpinejs/persist": "^3.13.2",
+    "@astrojs/alpinejs": "^0.3.1",
+    "@astrojs/tailwind": "^5.0.2",
+    "@types/alpinejs": "^3.13.5",
+    "alpinejs": "^3.13.2",
+    "astro": "^3.5.5",
+    "luxon": "^3.4.4",
+    "tailwindcss": "^3.3.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0",
+    "prettier-plugin-astro": "^0.12.2",
+    "prettier-plugin-tailwindcss": "^0.5.7"
+  }
+}

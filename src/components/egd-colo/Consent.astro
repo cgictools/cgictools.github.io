@@ -1,0 +1,246 @@
+---
+import Logo from '../../images/logo.png';
+---
+
+<p class="absolute left-0 top-0 text-sm">
+    Please sign and bring this page to your procedure.
+</p>
+<p class="absolute right-0 top-0 text-right text-sm">
+    Proc: <span x-text="procApptDay()"></span>
+</p>
+<div class="mb-1 flex h-24 flex-row justify-center">
+    <img src={Logo.src} alt="logo" />
+</div>
+
+<div
+    class="text-sm"
+    x-bind:class=" selectedProcs.length === 2 ? 'leading-none' : 'leading-tight' ">
+    <h1 class="mb-2 text-center font-bold uppercase leading-normal">
+        <span x-text="procs[1].selected ? 'Colonoscopy' : ''"></span><span
+            x-text="selectedProcs.length === 2 ? ' / ' : ''"></span><span
+            x-text="procs[0].selected ? 'EGD (Esophagogastroduodenoscopy)' : ''"
+        ></span><br />
+         Information and Consent Form
+    </h1>
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        Direct visualization of the <span
+            x-text="procs[0].selected ? 'upper' : ''"></span><span
+            x-text="selectedProcs.length === 2 ? '/' : ''"></span><span
+            x-text="procs[1].selected ? 'lower' : ''"></span> digestive tract
+        with a lighted instrument is referred to as <span
+            x-text="procs[0].selected ? 'EGD' : ''"></span><span
+            x-text="selectedProcs.length === 2 ? '/' : ''"></span><span
+            x-text="procs[1].selected ? 'colonoscopy' : ''"></span>. Our
+        physician has advised you of the need to have this type of examination.
+        The following information is presented to explain the procedure and
+        review the possible risks of the procedure.
+    </p>
+    <p
+        x-show="procs[1].selected"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        For the <span class="font-bold underline">Colonoscopy</span>, you will
+        be sedated using intravenous medication. A flexible, lighted tube called
+        a colonoscope will be inserted into the rectum, and the inside lining of
+        your colon will be carefully inspected. A small piece of tissue (a
+        “biopsy”) may be removed for examination under the microscope. Growths
+        (“polyps”) that may develop in the intestinal tract will be removed
+        using biopsy or electrocautery. Electrocautery may also be used to
+        coagulate any bleeding lesions. If there is a narrowed area in the G.I.
+        tract, it may need to be dilated. Colonoscopy is considered the best
+        method for detecting abnormalities of the colon. No test is 100%
+        accurate, and, rarely, polyps, cancers, or other abnormalities of the
+        colon can be missed by colonoscopy.
+    </p>
+    <p
+        x-show="procs[0].selected"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        For the <span class="font-bold underline">EGD</span>, you will be
+        sedated using intravenous medication. A thin, flexible viewing
+        instrument called an endoscope will be inserted into the mouth and
+        gently advanced down the throat to carefully inspect the inside lining
+        of your esophagus, stomach, and duodenum. A small piece of tissue (a
+        “biopsy”) may be removed for examination under the microscope. Growths
+        ("polyps") that may develop in the intestinal tract will be removed
+        using biopsy or electrocautery. Electrocautery may also be used to
+        coagulate any bleeding lesions. If there is a narrowed area in the G.I.
+        tract, it may need to be dilated. EGD is considered the best method for
+        detecting abnormalities of the upper gastrointestinal tract. No test is
+        100% accurate, and, rarely, polyps, cancers, or other abnormalities of
+        the upper GI tract can be missed by EGD.
+    </p>
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        Minor side-effects of all the above procedures include bruising or
+        discomfort at the IV site, gas/cramps or bloating, nausea, (rarely)
+        vomiting, or drowsiness after the procedure. Rarely, discomfort may be
+        felt <span
+            x-text="procs[1].selected ? 'in the abdomen or rectum after colonoscopy' : ''"
+        ></span><span x-text="selectedProcs.length === 2 ? ', or ' : ''"
+        ></span><span
+            x-text="procs[0].selected ? 'in the throat after EGD' : ''"></span>.
+        These sensations pass and are of a minor nature.
+    </p>
+    <p class="mb-0.5">
+        The following are rare risks of these procedures, but could be
+        potentially life-threatening:
+    </p>
+    <ol class="mb-1.5 list-decimal px-4">
+        <li>
+            Injury to the lining of the digestive tract resulting in
+            perforation. If this occurs, surgery to close the leak and drain the
+            region may be necessary.
+        </li>
+        <li>
+            Bleeding, if it occurs, usually is a complication of biopsy, polyp
+            removal (polypectomy), dilation, or electrocoagulation. Management
+            of this complication may consist only of careful observation or may
+            require hospitalization, transfusion, or, rarely, surgical operation
+            for control.
+        </li>
+        <li>
+            Adverse reaction to medications, including heart or lung
+            complications.
+        </li>
+        <li>Injury to abdominal organs.</li>
+        <li>Infection.</li>
+        <li>Missed pathology.</li>
+        <li>Interval development of pathology.</li>
+    </ol>
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        Preparation instructions have been reviewed in detail with me and I am
+        in receipt of these instructions.
+    </p>
+    <p
+        x-show="selectedFacility.short === 'MOSCL'"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        I have received the MemorialCare Outpatient Surgical Center Long Beach
+        Patient Rights and Responsibilities/physician ownership disclosure
+        information sheet.
+    </p>
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        If you are taking a GLP-1 agonist (diabetes/weight loss medication),
+        including, but not limited to, Ozempic, Mounjaro, Wegovy, Zepbound,
+        Trulicity, Rybelsus, Saxenda, Bydureon, Byetta, Victoza, Adlyxin,
+        Tranzeum, Soliqua, or Xultopy,
+        <span class="font-bold">
+            you must hold it 1 week prior to your procedure.
+        </span>If you fail to do so, your procedure may be cancelled at the
+        facility on the day of the procedure. Please contact our office if you
+        have any questions.
+    </p>
+    <p class="mb-1.5">
+        I will inform the office of Dr. Lisa Hertz / Dr. Kashyap Trivedi / Dr.
+        Pavan Mankal in the event I test positive for COVID-19 or am exposed to
+        someone who has tested positive for COVID-19 prior to my scheduled
+        procedure.
+    </p>
+    <!-- <table class="mb-1.5">
+    <tr class="align-top">
+        <td class="pr-4">
+            <div class="h-4 w-12 border-b border-black"></div>
+            <p class="text-center text-[10px]">Initial</p>
+        </td>
+        <td>
+            <p>
+                Preparation instructions have been reviewed in detail with me
+                and I am in receipt of these instructions.
+            </p>
+        </td>
+    </tr>
+    <tr x-show="selectedFacility.short === 'MOSCL'" class="align-top">
+        <td class="pr-4">
+            <div class="h-4 w-12 border-b border-black"></div>
+            <p class="text-center text-[10px]">Initial</p>
+        </td>
+        <td>
+            <p>
+                I have received the MemorialCare Outpatient Surgical Center Long
+                Beach Patient Rights and Responsibilities/physician ownership
+                disclosure information sheet.
+            </p>
+        </td>
+    </tr>
+    <tr class="align-top">
+        <td class="pr-4">
+            <div class="h-4 w-12 border-b border-black"></div>
+            <p class="text-center text-[10px]">Initial</p>
+        </td>
+        <td>
+            <p>
+                If you are taking a GLP-1 agonist (diabetes/weight loss
+                medication), including, but not limited to, Ozempic, Mounjaro,
+                Wegovy, Zepbound, Trulicity, Rybelsus, Saxenda, Bydureon,
+                Byetta, Victoza, Adlyxin, Tranzeum, Soliqua, or Xultopy,
+                <span class="font-bold">
+                    you must hold it 1 week prior to your procedure.
+                </span>If you fail to do so, your procedure may be cancelled at
+                the facility on the day of the procedure. Please contact our
+                office if you have any questions.
+            </p>
+        </td>
+    </tr>
+    <tr class="align-top">
+        <td class="pr-4">
+            <div class="h-4 w-12 border-b border-black"></div>
+            <p class="text-center text-[10px]">Initial</p>
+        </td>
+        <td>
+            <p>
+                I will inform the office of Dr. Lisa Hertz / Dr. Kashyap Trivedi
+                / Dr. Pavan Mankal in the event I test positive for COVID-19 or
+                am exposed to someone who has tested positive for COVID-19 prior
+                to my scheduled procedure.
+            </p>
+        </td>
+    </tr>
+</table> -->
+    <p class="mb-0.5">
+        I certify that I have read the above and understand the possible risks
+        and complications noted. Possible alternative examinations have been
+        discussed with me. I consent to the taking of photographs of my
+        intestinal tract for my record. I hereby authorize and permit Dr. Lisa
+        Hertz / Dr. Kashyap Trivedi / Dr. Pavan Mankal and whomever are
+        designated as assistants to perform the following: <span
+            x-text="procs[1].selected ? 'colonoscopy' : ''"></span><span
+            x-text="selectedProcs.length === 2 ? ' and ' : ''"></span><span
+            x-text="procs[0].selected ? 'EGD' : ''"></span> with possible
+        biopsy, polypectomy, or cauterization.
+    </p>
+    <table class="mb-8">
+        <tr class="align-top">
+            <td class="pr-4">
+                <div class="h-7 w-56 border-b border-black"></div>
+                <p>Patient Name (Please Print)</p>
+            </td>
+            <td class="pr-4">
+                <div class="h-7 w-56 border-b border-black"></div>
+                <p>Patient Signature</p>
+            </td>
+            <td class="pr-4">
+                <div class="h-7 w-28 border-b border-black"></div>
+                <p>Date of Birth</p>
+            </td>
+            <td class="pr-4">
+                <div class="h-7 w-28 border-b border-black"></div>
+                <p>Date</p>
+            </td>
+        </tr>
+        <tr class="align-top">
+            <td class="pr-4">
+                <div class="h-5 w-56 border-b border-black"></div>
+                <p>Patient Representative (Please Print)</p>
+                <p class="text-xs">(If patient is a minor or unable to sign)</p>
+            </td>
+            <td class="pr-4">
+                <div class="h-5 w-56 border-b border-black"></div>
+                <p>Patient Representative Signature</p>
+            </td>
+            <td class="pr-4">
+                <div class="h-5 w-28"></div>
+            </td>
+            <td class="pr-4">
+                <div class="h-5 w-28 border-b border-black"></div>
+                <p>Date</p>
+            </td>
+        </tr>
+    </table>
+</div>
