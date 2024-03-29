@@ -695,7 +695,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <table class="ml-2">
                             <tr x-show="selectedProcs.length" x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3
                                         x-text="(selectedProcs.length > 1) ? 'Procedures' : 'Procedure'"
                                         class="font-medium">
@@ -708,7 +709,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <tr
                                 x-show="(sedation && !sedationTBD) || sedationFinal"
                                 x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Sedation</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
@@ -716,8 +718,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </td>
                             </tr>
                             <tr x-show="prep" x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
-                                    <h3 class="font-medium">Prep</h3>
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
+                                    <h3 class="font-medium">Colo Prep</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
                                     <span x-text="prep"></span>
@@ -726,7 +729,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <tr
                                 x-show="(facilityIndex && !facilityTBD) || facilityIndexFinal"
                                 x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Facility</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
@@ -754,7 +758,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </td>
                             </tr>
                             <tr x-show="procApptInput" x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Date</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
@@ -773,7 +778,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <tr
                                 x-show=" procs[0].selected && (facilityIndex === '0' || facilityIndexFinal === '0') "
                                 x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">COVID</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
@@ -781,7 +787,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </td>
                             </tr>
                             <tr x-show="fuApptInput || fuTBD" x-cloak>
-                                <td class="pb-2 pr-6 align-text-top">
+                                <td
+                                    class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Follow-up</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
@@ -831,7 +838,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             x-cloak
                             class="grid grid-cols-1 gap-y-8">
                             <div>
-                                <h3 class="mb-1.5 font-medium">Instructions</h3>
+                                <h3 class="mb-1 font-medium">Instructions</h3>
                                 <!-- email template -->
                                 <div x-show="sendInstMethod === 'email'">
                                     <p class="mb-2" x-text="sendInstMessage()">
@@ -926,7 +933,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 <h3 class="mb-2 font-medium">Notes</h3>
                                 <table class="ml-2">
                                     <tr>
-                                        <td class="pb-2 pr-6 align-text-top">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                             <h3 class="font-medium">
                                                 Order Reason
                                             </h3>
@@ -940,7 +948,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="pb-2 pr-6 align-text-top">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                             <h3 class="font-medium">
                                                 Tele/Order
                                             </h3>
@@ -954,7 +963,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="pb-2 pr-6 align-text-top">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                             <h3 class="font-medium">
                                                 Appt Notes
                                             </h3>
@@ -969,13 +979,15 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     </tr>
                                 </table>
                                 <p x-show="procs[1].selected">
-                                    If screening colo (screening, h/o colon
-                                    polyps, colon adenomas), add the year of
-                                    last colo to the appt reason.
+                                    If screening colo (e.g. screening, h/o colon
+                                    polyps, colon adenomas, etc), add the year
+                                    of last colo to the appt reason.
                                 </p>
                             </div>
                             <!-- staff to do -->
-                            <div x-show="numDaysOut() < 14">
+                            <div
+                                x-show="numDaysOut() < 14"
+                                class="text-red-500">
                                 <h3 class="mb-2 font-medium">Verification</h3>
                                 <p>
                                     Procedure is in less than 2 weeks. Send a
