@@ -188,7 +188,6 @@ window.procs = function () {
         get prepGeneric() {
             return this.preps.find((prep) => prep.name === this.prep).generic;
         },
-        // prepGeneric: this.preps.find((prep) => prep.name === this.prep),
         // pickup: "",
 
         // facilities
@@ -366,7 +365,7 @@ window.procs = function () {
             }
         },
 
-        // procedure date
+        // procedure date, proc appt
         procApptInput: null,
 
         procApptMin() {
@@ -385,8 +384,18 @@ window.procs = function () {
             });
         },
 
-        procApptDay() {
-            return this.procAppt().toLocaleString();
+        numDaysOut() {
+            return this.procAppt()
+                .diff(DateTime.local().setZone("America/Los_Angeles"), "days")
+                .toObject().days;
+        },
+
+        procApptDateNumShort() {
+            return this.procAppt().toLocaleString({
+                day: "numeric",
+                month: "numeric",
+                year: "2-digit",
+            });
         },
 
         procApptDate() {
@@ -529,6 +538,14 @@ window.procs = function () {
             });
         },
 
+        fuApptDateNumShort() {
+            return this.fuAppt.toLocaleString({
+                day: "numeric",
+                month: "numeric",
+                year: "2-digit",
+            });
+        },
+
         fuApptDate() {
             return this.fuAppt.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
@@ -537,6 +554,33 @@ window.procs = function () {
             return this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE);
         },
 
+        // send inst method
+        sendInstMethod: "",
+
+        sendInstText: [
+            "Email instructions and attach to patient docs.",
+            "Attach to patient docs and upload to portal.",
+            "Attach to patient docs. Send tele/order to print.",
+        ],
+
+        sendInstAction: [
+            "Emailed/attached inst.",
+            "Attached/uploaded inst to portal.",
+            "Attached inst, please print for pickup.",
+            "Attached inst, please print to mail.",
+        ],
+
+        sendInstMessage() {
+            if (this.sendInstMethod === "email") {
+                return this.sendInstText[0];
+            } else if (this.sendInstMethod === "portal") {
+                return this.sendInstText[1];
+            } else {
+                return this.sendInstText[2];
+            }
+        },
+
+        // checks during call, for the red number
         checkDuring() {
             let incomplete = 0;
 
@@ -556,9 +600,14 @@ window.procs = function () {
                 incomplete++;
             }
 
+            if (this.sendInstMethod === "") {
+                incomplete++;
+            }
+
             return incomplete;
         },
 
+        // warnings for each subsection in call section, for highlighting h3's in red
         warnCallFacility() {
             if (this.facilityTBD && this.facilityIndexFinal === "") {
                 this.$refs.callFacility.style.color = this.red;
@@ -575,11 +624,27 @@ window.procs = function () {
             }
         },
 
-        warnProcAppt() {
+        warnCallProcAppt() {
             if (!this.procApptInput) {
-                this.$refs.procAppt.style.color = this.red;
+                this.$refs.callProcAppt.style.color = this.red;
             } else {
-                this.$refs.procAppt.style.color = "black";
+                this.$refs.callProcAppt.style.color = "black";
+            }
+        },
+
+        warnCallFuAppt() {
+            if (!this.fuApptInput) {
+                this.$refs.callFuAppt.style.color = this.red;
+            } else {
+                this.$refs.callFuAppt.style.color = "black";
+            }
+        },
+
+        warnCallSendInst() {
+            if (this.sendInstMethod === "") {
+                this.$refs.callSendInst.style.color = this.red;
+            } else {
+                this.$refs.callSendInst.style.color = "black";
             }
         },
 
@@ -700,6 +765,97 @@ window.procs = function () {
 
         copyEmailBody() {
             navigator.clipboard.writeText(this.emailBodyClip());
+        },
+
+        // timestamps
+        DOS() {
+            return "DOS " + this.procApptDateNumShort();
+        },
+
+        copyDOS() {
+            navigator.clipboard.writeText(this.DOS());
+        },
+
+        procTS() {
+            if (this.procs[1].selected) {
+                return (
+                    this.selectedProcs.map((proc) => proc.short).join("/") +
+                    " " +
+                    this.prep.toLowerCase() +
+                    " " +
+                    this.sedation.substring(0, 3) +
+                    " " +
+                    this.selectedFacility.short +
+                    ", DOS " +
+                    this.procApptDateNumShort() +
+                    ". "
+                );
+            } else {
+                return (
+                    this.selectedProcs.map((proc) => proc.short).join("/") +
+                    " " +
+                    this.sedation.substring(0, 3) +
+                    " " +
+                    this.selectedFacility.short +
+                    " sched for " +
+                    this.procApptDateNumShort() +
+                    ". "
+                );
+            }
+        },
+
+        fuTS() {
+            if (!this.fuTBD) {
+                return "f/u sched for " + this.fuApptDateNumShort() + ". ";
+            } else {
+                return "";
+            }
+        },
+
+        actionTS() {
+            if (this.sendInstMethod === "email") {
+                return this.sendInstAction[0];
+            } else if (this.sendInstMethod === "portal") {
+                return this.sendInstAction[1];
+            } else if (this.sendInstMethod === "pickup") {
+                return this.sendInstAction[2];
+            } else if (this.sendInstMethod === "mail") {
+                return this.sendInstAction[3];
+            }
+        },
+
+        timestamp() {
+            if (this.instructions.length && !this.noInst) {
+                return (
+                    this.procTS() +
+                    this.fuTS() +
+                    this.actionTS() +
+                    " See packet for additional instructions."
+                );
+            } else {
+                return this.procTS() + this.fuTS() + this.actionTS();
+            }
+        },
+
+        copyTimestamp() {
+            navigator.clipboard.writeText(this.timestamp());
+        },
+
+        apptNotes() {
+            let month = DateTime.local().setZone("America/Los_Angeles").month;
+            let day = DateTime.local().setZone("America/Los_Angeles").day;
+
+            if (this.procs[1].selected) {
+                return (
+                    month + "/" + day + " appt made, " + this.prep.toLowerCase()
+                );
+            } else {
+                return month + "/" + day + " appt made";
+            }
+        },
+
+        copyApptNotes() {
+            navigator.clipboard.writeText(this.apptNotes());
         },
     };
 };
