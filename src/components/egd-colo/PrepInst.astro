@@ -39,7 +39,9 @@ import Transpo from './snippets/Transpo.astro';
     <span class="font-bold">No red, orange, or purple drinks!</span>
 </p>
 <!-- Golytely cannot be replaced with ez2go -->
-<p x-show=" prep !== 'Golytely' " class="mb-1 border-b pb-1">
+<p
+    x-show=" prep !== 'Golytely' && prep !== 'ez2go' "
+    class="mb-1 border-b pb-1">
     Let us know if the <span x-text="prep"></span> is too expensive, or if you
     are unable to get it for any other reason. We have an alternate
     over-the-counter prep available in our office for $25 and a different set of
