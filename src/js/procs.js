@@ -103,7 +103,6 @@ window.procs = function () {
             },
         ],
 
-        // REVIEW WORDING OF EMAIL OUTPUT
         mosclCovid: [
             "Patient needs to notify our office in event of Covid infection prior to procedure. Will need to reschedule procedure to at least 4 weeks after Covid resolved.",
             "Please notify our office if you get Covid prior to the procedure, as your procedure may need to be rescheduled.",
@@ -115,7 +114,7 @@ window.procs = function () {
             "",
             "Your {joinProcs} is scheduled for {procApptDate} at {procApptTime} at {selectedFacility.long} - {selectedFacility.address}. Please arrive by {procApptArrival}.",
             "",
-            "I've attached a consent form and the instructions for your prep. Please sign and bring the consent form to your procedure.",
+            "Attached are the consent form and instructions for your prep. Please sign and bring the consent form to your procedure.",
             "{mosclPacket}",
             "{mosclCovid}",
             "",
@@ -133,12 +132,12 @@ window.procs = function () {
             "",
             "Best regards,",
             "{staffName}",
-            "Comprehensive GI Care Staff",
+            "Comprehensive GI Care",
         ],
 
         emailSnippets: {
             mosclPacket:
-                "I've also attached instructions to register at MemorialCare Outpatient Surgical Center Long Beach. You can complete the included questionnaire and bring it to your procedure, or you can wait for the facility to text you a link to complete the questionnaire online.",
+                "Also attached are instructions to register at MemorialCare Outpatient Surgical Center Long Beach. You can complete the included questionnaire and bring it to your procedure, or you can wait for the facility to text you a link to complete the questionnaire online.",
             ez2goKit:
                 "For your ez2go prep, you can purchase the ingredients over the counter at your local pharmacy [238g PEG 3350 (Miralax) powder, 4 5mg Bisacodyl tablets, 1 bottle Magnesium citrate]. Or, you can pick up our pre-packaged kit for $25 at our office (4772 Katella Ave, Ste. 200, Los Alamitos, CA 90720).",
             rxPrep: "A prescription for {prep} has been sent to your pharmacy. Please let us know if you have issues filling the prescription.",
@@ -705,6 +704,18 @@ window.procs = function () {
             return this.emailBodyArray().join("\n");
         },
 
+        packetCoverJoin() {
+            // return this.emailBodyArray()
+            //     .splice(this.emailBodyArray().length - 2, 1)
+            //     .splice(0, 1)
+            //     .join("<br />");
+            let initial = this.emailBodyArray();
+            let length = initial.length;
+            initial.splice(length - 2, 1);
+            initial.splice(0, 1);
+            return initial.join("<br />");
+        },
+
         // string input, replaces keywords
         emailBodyReplace(join) {
             return join
@@ -734,6 +745,10 @@ window.procs = function () {
 
         emailBodyHtml() {
             return this.emailBodyReplace(this.emailBodyHtmlJoin());
+        },
+
+        packetCoverHtml() {
+            return this.emailBodyReplace(this.packetCoverJoin());
         },
 
         emailBodyClip() {

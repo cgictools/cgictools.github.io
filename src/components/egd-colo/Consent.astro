@@ -2,19 +2,16 @@
 import Logo from '../../images/logo.png';
 ---
 
-<p class="absolute left-0 top-0 text-sm">
-    Please sign and bring this page to your procedure.
-</p>
-<p class="absolute right-0 top-0 text-right text-sm">
-    Proc: <span x-text="procApptDateNumShort()"></span>
-</p>
-<div class="mb-1 flex h-24 flex-row justify-center">
+<div class="flex flex-row justify-between">
+    <p>Please sign and bring this page to your procedure.</p>
+    <p>Proc: <span x-text="procApptDateNumShort()"></span></p>
+</div>
+
+<div class="my-1 flex h-24 flex-row justify-center">
     <img src={Logo.src} alt="logo" />
 </div>
 
-<div
-    class="text-sm"
-    x-bind:class=" selectedProcs.length === 2 ? 'leading-none' : 'leading-tight' ">
+<div class="text-sm leading-none">
     <h1 class="mb-2 text-center font-bold uppercase leading-normal">
         <span x-text="procs[1].selected ? 'Colonoscopy' : ''"></span><span
             x-text="selectedProcs.length === 2 ? ' / ' : ''"></span><span
@@ -205,7 +202,7 @@ import Logo from '../../images/logo.png';
             x-text="procs[0].selected ? 'EGD' : ''"></span> with possible
         biopsy, polypectomy, or cauterization.
     </p>
-    <table class="mb-8">
+    <table class="mb-10">
         <tr class="align-top">
             <td class="pr-4">
                 <div class="h-7 w-56 border-b border-black"></div>

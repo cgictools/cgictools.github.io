@@ -1,4 +1,5 @@
 ---
+import Logo from '../images/logo.png';
 import Consent from './egd-colo/Consent.astro';
 import EGDCover from './egd-colo/EGDCover.astro';
 import ColoCover from './egd-colo/ColoCover.astro';
@@ -7,6 +8,19 @@ import PrepInst from './egd-colo/PrepInst.astro';
 ---
 
 <!-- flex container on each page div to center vertically when printing -->
+<div
+    id="packetCover"
+    x-show="sendInstMethod !== 'email'"
+    class="flex h-screen break-after-page flex-col justify-center">
+    <div class="mb-12 flex h-28 flex-row justify-center">
+        <img src={Logo.src} alt="logo" />
+    </div>
+    <div class="mx-16 mb-20 text-[15px] leading-relaxed">
+        <p>Dear patient,</p>
+        <p x-html="packetCoverHtml()"></p>
+    </div>
+</div>
+
 <div
     id="consent"
     class="flex h-screen break-after-page flex-col justify-center">
