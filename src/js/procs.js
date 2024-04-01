@@ -729,7 +729,7 @@ window.procs = function () {
                 x = x.filter((item) => item !== "{ez2goKit}");
             }
 
-            if (this.isFuTBD()) {
+            if (this.fuTBD()) {
                 x = x
                     .filter((item, i) => x[i - 1] !== "{fu}")
                     .filter((item) => item !== "{fu}");
