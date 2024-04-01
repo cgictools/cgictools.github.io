@@ -5,6 +5,7 @@ import AddInst from './snippets/AddInst.astro';
 import OTCMeds from './snippets/OTCMeds.astro';
 import RxMeds from './snippets/RxMeds.astro';
 import Transpo from './snippets/Transpo.astro';
+import CxPolicy from './snippets/CxPolicy.astro';
 ---
 
 <div class="mb-4 flex h-24 flex-row justify-center">
@@ -14,7 +15,7 @@ import Transpo from './snippets/Transpo.astro';
     Patient Instructions for EGD
 </h1>
 <ApptDetails />
-<h2 class="mb-2 text-center font-bold uppercase">
+<h2 class="mb-2 font-bold uppercase">
     Preparation for the Upper Endoscopy (EGD)
 </h2>
 <div class="mb-2">
@@ -50,9 +51,4 @@ import Transpo from './snippets/Transpo.astro';
     office. If you are unable to keep this appointment, please notify our office
     at (562) 596-5552 as soon as possible.
 </p>
-<h2 class="mb-2 text-center font-bold uppercase">Cancellation Policy</h2>
-<p class="mb-8">
-    Procedure cancellations/rescheduling must be done at least 10 days prior to
-    the scheduled procedure date, or a $100.00 fee will be charged. This is not
-    covered by your insurance company.
-</p>
+<CxPolicy />

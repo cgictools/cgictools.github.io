@@ -1,6 +1,7 @@
 ---
-import Logo from "../../images/logo.png";
-import ApptDetails from "./snippets/ApptDetails.astro";
+import Logo from '../../images/logo.png';
+import ApptDetails from './snippets/ApptDetails.astro';
+import CxPolicy from './snippets/CxPolicy.astro';
 ---
 
 <div class="mb-4 flex h-24 flex-row justify-center">
@@ -62,11 +63,4 @@ import ApptDetails from "./snippets/ApptDetails.astro";
     If you have any questions, please feel free to ask the physician, the GI
     nurse or technician.
 </p>
-
-<h2 class="mb-2 font-bold uppercase">Cancellation Policy</h2>
-<p class="mb-8">
-    Three full working days advance notice is required for all procedure
-    cancellations. If appointments are not canceled within this time frame, a
-    $100.00 fee will be charged. This fee is not covered by your insurance
-    company.
-</p>
+<CxPolicy />

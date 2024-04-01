@@ -367,27 +367,40 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                         </div>
                         <div>
-                            <h3 class="pb-2 font-medium">Sched Follow-up?</h3>
+                            <h3
+                                x-ref="preFu"
+                                x-on:hoverpre.window="warnPreFu()"
+                                class="pb-2 font-medium">
+                                Sched Follow-up?
+                            </h3>
                             <ul>
                                 <li class="select-none pb-1">
-                                    <label for="schedFu" class="p-1 pr-1.5">
+                                    <label
+                                        for="yesFu"
+                                        x-on:click="$nextTick(() => { warnPreFu() })"
+                                        class="p-1 pr-1.5">
                                         <input
                                             type="radio"
-                                            id="schedFu"
-                                            value=""
-                                            x-model="fuTBD"
+                                            id="yesFu"
+                                            value="yes"
+                                            x-on:click="$nextTick(() => { warnPreFu() })"
+                                            x-model="schedFu"
                                             class="-ml-1 mr-0.5"
                                         />
                                          yes
                                     </label>
                                 </li>
                                 <li class="select-none">
-                                    <label for="noFu" class="p-1 pr-1.5">
+                                    <label
+                                        for="noFu"
+                                        x-on:click="$nextTick(() => { warnPreFu() })"
+                                        class="p-1 pr-1.5">
                                         <input
                                             type="radio"
                                             id="noFu"
-                                            value="true"
-                                            x-model="fuTBD"
+                                            value="no"
+                                            x-on:click="$nextTick(() => { warnPreFu() })"
+                                            x-model="schedFu"
                                             class="-ml-1 mr-0.5"
                                         />
                                          no, TBD</label
@@ -585,7 +598,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </li>
                             </ul> -->
                         </div>
-                        <div x-show="!fuTBD">
+                        <div x-show="!fuTBD()">
                             <h3
                                 x-ref="callFuAppt"
                                 x-on:hovercall.window="warnCallFuAppt"
@@ -786,7 +799,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <p x-text="mosclCovid[1]"></p>
                                 </td>
                             </tr>
-                            <tr x-show="fuApptInput || fuTBD" x-cloak>
+                            <tr x-show="fuApptInput || fuTBD()" x-cloak>
                                 <td
                                     class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Follow-up</h3>
@@ -799,7 +812,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             ></span>
                                         </p>
                                     </template>
-                                    <template x-if="fuTBD">
+                                    <template x-if="fuTBD()">
                                         <p>
                                             Follow-up to be determined based on
                                             results of procedure.
@@ -985,13 +998,47 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </p>
                             </div>
                             <!-- staff to do -->
+                            <!-- group the messages for late add-on, something like below block -->
+                            <!-- <div>
+                                <h3>Add-On Proc</h3>
+                                <table>
+                                    <tr><td>Fax Documents</td><td></td></tr>
+                                    <tr
+                                        ><td>Insurance Verification</td><td
+                                        ></td></tr
+                                    >
+                                    <tr><td>Prime Scheduling</td><td></td></tr>
+                                </table>
+                            </div> -->
+                            <div x-show="numDaysOut() < 7" class="text-red-500">
+                                <h3 class="mb-2 font-medium">Add-On Proc</h3>
+                                <p>
+                                    Procedure is in less than 7 days. Send a
+                                    chat message to fax necessary documents to
+                                    <span x-text="selectedFacility.short"
+                                    ></span>.
+                                </p>
+                            </div>
                             <div
                                 x-show="numDaysOut() < 14"
                                 class="text-red-500">
-                                <h3 class="mb-2 font-medium">Verification</h3>
+                                <h3 class="mb-2 font-medium">
+                                    Insurance Verification for Add-On Procs
+                                </h3>
                                 <p>
                                     Procedure is in less than 2 weeks. Send a
-                                    chat message for procedure verification.
+                                    chat message for procedure insurance
+                                    verification.
+                                </p>
+                            </div>
+                            <div
+                                x-show="numDaysOut() < 14 && selectedFacility.short === 'PRIME'"
+                                class="text-red-500">
+                                <h3 class="mb-2 font-medium">Prime Add-On</h3>
+                                <p>
+                                    Procedure is in less than 2 weeks. Send a
+                                    chat message to notify Prime of add-on
+                                    procedure.
                                 </p>
                             </div>
                         </div>

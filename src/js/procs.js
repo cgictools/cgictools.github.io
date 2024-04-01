@@ -143,7 +143,7 @@ window.procs = function () {
                 "For your ez2go prep, you can purchase the ingredients over the counter at your local pharmacy [238g PEG 3350 (Miralax) powder, 4 5mg Bisacodyl tablets, 1 bottle Magnesium citrate]. Or, you can pick up our pre-packaged kit for $25 at our office (4772 Katella Ave, Ste. 200, Los Alamitos, CA 90720).",
             rxPrep: "A prescription for {prep} has been sent to your pharmacy. Please let us know if you have issues filling the prescription.",
             primeOON:
-                "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Our physicians and the lab/pathologist we use are in-network with your insurance, and you may have an out-of-pocket cost for these services based on your in-network benefits. Please see the attached pamphlet for more details on Prime's billing policies.",
+                "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. Our physicians are in network with your insurance, and the lab/pathologist we use are in-network with most insurances. You may have an out-of-pocket cost for these services based on your in-network benefits. Please see the attached pamphlet for more details on Prime's billing policies.",
             primeRide:
                 "Prime Surgical Center does offer a ride service at no additional cost. The number to call to arrange transport is (818) 937-9969. You can find more details in the attached pamphlet.",
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
@@ -304,6 +304,10 @@ window.procs = function () {
                 incomplete++;
             }
 
+            if (this.schedFu === "") {
+                incomplete++;
+            }
+
             return incomplete;
         },
 
@@ -365,6 +369,14 @@ window.procs = function () {
             }
         },
 
+        warnPreFu() {
+            if (this.schedFu === "") {
+                this.$refs.preFu.style.color = this.red;
+            } else {
+                this.$refs.preFu.style.color = "black";
+            }
+        },
+
         // procedure date, proc appt
         procApptInput: null,
 
@@ -385,9 +397,12 @@ window.procs = function () {
         },
 
         numDaysOut() {
-            return this.procAppt()
-                .diff(DateTime.local().setZone("America/Los_Angeles"), "days")
-                .toObject().days;
+            let procDay = this.procAppt().startOf("day");
+            let today = DateTime.local()
+                .setZone("America/Los_Angeles")
+                .startOf("day");
+
+            return procDay.diff(today, "days").toObject().days;
         },
 
         procApptDateNumShort() {
@@ -511,10 +526,14 @@ window.procs = function () {
         },
 
         // follow up
-        fuTBD: false,
+        schedFu: "",
 
-        isFuTBD() {
-            return Boolean(this.fuTBD);
+        fuTBD() {
+            if (this.schedFu === "no") {
+                return true;
+            } else if (this.schedFu === "yes") {
+                return false;
+            }
         },
 
         fuApptInput: null,
@@ -856,6 +875,26 @@ window.procs = function () {
 
         copyApptNotes() {
             navigator.clipboard.writeText(this.apptNotes());
+        },
+
+        // messages for add-on procs
+        addOnCount() {
+            let count = 0;
+
+            if (this.numDaysOut() < 7) {
+                count++;
+            }
+
+            if (this.numDaysOut() < 14) {
+                count++;
+            }
+
+            if (
+                this.numDaysOut() < 14 &&
+                this.selectedFacility.short === "PRIME"
+            ) {
+                count++;
+            }
         },
     };
 };
