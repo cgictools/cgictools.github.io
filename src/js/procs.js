@@ -446,21 +446,9 @@ window.procs = function () {
             }
         },
 
-        proc5DaysPrior() {
+        daysBeforeProc(d) {
             return this.procAppt()
-                .minus({ days: 5 })
-                .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
-        },
-
-        proc2DaysPrior() {
-            return this.procAppt()
-                .minus({ days: 2 })
-                .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
-        },
-
-        proc1DayPrior() {
-            return this.procAppt()
-                .minus({ days: 1 })
+                .minus({ days: d })
                 .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
@@ -486,42 +474,12 @@ window.procs = function () {
                 .toLocaleString(DateTime.TIME_SIMPLE);
         },
 
-        proc17HoursPrior() {
-            return this.procAppt()
-                .minus({ hours: 17 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        proc8HoursPrior() {
-            return this.procAppt()
-                .minus({ hours: 8 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        proc6HoursPrior() {
-            return this.procAppt()
-                .minus({ hours: 6 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        proc5Hours30MinsPrior() {
+        hoursBeforeProc(h, m = 0) {
             return this.procAppt()
                 .minus({
-                    hours: 5,
-                    minutes: 30,
+                    hours: h,
+                    minutes: m,
                 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        proc5HoursPrior() {
-            return this.procAppt()
-                .minus({ hours: 5 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        proc4HoursPrior() {
-            return this.procAppt()
-                .minus({ hours: 4 })
                 .toLocaleString(DateTime.TIME_SIMPLE);
         },
 
