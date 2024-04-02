@@ -574,7 +574,7 @@ window.procs = function () {
                 incomplete++;
             }
 
-            if (!this.fuApptInput && this.fuTBD) {
+            if (!this.fuApptInput && !this.fuTBD()) {
                 incomplete++;
             }
 
