@@ -376,6 +376,8 @@ window.procs = function () {
             }
         },
 
+        leftMsg: false,
+
         // procedure date, proc appt
         procApptInput: null,
 
@@ -769,6 +771,8 @@ window.procs = function () {
         },
 
         procTS() {
+            let DOS = ", DOS " + this.procApptDateNumShort() + ". ";
+
             if (this.procs[1].selected) {
                 return (
                     this.selectedProcs.map((proc) => proc.short).join("/") +
@@ -778,9 +782,7 @@ window.procs = function () {
                     this.sedation.substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
-                    ", DOS " +
-                    this.procApptDateNumShort() +
-                    ". "
+                    DOS
                 );
             } else {
                 return (
@@ -789,9 +791,7 @@ window.procs = function () {
                     this.sedation.substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
-                    " sched for " +
-                    this.procApptDateNumShort() +
-                    ". "
+                    DOS
                 );
             }
         },
@@ -831,6 +831,51 @@ window.procs = function () {
 
         copyTimestamp() {
             navigator.clipboard.writeText(this.timestamp());
+        },
+
+        lmTS() {
+            let addInst = this.instructions.map((inst) => inst.body).join(" ");
+            let fu = "";
+
+            if (this.fuTBD()) {
+                fu = "f/u TBD.";
+            } else {
+                fu = "Needs f/u.";
+            }
+
+            if (this.procs[1].selected) {
+                return (
+                    "l/m. " +
+                    this.selectedProcs.map((proc) => proc.short).join("/") +
+                    " " +
+                    this.prep.toLowerCase() +
+                    " " +
+                    this.sedation.substring(0, 3) +
+                    " " +
+                    this.selectedFacility.short +
+                    ". " +
+                    fu +
+                    " " +
+                    addInst
+                );
+            } else {
+                return (
+                    "l/m. " +
+                    this.selectedProcs.map((proc) => proc.short).join("/") +
+                    " " +
+                    this.sedation.substring(0, 3) +
+                    " " +
+                    this.selectedFacility.short +
+                    ". " +
+                    fu +
+                    " " +
+                    addInst
+                );
+            }
+        },
+
+        copyLmTS() {
+            navigator.clipboard.writeText(this.lmTS());
         },
 
         apptNotes() {
