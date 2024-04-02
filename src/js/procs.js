@@ -779,7 +779,7 @@ window.procs = function () {
                     " " +
                     this.prep.toLowerCase() +
                     " " +
-                    this.sedation.substring(0, 3) +
+                    this.selectedSedation().substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
                     DOS
@@ -788,7 +788,7 @@ window.procs = function () {
                 return (
                     this.selectedProcs.map((proc) => proc.short).join("/") +
                     " " +
-                    this.sedation.substring(0, 3) +
+                    this.selectedSedation().substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
                     DOS
@@ -834,14 +834,23 @@ window.procs = function () {
         },
 
         lmTS() {
-            let addInst = this.instructions.map((inst) => inst.body).join(" ");
-            let fu = "";
+            let sed = "";
 
-            if (this.fuTBD()) {
-                fu = "f/u TBD.";
+            if (this.sedationTBD) {
+                sed = "(MAC or twi)";
             } else {
-                fu = "Needs f/u.";
+                sed = this.selectedSedation().substring(0, 3);
             }
+
+            // let facility = "";
+
+            // if (this.facilityTBD) {
+            //     facility = "(MOSCL or PRIME)";
+            // } else {
+            //     facility = this.selectedFacility.short;
+            // }
+
+            let addInst = this.instructions.map((inst) => inst.body).join(" ");
 
             if (this.procs[1].selected) {
                 return (
@@ -850,11 +859,16 @@ window.procs = function () {
                     " " +
                     this.prep.toLowerCase() +
                     " " +
-                    this.sedation.substring(0, 3) +
+                    sed +
                     " " +
-                    this.selectedFacility.short +
+                    (this.facilityTBD
+                        ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
+                        : this.selectedFacility.short) +
+                    (this.facilityIndex === "1" && !this.facilityTBD
+                        ? "-$" + this.facilities[1].quote
+                        : "") +
                     ". " +
-                    fu +
+                    (this.fuTBD() ? "f/u TBD" : "Needs f/u.") +
                     " " +
                     addInst
                 );
@@ -863,11 +877,16 @@ window.procs = function () {
                     "l/m. " +
                     this.selectedProcs.map((proc) => proc.short).join("/") +
                     " " +
-                    this.sedation.substring(0, 3) +
+                    sed +
                     " " +
-                    this.selectedFacility.short +
+                    (this.facilityTBD
+                        ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
+                        : this.selectedFacility.short) +
+                    (this.facilityIndex === "1" && !this.facilityTBD
+                        ? "-$" + this.facilities[1].quote
+                        : "") +
                     ". " +
-                    fu +
+                    (this.fuTBD() ? "f/u TBD" : "Needs f/u.") +
                     " " +
                     addInst
                 );
