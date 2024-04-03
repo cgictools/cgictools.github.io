@@ -176,22 +176,42 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-ref="prePrepSent"
                                     x-on:hoverpre.window="warnPrePrepSent()"
                                     class="pb-2 font-medium">
-                                    Was Rx Sent?
+                                    Was <span x-text="prep"></span> Rx Sent?
                                 </h3>
-                                <div class="select-none">
-                                    <input
-                                        type="checkbox"
-                                        id="prepSent"
-                                        x-on:click="$nextTick(() => { warnPrePrepSent() })"
-                                        x-model="prepSent"
-                                        class="-mr-0.5"
-                                    />
-                                    <label
-                                        for="prepSent"
-                                        x-on:click="$nextTick(() => { warnPrePrepSent() })"
-                                        x-text="prepSent ? 'yes' : 'no'"
-                                        class="pl-1"></label>
-                                </div>
+                                <ul>
+                                    <li class="select-none pb-1">
+                                        <label
+                                            for="sent"
+                                            x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="sent"
+                                                value="yes"
+                                                x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                                x-model="prepSent"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             yes
+                                        </label>
+                                    </li>
+                                    <li class="select-none pb-1">
+                                        <label
+                                            for="notSent"
+                                            x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="notSent"
+                                                value="no"
+                                                x-on:click="$nextTick(() => { warnPrePrepSent() })"
+                                                x-model="prepSent"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             no
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div>
@@ -860,9 +880,44 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <h2 class="text-lg font-semibold">Output</h2>
                             <ShareSVG />
                         </div>
-                        <!-- grid?? -->
                         <div
-                            x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg)"
+                            x-show="(checkPre() === 0 && prepSent === 'no') && (checkDuring() === 0 || leftMsg)"
+                            class="mb-8">
+                            <h3 class="pb-2 font-medium">
+                                Send <span x-text="prep"></span> Rx
+                            </h3>
+                            <ul>
+                                <li class="select-none pb-1">
+                                    <label for="rxFinalSent" class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="rxFinalSent"
+                                            value="sent"
+                                            x-model="rxFinal"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         Sent Rx
+                                    </label>
+                                </li>
+                                <li class="select-none pb-1">
+                                    <label
+                                        for="rxFinalForward"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="rxFinalForward"
+                                            value="forward"
+                                            x-model="rxFinal"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         Will send message/forward tele
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- grid -->
+                        <div
+                            x-show="(checkPre() === 0 && (checkDuring() === 0 || leftMsg)) && (prepSent === 'yes' || rxFinal !== '')"
                             x-cloak
                             class="grid grid-cols-1 gap-y-8">
                             <div x-show="!leftMsg">

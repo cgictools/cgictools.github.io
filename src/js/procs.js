@@ -183,11 +183,11 @@ window.procs = function () {
 
         // colon preps
         prep: "",
-        prepSent: null,
+        prepSent: "",
+
         get prepGeneric() {
             return this.preps.find((prep) => prep.name === this.prep).generic;
         },
-        // pickup: "",
 
         // facilities
         facilityTBD: false,
@@ -283,7 +283,7 @@ window.procs = function () {
             if (this.procs[1].selected) {
                 if (this.prep === "") {
                     incomplete++;
-                } else if (this.prep !== "ez2go" && !this.prepSent) {
+                } else if (this.prep !== "ez2go" && this.prepSent === "") {
                     incomplete++;
                 }
             }
@@ -337,9 +337,9 @@ window.procs = function () {
         },
 
         warnPrePrepSent() {
-            if (!this.prepSent) {
+            if (this.prepSent === "") {
                 this.$refs.prePrepSent.style.color = this.red;
-            } else {
+            } else if (this.prepSent === "yes") {
                 this.$refs.prePrepSent.style.color = "black";
             }
         },
@@ -628,6 +628,8 @@ window.procs = function () {
 
         // output
 
+        rxFinal: "",
+
         emailSubject() {
             return this.emailSubjectTemplate.replace(
                 "{upperProcs}",
@@ -800,7 +802,7 @@ window.procs = function () {
             if (!this.fuTBD) {
                 return "f/u sched for " + this.fuApptDateNumShort() + ". ";
             } else {
-                return "";
+                return "f/u TBD. ";
             }
         },
 
@@ -817,15 +819,27 @@ window.procs = function () {
         },
 
         timestamp() {
+            let rx = "";
+
+            if (this.rxFinal === "sent") {
+                rx = " " + this.prep + " sent.";
+            } else if (this.rxFinal === "forward") {
+                rx = " Please send " + this.prep + ".";
+            }
+
+            let addInst = this.instructions.map((inst) => inst.body).join(" ");
+
             if (this.instructions.length && !this.noInst) {
                 return (
                     this.procTS() +
                     this.fuTS() +
                     this.actionTS() +
-                    " See packet for additional instructions."
+                    rx +
+                    " " +
+                    addInst
                 );
             } else {
-                return this.procTS() + this.fuTS() + this.actionTS();
+                return this.procTS() + this.fuTS() + this.actionTS() + rx;
             }
         },
 
@@ -834,21 +848,13 @@ window.procs = function () {
         },
 
         lmTS() {
-            let sed = "";
+            let rx = "";
 
-            if (this.sedationTBD) {
-                sed = "(MAC or twi)";
-            } else {
-                sed = this.selectedSedation().substring(0, 3);
+            if (this.rxFinal === "sent") {
+                rx = this.prep + " sent.";
+            } else if (this.rxFinal === "forward") {
+                rx = "Need to send " + this.prep + ".";
             }
-
-            // let facility = "";
-
-            // if (this.facilityTBD) {
-            //     facility = "(MOSCL or PRIME)";
-            // } else {
-            //     facility = this.selectedFacility.short;
-            // }
 
             let addInst = this.instructions.map((inst) => inst.body).join(" ");
 
@@ -859,7 +865,9 @@ window.procs = function () {
                     " " +
                     this.prep.toLowerCase() +
                     " " +
-                    sed +
+                    (this.sedationTBD
+                        ? "(MAC or twi)"
+                        : this.selectedSedation().substring(0, 3)) +
                     " " +
                     (this.facilityTBD
                         ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
@@ -868,7 +876,9 @@ window.procs = function () {
                         ? "-$" + this.facilities[1].quote
                         : "") +
                     ". " +
-                    (this.fuTBD() ? "f/u TBD" : "Needs f/u.") +
+                    (this.fuTBD() ? "f/u TBD." : "Needs f/u.") +
+                    " " +
+                    rx +
                     " " +
                     addInst
                 );
@@ -877,7 +887,9 @@ window.procs = function () {
                     "l/m. " +
                     this.selectedProcs.map((proc) => proc.short).join("/") +
                     " " +
-                    sed +
+                    (this.sedationTBD
+                        ? "(MAC or twi)"
+                        : this.selectedSedation().substring(0, 3)) +
                     " " +
                     (this.facilityTBD
                         ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
@@ -886,7 +898,9 @@ window.procs = function () {
                         ? "-$" + this.facilities[1].quote
                         : "") +
                     ". " +
-                    (this.fuTBD() ? "f/u TBD" : "Needs f/u.") +
+                    (this.fuTBD() ? "f/u TBD." : "Needs f/u.") +
+                    " " +
+                    rx +
                     " " +
                     addInst
                 );
