@@ -881,7 +881,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <ShareSVG />
                         </div>
                         <div
-                            x-show="(checkPre() === 0 && prepSent === 'no') && (checkDuring() === 0 || leftMsg)"
+                            x-show="checkPre() === 0 && prepSent === 'no' && (checkDuring() === 0 || leftMsg)"
                             class="mb-8">
                             <h3 class="pb-2 font-medium">
                                 Send <span x-text="prep"></span> Rx
@@ -917,7 +917,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <!-- grid -->
                         <div
-                            x-show="(checkPre() === 0 && (checkDuring() === 0 || leftMsg)) && (prepSent === 'yes' || rxFinal !== '')"
+                            x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg) && (procs[0].selected || (prep === 'ez2go' || (prepSent === 'yes' || rxFinal !== '')))"
                             x-cloak
                             class="grid grid-cols-1 gap-y-8">
                             <div x-show="!leftMsg">
