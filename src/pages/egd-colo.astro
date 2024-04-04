@@ -1075,57 +1075,47 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </p>
                             </div>
                             <!-- staff to do -->
-                            <!-- group the messages for late add-on, something like below block -->
-                            <!-- <div>
-                                <h3>Add-On Proc</h3>
-                                <table>
-                                    <tr><td>Fax Documents</td><td></td></tr>
+                            <div x-show="!leftMsg" class="text-red-500">
+                                <h3 class="mb-2 font-medium">Add-On Proc</h3>
+                                <table class="ml-2">
+                                    <tr x-show="numDaysOut() < 7">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
+                                            Fax Docs
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            Procedure is in less than 7 days.
+                                            Send a chat message to fax necessary
+                                            documents to
+                                            <span
+                                                x-text="selectedFacility.short"
+                                            ></span>.
+                                        </td>
+                                    </tr>
+                                    <tr x-show="numDaysOut() < 14">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
+                                            Ins Verif
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            Procedure is in less than 2 weeks.
+                                            Send a chat message for procedure
+                                            insurance verification.
+                                        </td>
+                                    </tr>
                                     <tr
-                                        ><td>Insurance Verification</td><td
-                                        ></td></tr
-                                    >
-                                    <tr><td>Prime Scheduling</td><td></td></tr>
+                                        x-show="numDaysOut() < 14 && selectedFacility.short === 'PRIME'">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
+                                            Prime Sched
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            Procedure is in less than 2 weeks.
+                                            Send a chat message to notify Prime
+                                            of add-on procedure.
+                                        </td>
+                                    </tr>
                                 </table>
-                            </div> -->
-                            <div x-show="!leftMsg">
-                                <div
-                                    x-show="numDaysOut() < 7"
-                                    class="text-red-500">
-                                    <h3 class="mb-2 font-medium">
-                                        Add-On Proc
-                                    </h3>
-                                    <p>
-                                        Procedure is in less than 7 days. Send a
-                                        chat message to fax necessary documents
-                                        to
-                                        <span x-text="selectedFacility.short"
-                                        ></span>.
-                                    </p>
-                                </div>
-                                <div
-                                    x-show="numDaysOut() < 14"
-                                    class="text-red-500">
-                                    <h3 class="mb-2 font-medium">
-                                        Insurance Verification for Add-On Procs
-                                    </h3>
-                                    <p>
-                                        Procedure is in less than 2 weeks. Send
-                                        a chat message for procedure insurance
-                                        verification.
-                                    </p>
-                                </div>
-                                <div
-                                    x-show="numDaysOut() < 14 && selectedFacility.short === 'PRIME'"
-                                    class="text-red-500">
-                                    <h3 class="mb-2 font-medium">
-                                        Prime Add-On
-                                    </h3>
-                                    <p>
-                                        Procedure is in less than 2 weeks. Send
-                                        a chat message to notify Prime of add-on
-                                        procedure.
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </section>
