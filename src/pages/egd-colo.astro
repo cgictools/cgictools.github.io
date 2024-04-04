@@ -952,7 +952,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                     <p
                                                         x-text="emailSubject()"
                                                         x-on:click="copyEmailSubject()"
-                                                        class="cursor-pointer text-sm">
+                                                        class="cursor-pointer text-sm text-zinc-700 hover:text-black">
                                                     </p>
                                                 </div>
                                                 <button
@@ -969,7 +969,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 <p
                                                     x-html="emailBodyHtml()"
                                                     x-on:click="copyEmailBody()"
-                                                    class="cursor-pointer">
+                                                    class="cursor-pointer text-zinc-700 hover:text-black">
                                                 </p>
                                             </template>
                                         </div>
@@ -1026,7 +1026,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             <p
                                                 x-text="DOS()"
                                                 x-on:click="copyDOS()"
-                                                class="cursor-pointer">
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
                                         </td>
                                     </tr>
@@ -1042,13 +1042,13 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-show="!leftMsg"
                                                 x-text="timestamp()"
                                                 x-on:click="copyTimestamp()"
-                                                class="cursor-pointer">
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
                                             <p
                                                 x-show="leftMsg"
                                                 x-text="lmTS()"
                                                 x-on:click="copyLmTS()"
-                                                class="cursor-pointer">
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
                                         </td>
                                     </tr>
@@ -1063,7 +1063,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             <p
                                                 x-text="apptNotes()"
                                                 x-on:click="copyApptNotes()"
-                                                class="cursor-pointer">
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
                                         </td>
                                     </tr>
@@ -1075,7 +1075,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </p>
                             </div>
                             <!-- staff to do -->
-                            <div x-show="!leftMsg" class="text-red-500">
+                            <div
+                                x-show="!leftMsg && numDaysOut() < 14"
+                                class="text-red-500">
                                 <h3 class="mb-2 font-medium">Add-On Proc</h3>
                                 <table class="ml-2">
                                     <tr x-show="numDaysOut() < 7">
