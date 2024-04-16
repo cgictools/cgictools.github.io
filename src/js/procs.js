@@ -464,6 +464,17 @@ window.procs = function () {
             return x;
         },
 
+        isAfternoonProc() {
+            let hour = this.procAppt().hour;
+            let x = false;
+
+            if (hour >= 12) {
+                x = true;
+            }
+
+            return x;
+        },
+
         // for ez2go
         proc2ndDoseTime() {
             return this.procAppt()

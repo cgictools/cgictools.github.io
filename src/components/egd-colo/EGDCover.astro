@@ -33,10 +33,11 @@ import CxPolicy from './snippets/CxPolicy.astro';
     <p class="mb-1">
         <span class="font-bold uppercase">The day of the examination:</span>
          Nothing to eat or drink after 12:00 A.M., midnight, until after your
-        procedure. If your appointment is in the afternoon, you can have clear
-        liquids up to 5 hours before the appointment time (<span
-            x-text="hoursBeforeProc(5)"></span>). Additionally, do not smoke
-        during the same period of time.
+        procedure. <span x-show="isAfternoonProc()"
+            >Because your appointment is in the afternoon, you can have clear
+            liquids up to 5 hours before the appointment time (up to <span
+                x-text="hoursBeforeProc(5)"></span>).</span
+        > Additionally, do not smoke during the same period of time.
     </p>
     <p>
         Report to the appropriate GI lab as indicated above. Wear comfortable
