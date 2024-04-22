@@ -810,7 +810,7 @@ window.procs = function () {
         },
 
         fuTS() {
-            if (!this.fuTBD) {
+            if (!this.fuTBD()) {
                 return "f/u sched for " + this.fuApptDateNumShort() + ". ";
             } else {
                 return "f/u TBD. ";
