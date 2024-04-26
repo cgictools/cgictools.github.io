@@ -2,7 +2,9 @@
 import Logo from '../../images/logo.png';
 ---
 
-<div class="flex flex-row justify-between">
+<div
+    class="flex flex-row justify-between"
+    x-bind:class=" selectedProcs.length === 2 ? '' : 'mb-10' ">
     <p>Please sign and bring this page to your procedure.</p>
     <p>Proc: <span x-text="procApptDateNumShort()"></span></p>
 </div>
