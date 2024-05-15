@@ -58,7 +58,7 @@ window.procs = function () {
             {
                 id: 3,
                 short: "LAMC",
-                long: "Los Alamitos Medical Center",
+                long: "UCI Health - Los Alamitos",
                 address: "3751 Katella Ave, Los Alamitos, CA 90720",
                 checkin:
                     "Please report to Patient Registration in the main lobby.",
