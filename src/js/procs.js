@@ -784,7 +784,7 @@ window.procs = function () {
         },
 
         procTS() {
-            let DOS = ", DOS " + this.procApptDateNumShort() + ". ";
+            let DOS = ", DOS " + this.procApptDateNumShort();
 
             if (this.procs[1].selected) {
                 return (
@@ -795,7 +795,10 @@ window.procs = function () {
                     this.selectedSedation().substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
-                    DOS
+                    DOS +
+                    " " +
+                    this.procApptTime() +
+                    ". "
                 );
             } else {
                 return (
@@ -804,7 +807,10 @@ window.procs = function () {
                     this.selectedSedation().substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
-                    DOS
+                    DOS +
+                    " " +
+                    this.procApptTime() +
+                    ". "
                 );
             }
         },
