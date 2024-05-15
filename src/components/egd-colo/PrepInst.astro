@@ -72,25 +72,13 @@ import Transpo from './snippets/Transpo.astro';
             class="normal-case"></span>):
     </p>
     <ul class="px-4" x-bind:class=" instructions.length ? '' : 'py-1' ">
-        <li x-show=" prep === 'Sutab' ">
-            <span class="font-bold uppercase underline"
-                >A low-residue breakfast is allowed.</span
-            > This includes white bread, biscuits, muffins (no wheat), cream of
-            wheat, grits, coffee, tea, milk, juice without pulp, eggs, fruit (no
-            skin or seeds), cornflakes, yogurt, cottage cheese.
-        </li>
         <li>
-            <span
-                x-show=" prep !== 'Sutab' "
-                class="font-bold uppercase underline"
+            <span class="font-bold uppercase underline"
                 >No solid food. This includes breakfast!
             </span>
         </li>
         <li>
-            <span x-show=" prep === 'Sutab' " class="uppercase underline"
-                >After breakfast,</span
-            ><span class="font-bold uppercase underline"
-                >Clear liquids only</span
+            <span class="font-bold uppercase underline">Clear liquids only</span
             >
              until after your procedure.
         </li>
@@ -123,7 +111,7 @@ import Transpo from './snippets/Transpo.astro';
         <p>
             <span class="font-bold uppercase">1st dose:</span>
             <span class="underline"
-                >between 3 to 5 PM the day before your procedure</span
+                >starting between 3 to 5 PM the day before your procedure</span
             >, take 2 Bisacodyl tablets with 8 oz of clear liquid. 30 minutes
             after taking the 2 Bisacodyl tablets, start drinking 8 oz of the
             "prep mix" every 10-20 minutes until the first bottle (28-32 oz) is
@@ -131,14 +119,19 @@ import Transpo from './snippets/Transpo.astro';
         </p>
     </div>
     <p x-show=" prep === 'Suprep' ">
-        <span class="font-bold">Suprep 1st dose, at 6 PM:</span> Pour one
-        6-ounce bottle of Suprep liquid into the mixing container. Add cool
-        drinking water or berry flavored Propel water to the 16-ounce line on
-        the container and mix. Drink all the liquid in the container. Over the
-        next hour, drink 2 more 16-ounce containers of water.
+        <span class="font-bold"
+            >Suprep 1st dose, starting between 3 to 5 PM the day before your
+            procedure:</span
+        > Pour one 6-ounce bottle of Suprep liquid into the mixing container.
+        Add cool drinking water or berry flavored Propel water to the 16-ounce
+        line on the container and mix. Drink all the liquid in the container.
+        Over the next hour, drink 2 more 16-ounce containers of water.
     </p>
     <p x-show=" prep === 'Clenpiq' ">
-        <span class="font-bold">Clenpiq 1st dose, between 5 to 7 PM:</span>
+        <span class="font-bold"
+            >Clenpiq 1st dose, starting between 3 to 5 PM the day before your
+            procedure:</span
+        >
          Drink 1 bottle of Clenpiq right from the bottle. <span
             class="font-bold underline"
             >Do not mix or dilute with other liquids</span
@@ -149,14 +142,17 @@ import Transpo from './snippets/Transpo.astro';
         the discomfort goes away.
     </p>
     <p x-show=" prep === 'Sutab' ">
-        <span class="font-bold">Sutab 1st dose, at 6 PM:</span> Open 1 bottle of
-        12 tablets. Fill the provided container with 16-ounces of water (to the
-        fill line). Swallow each tablet with a sip of water and drink the entire
-        amount over 15 to 20 minutes. Approximately 1 hour after the last tablet
-        is swallowed, fill the provided container a second time with 16-ounces
-        of water (to the fill line) and drink the entire amount over 30 minutes.
-        Approximately 30 minutes after finishing the second container of water,
-        drink another 16-ounces of water over 30 minutes.
+        <span class="font-bold"
+            >Sutab 1st dose, starting between 3 to 5 PM the day before your
+            procedure:</span
+        > Open 1 bottle of 12 tablets. Fill the provided container with
+        16-ounces of water (to the fill line). Swallow each tablet with a sip of
+        water and drink the entire amount over 15 to 20 minutes. Approximately 1
+        hour after the last tablet is swallowed, fill the provided container a
+        second time with 16-ounces of water (to the fill line) and drink the
+        entire amount over 30 minutes. Approximately 30 minutes after finishing
+        the second container of water, drink another 16-ounces of water over 30
+        minutes.
     </p>
     <div x-show=" prep === 'Golytely' ">
         <p class="mb-0.5">
@@ -168,21 +164,23 @@ import Transpo from './snippets/Transpo.astro';
             water with ginger-ale or 7-up. Refrigerate until ready to drink.
         </p>
         <p>
-            <span class="font-bold">1st dose, at 6 PM:</span> Begin drinking the
-            solution. Drink an 8-ounce glass every 10 to 15 minutes until you
-            have finished 2/3 of the container. Drink each glass quickly or use
-            a straw to bypass the taste buds. Bowel movements should begin
-            approximately one hour after the first glass of the solution. They
-            will continue for several hours after you finish drinking the last
-            glass. Feelings of bloating, abdominal fullness, and nausea are
-            common after the first glasses of the solution. This is temporary
-            and should subside once bowel movements begin. If you have severe
-            discomfort or bloating, stop drinking the solution for a while or
-            wait longer between drinking each glass until the discomfort goes
-            away.
+            <span class="font-bold"
+                >1st dose, starting between 3 to 5 PM the day before your
+                procedure:</span
+            > Begin drinking the solution. Drink an 8-ounce glass every 10 to 15
+            minutes until you have finished 2/3 of the container. Drink each
+            glass quickly or use a straw to bypass the taste buds. Bowel
+            movements should begin approximately one hour after the first glass
+            of the solution. They will continue for several hours after you
+            finish drinking the last glass. Feelings of bloating, abdominal
+            fullness, and nausea are common after the first glasses of the
+            solution. This is temporary and should subside once bowel movements
+            begin. If you have severe discomfort or bloating, stop drinking the
+            solution for a while or wait longer between drinking each glass
+            until the discomfort goes away.
         </p>
     </div>
-    <p x-show=" prep === 'Plenvu' ">
+    <!-- <p x-show=" prep === 'Plenvu' ">
         <span class="font-bold"
             >Plenvu 1st dose, at <span x-text="hoursBeforeProc(17)"
             ></span>:</span
@@ -191,7 +189,7 @@ import Transpo from './snippets/Transpo.astro';
         shake until completely dissolved. This may take 2 to 3 minutes. Drink
         the entire contents slowly within 30 minutes. Refill the container with
         16 ounces of a clear liquid and finish this within 30 minutes.
-    </p>
+    </p> -->
 </div>
 <!-- 2nd dose, early proc -->
 <div
@@ -200,29 +198,39 @@ import Transpo from './snippets/Transpo.astro';
     <p x-show=" prep === 'ez2go' ">
         <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose <span
             class="underline"
-            >between 6 to 8 PM the night before your procedure</span
+            >between 6 to 8 PM the night before your procedure (and 3 to 4 hours
+            after 1st dose)</span
         >. Take the remaining 2 Bisacodyl tablets, and 30 minutes after, start
         drinking 8 oz of the "prep mix" every 10-20 minutes until the bottle
         (28-32 oz) is completed (8 oz glasses every time, every 10-20 min).
     </p>
     <p x-show=" prep === 'Suprep' ">
-        <span class="font-bold">Suprep 2nd dose, at 10 PM:</span> Repeat the
-        above instructions using the other Suprep bottle.
+        <span class="font-bold"
+            >Suprep 2nd dose, starting between 6 to 8 PM the night before your
+            procedure (and 3 to 4 hours after 1st dose):</span
+        > Repeat the above instructions using the other Suprep bottle.
     </p>
     <p x-show=" prep === 'Clenpiq' ">
-        <span class="font-bold">Clenpiq 2nd dose, at 10 PM:</span> Drink the
-        other bottle of Clenpiq right from the bottle. Follow with
+        <span class="font-bold"
+            >Clenpiq 2nd dose, starting between 6 to 8 PM the night before your
+            procedure (and 3 to 4 hours after 1st dose):</span
+        > Drink the other bottle of Clenpiq right from the bottle. Follow with
         <span class="underline">five</span> 8-ounce drinks of clear liquid
         within the next 2 hours.
     </p>
     <p x-show=" prep === 'Sutab' ">
-        <span class="font-bold">Sutab 2nd dose, at 10 PM:</span> Repeat the
-        above instructions using the second bottle of tablets.
+        <span class="font-bold"
+            >Sutab 2nd dose, starting between 6 to 8 PM the night before your
+            procedure (and 3 to 4 hours after 1st dose):</span
+        > Repeat the above instructions using the second bottle of tablets.
     </p>
     <p x-show=" prep === 'Golytely' ">
-        <span class="font-bold">2nd dose, at 10 PM:</span> Drink the remaining
-        1/3 of the solution, an 8-ounce glass every 10 to 15 minutes until the
-        container is empty. Your stool should look like the color of broth.
+        <span class="font-bold"
+            >2nd dose, starting between 6 to 8 PM the night before your
+            procedure (and 3 to 4 hours after 1st dose):</span
+        > Drink the remaining 1/3 of the solution, an 8-ounce glass every 10 to
+        15 minutes until the container is empty. Your stool should look like the
+        color of broth.
     </p>
 </div>
 <!-- no BMs with prep -->
@@ -266,14 +274,14 @@ import Transpo from './snippets/Transpo.astro';
     </p>
     <p x-show=" prep === 'Suprep' ">
         <span class="font-bold"
-            >Suprep 2nd dose, at <span x-text="hoursBeforeProc(6)"
+            >Suprep 2nd dose, startign at <span x-text="proc2ndDoseTime()"
             ></span>:</span
-        > 6 hours prior to your exam, repeat the above instructions using the
-        other Suprep bottle.
+        > 6 hours prior to your arrival time, repeat the above instructions
+        using the other Suprep bottle.
     </p>
     <p x-show=" prep === 'Clenpiq' ">
         <span class="font-bold"
-            >Clenpiq 2nd dose, at <span x-text="hoursBeforeProc(6)"
+            >Clenpiq 2nd dose, starting at <span x-text="proc2ndDoseTime()"
             ></span>:</span
         >, drink the other bottle of Clenpiq right from the bottle. Follow with <span
             class="underline">five</span
@@ -281,21 +289,21 @@ import Transpo from './snippets/Transpo.astro';
     </p>
     <p x-show=" prep === 'Sutab' ">
         <span class="font-bold"
-            >Sutab 2nd dose, starting between <span x-text="hoursBeforeProc(8)"
-            ></span>
-             and <span x-text="hoursBeforeProc(5)"></span>:</span
+            >Sutab 2nd dose, starting at <span x-text="proc2ndDoseTime()"
+            ></span>:</span
         > Repeat the above instructions using the second bottle of tablets.
     </p>
     <p x-show=" prep === 'Golytely' ">
         <span class="font-bold"
-            >2nd dose, at <span x-text="hoursBeforeProc(5, 30)"></span>:</span
-        > 5.5 hours before the procedure, drink the remaining 1/3 of the
+            >2nd dose, starting at <span x-text="proc2ndDoseTime()"
+            ></span>:</span
+        > 6 hours prior to your arrival time, drink the remaining 1/3 of the
         solution, an 8-ounce glass every 10 to 15 minutes until the container is
         empty. Your stool should look like the color of broth.
     </p>
 </div>
 <!-- plenvu 2nd dose always day of proc -->
-<p
+<!-- <p
     x-show=" prep === 'Plenvu' "
     x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
     <span class="font-bold"
@@ -305,7 +313,7 @@ import Transpo from './snippets/Transpo.astro';
     dissolve. This may take 2 to 3 minutes. Drink entire contents slowly over 30
     minutes. Refill the container with 16 ounces of a clear liquid and finish
     this over 30 minutes.
-</p>
+</p> -->
 <!-- day of proc -->
 <div>
     <p class="mb-0.5">

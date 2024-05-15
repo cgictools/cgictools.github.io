@@ -31,10 +31,10 @@ window.procs = function () {
                 name: "Golytely",
                 generic: "PEG 3350 / electrolytes",
             },
-            {
-                name: "Plenvu",
-                generic: "PEG 3350 / electrolytes",
-            },
+            // {
+            //     name: "Plenvu",
+            //     generic: "PEG 3350 / electrolytes",
+            // },
         ],
 
         facilities: [
