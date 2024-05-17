@@ -45,15 +45,17 @@ window.procs = function () {
                 address: "3833 Worsham Ave, Ste. 200, Long Beach, CA 90808",
                 hourOffset: 1,
                 minOffset: 0,
+                phone: "562-426-2606",
             },
             {
                 id: 2,
                 short: "PRIME",
                 long: "Prime Surgical Center of Newport Beach",
-                address: "351 Hospital Road, Ste. 110, Newport Beach, CA 92663",
+                address: "351 Hospital Rd, Ste. 110, Newport Beach, CA 92663",
                 quote: "",
                 hourOffset: 1,
                 minOffset: 15,
+                phone: "949-335-4966",
             },
             {
                 id: 3,
@@ -64,6 +66,7 @@ window.procs = function () {
                     "Please report to Patient Registration in the main lobby.",
                 hourOffset: 1,
                 minOffset: 15,
+                phone: "562-598-1311",
             },
             {
                 id: 4,
@@ -73,6 +76,7 @@ window.procs = function () {
                 checkin: "Please report to the main lobby desk.",
                 hourOffset: 1,
                 minOffset: 0,
+                phone: "562-933-2000",
             },
         ],
 
@@ -549,13 +553,14 @@ window.procs = function () {
         sendInstText: [
             "Email instructions and attach to patient docs.",
             "Attach to patient docs and upload to portal.",
-            "Attach to patient docs. Send tele/order to print.",
+            "Attach to patient docs.",
+            "Attach to patient docs. Send tele/order to print and mail.",
         ],
 
         sendInstAction: [
             "Emailed/attached inst.",
             "Attached/uploaded inst to portal.",
-            "Attached inst, please print for pickup.",
+            "Attached inst, patient to pickup.",
             "Attached inst, please print to mail.",
         ],
 
@@ -564,8 +569,10 @@ window.procs = function () {
                 return this.sendInstText[0];
             } else if (this.sendInstMethod === "portal") {
                 return this.sendInstText[1];
-            } else {
+            } else if (this.sendInstMethod === "pickup") {
                 return this.sendInstText[2];
+            } else {
+                return this.sendInstText[3];
             }
         },
 
