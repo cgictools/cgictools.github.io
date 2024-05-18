@@ -1,0 +1,389 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHeading from '../components/PageHeading.astro';
+
+import PointerSVG from '../components/svg/PointerSVG.astro';
+import PhoneSVG from '../components/svg/PhoneSVG.astro';
+import DocumentSVG from '../components/svg/DocumentSVG.astro';
+import ShareSVG from '../components/svg/ShareSVG.astro';
+import EnvelopeSVG from '../components/svg/EnvelopeSVG.astro';
+import CopySVG from '../components/svg/CopySVG.astro';
+import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
+---
+
+<Layout title="Fibroscan - CGIC Tools">
+    <Breadcrumbs text="Fibroscan" />
+    <div x-data="fibroscan()">
+        <main class="pb-24 print:hidden">
+            <PageHeading text="Fibroscan scheduling" />
+            <div class="grid grid-cols-2 divide-x">
+                <section class="col-span-1">
+                    <div
+                        class="flex flex-row items-center justify-between pb-6 pr-8">
+                        <div class="flex flex-row items-center gap-2">
+                            <h2 class="text-lg font-semibold">Pre-Call</h2>
+                            <PointerSVG />
+                        </div>
+                        <div>
+                            <span
+                                x-text="checkPre()"
+                                x-on:mouseover="$dispatch('hoverpre')"
+                                x-bind:class="checkPre() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
+                                class="rounded-full px-4 py-1 text-sm"></span>
+                        </div>
+                    </div>
+                    <section class="grid grid-cols-1 gap-y-8 pb-8 pr-8">
+                        <div>
+                            <h3
+                                x-ref="preFirstFibro"
+                                x-on:hoverpre.window="warnPreFirstFibro()"
+                                class="pb-2 font-medium">
+                                First Fibroscan?
+                            </h3>
+                            <ul>
+                                <li class="select-none pb-1">
+                                    <label
+                                        for="yesFirst"
+                                        x-on:click="$nextTick(() => { warnPreFirstFibro() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="yesFirst"
+                                            value="yes"
+                                            x-on:click="$nextTick(() => { warnPreFirstFibro() })"
+                                            x-model="firstFibro"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         yes
+                                    </label>
+                                </li>
+                                <li class="select-none">
+                                    <label
+                                        for="notFirst"
+                                        x-on:click="$nextTick(() => { warnPreFirstFibro() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="notFirst"
+                                            value="no"
+                                            x-on:click="$nextTick(() => { warnPreFirstFibro() })"
+                                            x-model="firstFibro"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         no
+                                    </label>
+                                    <input
+                                        type="date"
+                                        x-ref="prePrevFibroDate"
+                                        x-bind:disabled="firstFibro === 'no' ? false : true"
+                                        x-model="prevFibroInput"
+                                        x-on:hoverpre.window="warnPrePrevFibroDate()"
+                                        x-on:change="$nextTick(() => { warnPrePrevFibroDate() })"
+                                        class="ml-4 rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black disabled:cursor-not-allowed disabled:border-zinc-300 disabled:bg-zinc-200 disabled:text-zinc-400"
+                                    />
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3
+                                x-ref="preFu"
+                                x-on:hoverpre.window="warnPreFu()"
+                                class="pb-2 font-medium">
+                                Sched Follow-up?
+                            </h3>
+                            <ul>
+                                <li class="select-none pb-1">
+                                    <label
+                                        for="yesFu"
+                                        x-on:click="$nextTick(() => { warnPreFu() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="yesFu"
+                                            value="yes"
+                                            x-on:click="$nextTick(() => { warnPreFu() })"
+                                            x-model="schedFu"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         yes
+                                    </label>
+                                </li>
+                                <li class="select-none">
+                                    <label
+                                        for="noFu"
+                                        x-on:click="$nextTick(() => { warnPreFu() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="noFu"
+                                            value="no"
+                                            x-on:click="$nextTick(() => { warnPreFu() })"
+                                            x-model="schedFu"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         no/TBD</label
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                    <div
+                        class="flex flex-row items-center justify-between border-t pb-6 pr-8 pt-8">
+                        <div class="flex flex-row items-center gap-2">
+                            <h2 class="text-lg font-semibold">Call</h2>
+                            <PhoneSVG />
+                        </div>
+                        <div>
+                            <span
+                                x-show="checkPre() === 0 && !leftMsg"
+                                x-cloak
+                                x-on:mouseover="$dispatch('hovercall')"
+                                x-text="checkDuring()"
+                                x-bind:class="checkDuring() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
+                                class="rounded-full px-4 py-1 text-sm"></span>
+                        </div>
+                    </div>
+                    <p x-show="checkPre() !== 0">
+                        Please complete the above Pre-Call section before
+                        calling the patient.
+                    </p>
+                    <div
+                        x-show="checkPre() === 0"
+                        x-cloak
+                        class="mb-8 select-none">
+                        <label for="lm" class="p-1 pr-1.5">
+                            <input
+                                type="checkbox"
+                                id="lm"
+                                x-model="leftMsg"
+                                class="-ml-1 mr-0.5"
+                            />
+                             No answer, left message
+                        </label>
+                    </div>
+                    <section
+                        x-show="checkPre() === 0 && !leftMsg"
+                        x-cloak
+                        class="grid grid-cols-1 gap-y-8 pr-8">
+                        <div class="grid grid-cols-2 items-end">
+                            <div>
+                                <h3
+                                    x-ref="callFibroAppt"
+                                    x-on:hovercall.window="warnCallFibroAppt()"
+                                    class="pb-2 font-medium">
+                                    Fibroscan
+                                </h3>
+                                <input
+                                    type="datetime-local"
+                                    step="1200"
+                                    x-bind:min="fibroApptMin()"
+                                    x-on:change="$nextTick(() => { warnCallFibroAppt() })"
+                                    x-bind:class="fibroApptInput ? 'text-black' : 'text-zinc-400'"
+                                    x-model="fibroApptInput"
+                                    class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                                />
+                                <p x-show="firstFibro === 'no'" class="pt-1">
+                                    Schedule on or after <span
+                                        x-text="earliestFibroDate()"></span>
+                                </p>
+                            </div>
+                            <div
+                                x-bind:class="firstFibro === 'yes' ? '-mb-1' : ''">
+                                <p>Fridays, every 20 minutes</p>
+                                <p>8:40am-12pm, 1:40pm-3:20pm</p>
+                            </div>
+                        </div>
+                        <div x-show="!fuTBD()">
+                            <h3
+                                x-ref="callFuAppt"
+                                x-on:hovercall.window="warnCallFuAppt"
+                                class="pb-2 font-medium">
+                                Follow-up
+                            </h3>
+                            <div x-show="fibroApptInput" x-cloak class="pb-1">
+                                <p class="text-zinc-500">
+                                    2 weeks post Fibroscan is <span
+                                        x-text="fuApptRec()"></span>
+                                </p>
+                            </div>
+                            <input
+                                type="datetime-local"
+                                step="900"
+                                x-bind:min="fuApptMin()"
+                                x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
+                                x-model="fuApptInput"
+                                class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                            />
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <section class="row-span-2 pl-8">
+                        <div class="flex flex-row items-center gap-2 pb-6">
+                            <h2 class="text-lg font-semibold">Output</h2>
+                            <ShareSVG />
+                        </div>
+                        <div
+                            x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg)"
+                            x-cloak
+                            class="grid grid-cols-1 gap-y-8">
+                            <div x-show="!leftMsg">
+                                <!-- email template -->
+                                <div class="rounded-md border border-zinc-300">
+                                    <div
+                                        class="rounded-t-md border-b border-zinc-300 bg-zinc-100">
+                                        <div
+                                            class="relative border-b border-zinc-300 py-2">
+                                            <span
+                                                class="absolute bottom-2 left-6 text-zinc-300">
+                                                <EnvelopeSVG />
+                                            </span>
+                                            <h3
+                                                class="text-center text-sm text-zinc-800">
+                                                Confirmation Email
+                                            </h3>
+                                        </div>
+                                        <div
+                                            class="flex flex-row items-center justify-between px-6 pb-2 pt-2.5">
+                                            <div class="flex flex-row gap-2">
+                                                <h3
+                                                    class="text-sm font-light text-zinc-400">
+                                                    Subject:
+                                                </h3>
+                                                <p
+                                                    x-on:click="navigator.clipboard.writeText('Fibroscan Appointment')"
+                                                    class="cursor-pointer text-sm text-zinc-700 hover:text-black">
+                                                    Fibroscan Appointment
+                                                </p>
+                                            </div>
+                                            <button
+                                                title="Copy email subject"
+                                                x-on:click="navigator.clipboard.writeText('Fibroscan Appointment')"
+                                                class="group">
+                                                <CopySVG />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="px-6 py-4 text-sm">
+                                        <template
+                                            x-if="checkPre() === 0 && checkDuring() === 0">
+                                            <p
+                                                x-html="emailBodyHtml()"
+                                                x-on:click="copyEmailBody()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                        </template>
+                                    </div>
+                                    <div
+                                        class="flex flex-row items-center gap-6 px-6 py-0.5 pb-2">
+                                        <button
+                                            title="Copy email body"
+                                            x-on:click="copyEmailBody()"
+                                            class="group flex flex-row gap-1 rounded-md bg-zinc-200 px-2 py-1">
+                                            <CopySVG />
+                                            <span
+                                                class="text-sm text-zinc-700 group-hover:text-black"
+                                                >Copy</span
+                                            >
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- timestamp template -->
+                            <div>
+                                <h3 class="mb-2 font-medium">Notes</h3>
+                                <table class="ml-2">
+                                    <tr x-show="!leftMsg">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
+                                            <h3 class="font-medium">
+                                                Order Reason
+                                            </h3>
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            <p
+                                                x-text="DOS()"
+                                                x-on:click="copyDOS()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
+                                            <h3 class="font-medium">
+                                                Tele/Order
+                                            </h3>
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            <p
+                                                x-show="!leftMsg"
+                                                x-text="timestamp()"
+                                                x-on:click="copyTimestamp()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                            <p
+                                                x-show="leftMsg"
+                                                x-text="lmTS()"
+                                                x-on:click="copyLmTS()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr x-show="!leftMsg">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
+                                            <h3 class="font-medium">
+                                                Appt Notes
+                                            </h3>
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            <p
+                                                x-text="apptNotes()"
+                                                x-on:click="copyApptNotes()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p x-show="procs[1].selected && !leftMsg">
+                                    If screening colo (e.g. screening, h/o colon
+                                    polyps, colon adenomas, etc), add the month
+                                    and year of last colo to the appt reason.
+                                </p>
+                            </div>
+                            <!-- staff to do -->
+                            <div
+                                x-show="!leftMsg && numDaysOut() < 14"
+                                class="text-red-500">
+                                <h3 class="mb-2 font-medium">
+                                    Add-On Fibroscan
+                                </h3>
+                                <table class="ml-2">
+                                    <tr x-show="numDaysOut() < 14">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
+                                            Ins Verif
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            Exam is in less than 2 weeks. Send a
+                                            chat message for procedure insurance
+                                            verification.
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </main>
+    </div>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+    <script src="../js/fibroscan.js"></script>
+</Layout>

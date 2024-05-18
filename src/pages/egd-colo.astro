@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Instructions from '../components/egd-colo/ProcPacket.astro';
+import PageHeading from '../components/PageHeading.astro';
 
 import PointerSVG from '../components/svg/PointerSVG.astro';
 import SubmitSVG from '../components/svg/SubmitSVG.astro';
@@ -18,27 +19,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
     <Breadcrumbs text="EGD/colo" />
     <div x-data="procs()">
         <main class="pb-24 print:hidden">
-            <!-- todo extract to component, page title + refresh -->
-            <div class="flex flex-row items-center gap-x-3 pb-8 pt-28">
-                <h1 class="text-2xl font-semibold">EGD/colo scheduling</h1>
-                <span
-                    class="rounded-full p-1 text-blue-700 transition-transform duration-500 ease-in-out hover:rotate-180 hover:cursor-pointer"
-                    x-on:click="window.location.reload()"
-                    title="Reload">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="h-6 w-6 stroke-[2.1]">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                        ></path>
-                    </svg>
-                </span>
-            </div>
+            <PageHeading text="EGD/colo scheduling" />
             <div class="grid grid-cols-2 divide-x">
                 <section class="col-span-1">
                     <div
@@ -572,7 +553,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </ul>
                             </div>
                         </div>
-
                         <div>
                             <h3
                                 x-ref="callProcAppt"
@@ -598,6 +578,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 type="datetime-local"
                                 step="900"
                                 x-bind:min="procApptMin()"
+                                x-on:change="$nextTick(() => { warnCallProcAppt() })"
                                 x-bind:class="procApptInput ? 'text-black' : 'text-zinc-400'"
                                 x-model="procApptInput"
                                 class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
@@ -617,49 +598,16 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 MOSCL EGD Covid reminder
                             </h3>
                             <p x-text="mosclCovid[0]"></p>
-                            <!-- <h3 class="pb-2 font-medium">
-                                Vaccinated for Covid?
-                            </h3>
-                            <ul>
-                                <li class="select-none pb-1">
-                                    <label for="covidVacc" class="p-1 pr-1.5">
-                                        <input
-                                            type="radio"
-                                            id="covidVacc"
-                                            name="covidStatus"
-                                            value="yes"
-                                            x-model="covidStatus"
-                                            class="-ml-1 mr-0.5"
-                                        />
-                                         yes
-                                    </label>
-                                </li>
-                                <li class="select-none">
-                                    <label
-                                        for="covidNotVacc"
-                                        class="p-1 pr-1.5">
-                                        <input
-                                            type="radio"
-                                            id="covidNotVacc"
-                                            name="covidStatus"
-                                            value="no"
-                                            x-model="covidStatus"
-                                            class="-ml-1 mr-0.5"
-                                        />
-                                         no
-                                    </label>
-                                </li>
-                            </ul> -->
                         </div>
                         <div x-show="!fuTBD()">
                             <h3
                                 x-ref="callFuAppt"
-                                x-on:hovercall.window="warnCallFuAppt"
+                                x-on:hovercall.window="warnCallFuAppt()"
                                 class="pb-2 font-medium">
                                 Follow-up
                             </h3>
                             <div x-show="procApptInput" x-cloak class="pb-1">
-                                <p class="text-zinc-400">
+                                <p class="text-zinc-500">
                                     3 weeks post proc is <span
                                         x-text="fuApptRec()"></span>
                                 </p>
@@ -668,6 +616,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 type="datetime-local"
                                 step="900"
                                 x-bind:min="fuApptMin()"
+                                x-on:change="$nextTick(() => { warnCallFuAppt() })"
                                 x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
                                 x-model="fuApptInput"
                                 class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
