@@ -286,7 +286,7 @@ window.fibroscan = function () {
 
         // string input, replaces keywords
         emailBodyReplace(join) {
-            return join
+            join = join
                 .replace("{greeting}", this.greeting())
                 .replace(
                     "{fibroDate}",
@@ -297,16 +297,22 @@ window.fibroscan = function () {
                     this.fibroAppt.toLocaleString(DateTime.TIME_SIMPLE),
                 )
                 .replace("{fastStartTime}", this.fastStartTime())
-                .replace("{fu}", this.emailSnippets.fu)
-                .replace(
-                    "{fuApptDate}",
-                    this.fuAppt.toLocaleString(DateTime.DATE_HUGE),
-                )
-                .replace(
-                    "{fuApptTime}",
-                    this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE),
-                )
                 .replace("{staffName}", this.staffName);
+
+            if (this.schedFu === "yes" || this.schedFu === "noHas") {
+                join = join
+                    .replace("{fu}", this.emailSnippets.fu)
+                    .replace(
+                        "{fuApptDate}",
+                        this.fuAppt.toLocaleString(DateTime.DATE_HUGE),
+                    )
+                    .replace(
+                        "{fuApptTime}",
+                        this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE),
+                    );
+            }
+
+            return join;
         },
 
         emailBodyHtml() {
@@ -349,7 +355,7 @@ window.fibroscan = function () {
                 })
                 .replace(/,/g, "");
 
-            let fu = "";
+            let fu = ", f/u TBD";
 
             if (this.schedFu === "noHas" || this.schedFu === "yes") {
                 fu =
@@ -399,8 +405,20 @@ window.fibroscan = function () {
 
             if (this.schedFu === "yes") {
                 fu = "Needs f/u.";
-            } else {
+            } else if (this.schedFu === "noTBD") {
                 fu = "No f/u needed.";
+            } else if (this.schedFu === "noHas" && this.preFuApptInput) {
+                fu =
+                    "Has f/u for " +
+                    this.fuAppt
+                        .toLocaleString({
+                            day: "numeric",
+                            month: "numeric",
+                            year: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                        })
+                        .replace(/,/g, "");
             }
 
             return "l/m, " + " Dx: " + this.reason + ". " + prev + " " + fu;
@@ -423,21 +441,27 @@ window.fibroscan = function () {
         },
 
         apptReason() {
-            return (
-                this.reason +
-                ". Dr " +
-                this.physician +
-                ", f/u " +
-                this.fuAppt
-                    .toLocaleString({
-                        day: "numeric",
-                        month: "numeric",
-                        year: "2-digit",
-                        hour: "numeric",
-                        minute: "2-digit",
-                    })
-                    .replace(/,/g, "")
-            );
+            if (this.checkPre() === 0 && this.checkDuring() === 0) {
+                let fu = "";
+
+                if (this.schedFu === "noTBD") {
+                    fu = ", no f/u";
+                } else {
+                    fu =
+                        ", f/u " +
+                        this.fuAppt
+                            .toLocaleString({
+                                day: "numeric",
+                                month: "numeric",
+                                year: "2-digit",
+                                hour: "numeric",
+                                minute: "2-digit",
+                            })
+                            .replace(/,/g, "");
+                }
+
+                return this.reason + ". Dr " + this.physician + fu;
+            }
         },
 
         copyApptReason() {
