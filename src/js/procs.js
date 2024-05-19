@@ -936,15 +936,14 @@ window.procs = function () {
         },
 
         apptNotes() {
-            let month = DateTime.local().setZone("America/Los_Angeles").month;
-            let day = DateTime.local().setZone("America/Los_Angeles").day;
+            let date = DateTime.local()
+                .setZone("America/Los_Angeles")
+                .toLocaleString({ month: "numeric", day: "numeric" });
 
             if (this.procs[1].selected) {
-                return (
-                    month + "/" + day + " appt made, " + this.prep.toLowerCase()
-                );
+                return date + " appt made, " + this.prep.toLowerCase() + " ";
             } else {
-                return month + "/" + day + " appt made";
+                return date + " appt made ";
             }
         },
 

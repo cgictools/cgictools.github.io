@@ -34,6 +34,83 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                     </div>
                     <section class="grid grid-cols-1 gap-y-8 pb-8 pr-8">
+                        <div class="grid grid-cols-2">
+                            <div>
+                                <h3
+                                    x-ref="preReason"
+                                    x-on:hoverpre.window="warnPreReason()"
+                                    class="pb-2 font-medium">
+                                    Reason
+                                </h3>
+                                <input
+                                    type="text"
+                                    x-model="reason"
+                                    x-ref="reason"
+                                    x-on:change="$nextTick(() => { warnPreReason() })"
+                                    x-on:keyup.enter="$refs.reason.blur()"
+                                    x-on:keyup.escape="reason = '' ; $nextTick(() => { $refs.reason.blur() }); $nextTick(() => { warnPreReason() })"
+                                    class="rounded border border-zinc-400 px-2 py-0.5"
+                                />
+                            </div>
+                            <div>
+                                <h3
+                                    x-ref="prePhysician"
+                                    x-on:hoverpre.window="warnPrePhysician()"
+                                    class="pb-2 font-medium">
+                                    Physician
+                                </h3>
+                                <ul class="flex gap-x-6">
+                                    <li class="select-none">
+                                        <label
+                                            for="H"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="H"
+                                                value="H"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. H
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="T"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="T"
+                                                value="T"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. T
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="M"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="M"
+                                                value="M"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. M
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div>
                             <h3
                                 x-ref="preFirstFibro"
@@ -42,7 +119,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 First Fibroscan?
                             </h3>
                             <ul>
-                                <li class="select-none pb-1">
+                                <li class="select-none">
                                     <label
                                         for="yesFirst"
                                         x-on:click="$nextTick(() => { warnPreFirstFibro() })"
@@ -80,6 +157,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         x-model="prevFibroInput"
                                         x-on:hoverpre.window="warnPrePrevFibroDate()"
                                         x-on:change="$nextTick(() => { warnPrePrevFibroDate() })"
+                                        x-on:keyup.enter="$refs.prePrevFibroDate.blur()"
                                         class="ml-4 rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black disabled:cursor-not-allowed disabled:border-zinc-300 disabled:bg-zinc-200 disabled:text-zinc-400"
                                     />
                                 </li>
@@ -111,19 +189,46 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </li>
                                 <li class="select-none">
                                     <label
-                                        for="noFu"
+                                        for="noTBD"
                                         x-on:click="$nextTick(() => { warnPreFu() })"
                                         class="p-1 pr-1.5">
                                         <input
                                             type="radio"
-                                            id="noFu"
-                                            value="no"
+                                            id="noTBD"
+                                            value="noTBD"
                                             x-on:click="$nextTick(() => { warnPreFu() })"
                                             x-model="schedFu"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         no/TBD</label
+                                         no, TBD</label
                                     >
+                                </li>
+                                <li class="select-none">
+                                    <label
+                                        for="noHas"
+                                        x-on:click="$nextTick(() => { warnPreFu() })"
+                                        class="p-1 pr-1.5">
+                                        <input
+                                            type="radio"
+                                            id="noHas"
+                                            value="noHas"
+                                            x-on:click="$nextTick(() => { warnPreFu() })"
+                                            x-model="schedFu"
+                                            class="-ml-1 mr-0.5"
+                                        />
+                                         no, already has</label
+                                    >
+                                    <input
+                                        type="datetime-local"
+                                        x-ref="preFuApptInput"
+                                        x-bind:min="today.substr(0, 16)"
+                                        x-bind:disabled="schedFu === 'noHas' ? false : true"
+                                        x-model="preFuApptInput"
+                                        x-on:hoverpre.window="warnPreFuApptInput()"
+                                        x-on:change="$nextTick(() => { warnPreFuApptInput() })"
+                                        x-on:keyup.enter="$refs.preFuApptInput.blur()"
+                                        class="ml-4 rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black disabled:cursor-not-allowed disabled:border-zinc-300 disabled:bg-zinc-200 disabled:text-zinc-400"
+                                    />
                                 </li>
                             </ul>
                         </div>
@@ -177,8 +282,10 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 <input
                                     type="datetime-local"
                                     step="1200"
+                                    x-ref="fibro"
                                     x-bind:min="fibroApptMin()"
                                     x-on:change="$nextTick(() => { warnCallFibroAppt() })"
+                                    x-on:keyup.enter="$refs.fibro.blur()"
                                     x-bind:class="fibroApptInput ? 'text-black' : 'text-zinc-400'"
                                     x-model="fibroApptInput"
                                     class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
@@ -189,32 +296,44 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </p>
                             </div>
                             <div
-                                x-bind:class="firstFibro === 'yes' ? '-mb-1' : ''">
+                                x-bind:class="firstFibro === 'yes' ? '-mb-1' : ''"
+                                class="text-zinc-600">
                                 <p>Fridays, every 20 minutes</p>
                                 <p>8:40am-12pm, 1:40pm-3:20pm</p>
                             </div>
                         </div>
-                        <div x-show="!fuTBD()">
+                        <div x-show="fibroApptInput">
+                            <p class="font-medium text-blue-600">
+                                Fast for 3 hours prior to Fibroscan (starting at
+
+
+                                <span x-text="fastStartTime()"></span>). Water
+                                is ok.
+                            </p>
+                        </div>
+                        <div x-show="schedFu === 'yes'">
                             <h3
                                 x-ref="callFuAppt"
                                 x-on:hovercall.window="warnCallFuAppt"
                                 class="pb-2 font-medium">
                                 Follow-up
                             </h3>
-                            <div x-show="fibroApptInput" x-cloak class="pb-1">
+                            <input
+                                type="datetime-local"
+                                step="900"
+                                x-ref="fu"
+                                x-bind:min="fuApptMin()"
+                                x-on:keyup.enter="$refs.fu.blur()"
+                                x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
+                                x-model="fuApptInput"
+                                class="mb-1 rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                            />
+                            <div x-show="fibroApptInput" x-cloak>
                                 <p class="text-zinc-500">
                                     2 weeks post Fibroscan is <span
                                         x-text="fuApptRec()"></span>
                                 </p>
                             </div>
-                            <input
-                                type="datetime-local"
-                                step="900"
-                                x-bind:min="fuApptMin()"
-                                x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
-                                x-model="fuApptInput"
-                                class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
-                            />
                         </div>
                     </section>
                 </section>
@@ -346,12 +465,22 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             </p>
                                         </td>
                                     </tr>
+                                    <tr x-show="!leftMsg">
+                                        <td
+                                            class="whitespace-nowrap pb-2 pr-6 align-text-top">
+                                            <h3 class="font-medium">
+                                                Appt Reason
+                                            </h3>
+                                        </td>
+                                        <td class="pb-2 align-text-top">
+                                            <p
+                                                x-text="apptReason()"
+                                                x-on:click="copyApptReason()"
+                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                            </p>
+                                        </td>
+                                    </tr>
                                 </table>
-                                <p x-show="procs[1].selected && !leftMsg">
-                                    If screening colo (e.g. screening, h/o colon
-                                    polyps, colon adenomas, etc), add the month
-                                    and year of last colo to the appt reason.
-                                </p>
                             </div>
                             <!-- staff to do -->
                             <div
@@ -368,7 +497,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                         <td class="pb-2 align-text-top">
                                             Exam is in less than 2 weeks. Send a
-                                            chat message for procedure insurance
+                                            chat message for insurance
                                             verification.
                                         </td>
                                     </tr>

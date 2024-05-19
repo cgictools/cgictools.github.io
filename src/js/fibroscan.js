@@ -11,7 +11,7 @@ window.fibroscan = function () {
             "",
             "{fu}",
             "",
-            "Please contact us at 562-596-5552 if you have any questions.",
+            "If you have any questions, please call us at 562-596-5552 or send us a message through your patient portal.",
             "",
             "Best regards,",
             "{staffName}",
@@ -19,17 +19,22 @@ window.fibroscan = function () {
         ],
 
         emailSnippets: {
-            fu: "Your post-Fibroscan follow up is scheduled for {fuApptDate} at {fuApptTime}.",
+            fu: "Your next follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
         red: "#dc2626",
 
-        //
+        // pre input
+
+        reason: "",
+
+        physician: "",
+
         firstFibro: "",
 
         prevFibroInput: null,
 
-        prevFibroAppt() {
+        get prevFibroAppt() {
             return DateTime.fromISO(this.prevFibroInput, {
                 locale: "en-US",
                 zone: "America/Los_Angeles",
@@ -37,7 +42,7 @@ window.fibroscan = function () {
         },
 
         earliestFibroDate() {
-            return this.prevFibroAppt()
+            return this.prevFibroAppt
                 .plus({
                     months: 6,
                     days: 1,
@@ -47,18 +52,20 @@ window.fibroscan = function () {
 
         schedFu: "",
 
-        fuTBD() {
-            if (this.schedFu === "no") {
-                return true;
-            } else if (this.schedFu === "yes") {
-                return false;
-            }
-        },
+        preFuApptInput: null,
 
-        //
+        // check pre
 
         checkPre() {
             let incomplete = 0;
+
+            if (this.reason === "") {
+                incomplete++;
+            }
+
+            if (this.physician === "") {
+                incomplete++;
+            }
 
             if (this.firstFibro === "") {
                 incomplete++;
@@ -72,7 +79,27 @@ window.fibroscan = function () {
                 incomplete++;
             }
 
+            if (this.schedFu === "noHas" && this.preFuApptInput === null) {
+                incomplete++;
+            }
+
             return incomplete;
+        },
+
+        warnPreReason() {
+            if (this.reason === "") {
+                this.$refs.preReason.style.color = this.red;
+            } else {
+                this.$refs.preReason.style.color = "black";
+            }
+        },
+
+        warnPrePhysician() {
+            if (this.physician === "") {
+                this.$refs.prePhysician.style.color = this.red;
+            } else {
+                this.$refs.prePhysician.style.color = "black";
+            }
         },
 
         warnPreFirstFibro() {
@@ -101,86 +128,95 @@ window.fibroscan = function () {
             }
         },
 
-        //
+        warnPreFuApptInput() {
+            if (this.schedFu === "noHas" && this.preFuApptInput === null) {
+                this.$refs.preFuApptInput.style.border =
+                    "1px solid " + this.red;
+            } else {
+                this.$refs.preFuApptInput.style.border =
+                    "1px solid rgb(82, 82, 91)";
+            }
+        },
+
+        // during input - fibroscan
 
         leftMsg: false,
 
         fibroApptInput: null,
 
-        fibroApptMin() {
-            // return DateTime.now().setZone("America/Los_Angeles").startOf("day");
-            let earliest = this.prevFibroAppt()
-                .plus({ months: 6, days: 1 })
-                .toISO();
-            let today = DateTime.local()
+        get today() {
+            return DateTime.local()
                 .setZone("America/Los_Angeles")
                 .startOf("day")
                 .toISO();
-            if (this.firstFibro === "no" && today < earliest) {
+        },
+
+        fibroApptMin() {
+            // return DateTime.now().setZone("America/Los_Angeles").startOf("day");
+            let earliest = this.prevFibroAppt
+                .plus({ months: 6, days: 1 })
+                .toISO();
+            if (this.firstFibro === "no" && this.today < earliest) {
                 return earliest.substr(0, 16);
             } else {
-                return today.substr(0, 16);
+                return this.today.substr(0, 16);
             }
         },
 
-        fibroAppt() {
+        get fibroAppt() {
             return DateTime.fromISO(this.fibroApptInput, {
                 locale: "en-US",
                 zone: "America/Los_Angeles",
             });
         },
 
-        fibroApptDate() {
-            return this.fibroAppt().toLocaleString(
-                DateTime.DATE_MED_WITH_WEEKDAY,
-            );
-        },
-
-        fibroApptTime() {
-            return this.fibroAppt().toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        hoursBeforeFibro(h, m = 0) {
-            return this.fibroAppt()
-                .minus({
-                    hours: h,
-                    minutes: m,
-                })
+        fastStartTime() {
+            return this.fibroAppt
+                .minus({ hours: 3 })
                 .toLocaleString(DateTime.TIME_SIMPLE);
         },
 
-        //
+        numDaysOut() {
+            let fibroDay = this.fibroAppt.startOf("day");
+            let today = DateTime.local()
+                .setZone("America/Los_Angeles")
+                .startOf("day");
+
+            return fibroDay.diff(today, "days").toObject().days;
+        },
+
+        // during input - follow up
 
         fuApptInput: null,
 
         fuApptMin() {
             if (this.fibroApptInput) {
-                return this.fibroAppt().startOf("day").toISO().substr(0, 16);
+                return this.fibroAppt.startOf("day").toISO().substr(0, 16);
             }
         },
 
         fuApptRec() {
-            return this.fibroAppt()
+            return this.fibroAppt
                 .plus({ weeks: 2 })
                 .toLocaleString(DateTime.DATE_SHORT);
         },
 
         get fuAppt() {
-            return DateTime.fromISO(this.fuApptInput, {
-                locale: "en-US",
-                zone: "America/Los_Angeles",
-            });
+            if (this.preFuApptInput) {
+                return DateTime.fromISO(this.preFuApptInput, {
+                    locale: "en-US",
+                    zone: "America/Los_Angeles",
+                });
+            } else if (this.fuApptInput) {
+                return DateTime.fromISO(this.fuApptInput, {
+                    locale: "en-US",
+                    zone: "America/Los_Angeles",
+                });
+            }
+            return;
         },
 
-        fuApptDate() {
-            return this.fuAppt.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
-        },
-
-        fuApptTime() {
-            return this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
-        //
+        // check during inputs
 
         checkDuring() {
             let incomplete = 0;
@@ -189,7 +225,7 @@ window.fibroscan = function () {
                 incomplete++;
             }
 
-            if (!this.fuApptInput && !this.fuTBD()) {
+            if (!this.fuApptInput && this.schedFu === "yes") {
                 incomplete++;
             }
 
@@ -212,7 +248,7 @@ window.fibroscan = function () {
             }
         },
 
-        //
+        // email
 
         greeting() {
             let hour = DateTime.local().setZone("America/Los_Angeles").hour;
@@ -228,7 +264,7 @@ window.fibroscan = function () {
             let x = this.emailBodyTemplate;
 
             // filter out / "remove" matches
-            if (this.fuTBD()) {
+            if (this.schedFu == "noTBD") {
                 // requires i to be second argument in order to be used as index,
                 // even though item is unused
                 x = x
@@ -252,12 +288,24 @@ window.fibroscan = function () {
         emailBodyReplace(join) {
             return join
                 .replace("{greeting}", this.greeting())
-                .replace("{fibroDate}", this.fibroApptDate())
-                .replace("{fibroTime}", this.fibroApptTime())
-                .replace("{fastStartTime}", this.hoursBeforeFibro(3))
+                .replace(
+                    "{fibroDate}",
+                    this.fibroAppt.toLocaleString(DateTime.DATE_HUGE),
+                )
+                .replace(
+                    "{fibroTime}",
+                    this.fibroAppt.toLocaleString(DateTime.TIME_SIMPLE),
+                )
+                .replace("{fastStartTime}", this.fastStartTime())
                 .replace("{fu}", this.emailSnippets.fu)
-                .replace("{fuApptDate}", this.fuApptDate())
-                .replace("{fuApptTime}", this.fuApptTime())
+                .replace(
+                    "{fuApptDate}",
+                    this.fuAppt.toLocaleString(DateTime.DATE_HUGE),
+                )
+                .replace(
+                    "{fuApptTime}",
+                    this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE),
+                )
                 .replace("{staffName}", this.staffName);
         },
 
@@ -273,8 +321,127 @@ window.fibroscan = function () {
             navigator.clipboard.writeText(this.emailBodyClip());
         },
 
-        //
+        // timestamps
 
-        DOS() {},
+        DOS() {
+            return (
+                "DOS " +
+                this.fibroAppt.toLocaleString({
+                    day: "numeric",
+                    month: "numeric",
+                    year: "2-digit",
+                })
+            );
+        },
+
+        copyDOS() {
+            navigator.clipboard.writeText(this.DOS());
+        },
+
+        timestamp() {
+            let fibro = this.fibroAppt
+                .toLocaleString({
+                    day: "numeric",
+                    month: "numeric",
+                    year: "2-digit",
+                    hour: "numeric",
+                    minute: "2-digit",
+                })
+                .replace(/,/g, "");
+
+            let fu = "";
+
+            if (this.schedFu === "noHas" || this.schedFu === "yes") {
+                fu =
+                    ", f/u " +
+                    this.fuAppt
+                        .toLocaleString({
+                            day: "numeric",
+                            month: "numeric",
+                            year: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                        })
+                        .replace(/,/g, "");
+            }
+
+            return (
+                "fibro " +
+                fibro +
+                fu +
+                ". Aware fasting 3 hrs prior, water ok. Sent email conf."
+            );
+        },
+
+        copyTimestamp() {
+            navigator.clipboard.writeText(this.timestamp());
+        },
+
+        lmTS() {
+            let prev = "";
+
+            if (this.firstFibro === "yes") {
+                prev = "no prev fibro.";
+            } else {
+                prev =
+                    "prev fibro " +
+                    this.prevFibroAppt.toLocaleString({
+                        day: "numeric",
+                        month: "numeric",
+                        year: "2-digit",
+                    }) +
+                    ", sched on/after " +
+                    this.earliestFibroDate() +
+                    ". ";
+            }
+
+            let fu = "";
+
+            if (this.schedFu === "yes") {
+                fu = "Needs f/u.";
+            } else {
+                fu = "No f/u needed.";
+            }
+
+            return "l/m, " + " Dx: " + this.reason + ". " + prev + " " + fu;
+        },
+
+        copyLmTS() {
+            navigator.clipboard.writeText(this.lmTS());
+        },
+
+        apptNotes() {
+            let date = DateTime.local()
+                .setZone("America/Los_Angeles")
+                .toLocaleString({ month: "numeric", day: "numeric" });
+
+            return date + " appt made, aware fasting, water ok, emailed conf ";
+        },
+
+        copyApptNotes() {
+            navigator.clipboard.writeText(this.apptNotes());
+        },
+
+        apptReason() {
+            return (
+                this.reason +
+                ". Dr " +
+                this.physician +
+                ", f/u " +
+                this.fuAppt
+                    .toLocaleString({
+                        day: "numeric",
+                        month: "numeric",
+                        year: "2-digit",
+                        hour: "numeric",
+                        minute: "2-digit",
+                    })
+                    .replace(/,/g, "")
+            );
+        },
+
+        copyApptReason() {
+            navigator.clipboard.writeText(this.apptReason);
+        },
     };
 };
