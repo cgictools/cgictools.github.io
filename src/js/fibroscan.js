@@ -158,7 +158,7 @@ window.fibroscan = function () {
             if (this.firstFibro === "no" && this.today.toISO() < earliest) {
                 return earliest.substr(0, 16);
             } else {
-                return this.today.substr(0, 16);
+                return this.today.toISO().substr(0, 16);
             }
         },
 
