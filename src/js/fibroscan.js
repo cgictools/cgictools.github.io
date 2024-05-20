@@ -28,9 +28,9 @@ window.fibroscan = function () {
 
         reason: "",
 
-        physician: "",
+        physician: "", // H, T, M
 
-        firstFibro: "",
+        firstFibro: "", // yes, no
 
         prevFibroInput: null,
 
@@ -50,7 +50,7 @@ window.fibroscan = function () {
                 .toLocaleString();
         },
 
-        schedFu: "",
+        schedFu: "", // yes, noTBD, noHas
 
         preFuApptInput: null,
 
@@ -456,7 +456,13 @@ window.fibroscan = function () {
                             .replace(/,/g, "");
                 }
 
-                return this.reason + ". Dr " + this.physician + fu;
+                let first = "";
+
+                if (this.firstFibro === "yes") {
+                    first = ", no prev";
+                }
+
+                return this.reason + ". Dr " + this.physician + fu + first;
             }
         },
 
