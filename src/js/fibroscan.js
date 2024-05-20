@@ -147,8 +147,7 @@ window.fibroscan = function () {
         get today() {
             return DateTime.local()
                 .setZone("America/Los_Angeles")
-                .startOf("day")
-                .toISO();
+                .startOf("day");
         },
 
         fibroApptMin() {
@@ -156,7 +155,7 @@ window.fibroscan = function () {
             let earliest = this.prevFibroAppt
                 .plus({ months: 6, days: 1 })
                 .toISO();
-            if (this.firstFibro === "no" && this.today < earliest) {
+            if (this.firstFibro === "no" && this.today.toISO() < earliest) {
                 return earliest.substr(0, 16);
             } else {
                 return this.today.substr(0, 16);
@@ -178,11 +177,8 @@ window.fibroscan = function () {
 
         numDaysOut() {
             let fibroDay = this.fibroAppt.startOf("day");
-            let today = DateTime.local()
-                .setZone("America/Los_Angeles")
-                .startOf("day");
 
-            return fibroDay.diff(today, "days").toObject().days;
+            return fibroDay.diff(this.today, "days").toObject().days;
         },
 
         // during input - follow up
@@ -465,7 +461,7 @@ window.fibroscan = function () {
         },
 
         copyApptReason() {
-            navigator.clipboard.writeText(this.apptReason);
+            navigator.clipboard.writeText(this.apptReason());
         },
     };
 };

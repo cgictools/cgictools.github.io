@@ -5,11 +5,9 @@ import PageHeading from '../components/PageHeading.astro';
 
 import PointerSVG from '../components/svg/PointerSVG.astro';
 import PhoneSVG from '../components/svg/PhoneSVG.astro';
-import DocumentSVG from '../components/svg/DocumentSVG.astro';
 import ShareSVG from '../components/svg/ShareSVG.astro';
 import EnvelopeSVG from '../components/svg/EnvelopeSVG.astro';
 import CopySVG from '../components/svg/CopySVG.astro';
-import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
 ---
 
 <Layout title="Fibroscan - CGIC Tools">
@@ -290,7 +288,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-model="fibroApptInput"
                                     class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
                                 />
-                                <p x-show="firstFibro === 'no'" class="pt-1">
+                                <p
+                                    x-show="firstFibro === 'no'"
+                                    class="pt-1 text-zinc-600">
                                     Schedule on or after <span
                                         x-text="earliestFibroDate()"></span>
                                 </p>
@@ -303,13 +303,26 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                         </div>
                         <div x-show="fibroApptInput">
-                            <p class="font-medium text-blue-600">
-                                Fast for 3 hours prior to Fibroscan (starting at
-
-
+                            <table>
+                                <tr class="text-blue-600">
+                                    <td
+                                        class="whitespace-nowrap pr-6 align-text-top font-medium"
+                                        >Inform patient:</td
+                                    >
+                                    <td class="align-text-top"
+                                        >Fast for 3 hours prior to Fibroscan
+                                        (starting at <span
+                                            x-text="fastStartTime()"></span>).
+                                        Water is ok.</td
+                                    >
+                                </tr>
+                            </table>
+                            <!-- <p class="font-medium text-blue-600">
+                                Inform patient: Fast for 3 hours prior to
+                                Fibroscan (starting at
                                 <span x-text="fastStartTime()"></span>). Water
                                 is ok.
-                            </p>
+                            </p> -->
                         </div>
                         <div x-show="schedFu === 'yes'">
                             <h3
