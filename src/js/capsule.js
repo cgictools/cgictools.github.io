@@ -126,6 +126,7 @@ window.capsule = function () {
                 day: "numeric",
                 hour: "numeric",
                 minute: "2-digit",
+                weekday: "long",
             });
         },
 
