@@ -1,0 +1,191 @@
+---
+import Logo from '../../images/logo.png';
+---
+
+<div class="my-1 flex h-24 flex-row justify-center">
+    <img src={Logo.src} alt="logo" />
+</div>
+
+<div class="text-sm leading-none">
+    <h1 class="mb-3 text-center text-lg font-bold leading-normal">
+        Patient Prep Instructions for Capsule Endoscopy with CapsoCam Plus&#174;
+    </h1>
+
+    <table class="mx-auto mb-2">
+        <tr>
+            <td class="pb-1 pr-4 font-bold">Date</td>
+            <td class="pb-1">
+                <span x-text="instDate()"> </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="pb-1 pr-4 font-bold">Time</td>
+            <td class="pb-1">
+                <span x-text="instTime()"> </span>
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="mb-2 font-semibold">Purchasing the Prep Medication</h2>
+    <!-- <p class="mb-2">
+        <span class="font-semibold">Note:</span> When purchasing your
+        preparation medication, ensure you get enough for the whole prep.
+    </p> -->
+    <ul class="mb-4 ml-4">
+        <li class="mb-1.5">
+            Polyethylene glycol (MiraLAX&#174;, ClearLax, PureLax, GaviLax,
+            LavaClear brands). Purchase a container(s) which has at least 153
+            grams (you will likely have some left over).
+        </li>
+        <li>
+            Mylicon drops - Smallest bottle possible... all you will need is 1.2
+            mL total. <span class="underline"
+                >Please bring this with you to the appointment.</span
+            >
+        </li>
+    </ul>
+
+    <p class="mb-4">
+        <span class="font-semibold"
+            >NOTE: If taking an oral iron supplement, please stop 4 full days
+            prior to the test (starting <span
+                x-text="daysBeforeCapsule(4, 'long')"></span>).</span
+        >
+    </p>
+
+    <h2 class="mb-1.5 text-center font-semibold">Day Before Procedure</h2>
+    <table class="mb-3 mr-4">
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Day: <span x-text="daysBeforeCapsule(1, 'short')"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                Eat normally for breakfast, followed by a light lunch. Then,
+                begin a clear liquid diet for the remainder of the day/night
+                before the procedure. (Nothing colored red to drink).
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Day: <span x-text="daysBeforeCapsule(1, 'short')"></span><br />
+                 Time: 7:00 PM
+            </td>
+            <td class="py-1.5 align-text-top">
+                Mix 7 capfuls (119 grams) of Polyethylene glycol (MiraLAX&#174;,
+                ClearLax, PureLax, GaviLax, LavaClearbrands) with 32 oz. of
+                water or Gatorade® or Sugar-free Gatorade (non-red) and drink
+                all contents. The Polyethylene glycol bottle top is a measuring
+                cap marked to contain 17 grams of powder when ﬁlled to the
+                indicated line.
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Day: <span x-text="daysBeforeCapsule(1, 'short')"></span><br />
+                 Time: 9:30 PM
+            </td>
+            <td class="py-1.5 align-text-top">
+                Take 0.6 mL of Mylicon® drops with 8 oz of water. This will
+                reduce bubbles in the GI tract.<br />Nothing to drink after
+                10:00 PM. Small sips of water with medications are allowed.
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="mb-1.5 text-center font-semibold">Day of Procedure</h2>
+    <table class="mb-3 mr-4">
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Day: <span x-text="daysBeforeCapsule(0, 'short')"></span><br />
+                 Time: Morning
+            </td>
+            <td class="py-1.5 align-text-top">
+                Hold medications until 2 hours after ingestion of capsule unless
+                your doctor deems it necessary, then take small sips of water
+                with medications.
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Day: <span x-text="daysBeforeCapsule(0, 'short')"></span><br />
+                 Time: <span x-text="hoursBeforeCapsule(2)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                2 hours prior to scheduled capsule ingestion time, mix 1 capful
+                (17 grams) of Polyethylene glycol (MiraLAX&#174;, ClearLax etc.)
+                with full glass of water or Gatorade (non-red).
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Time: <span x-text="hoursBeforeCapsule(0, 10)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">Arrive at Office/Clinic.</td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Time: <span x-text="hoursBeforeCapsule(0)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                Ingest CapsoCam Plus capsule with 0.6 mL of Mylicon drops in 8
+                oz of water.
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Time: <span x-text="hoursAfterCapsule(2)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                You may clear liquids 2 hours after swallowing the capsule.
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Time: <span x-text="hoursAfterCapsule(4)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                4 hours after capsule ingestion, mix 17-grams of Polyethylene
+                glycol (MiraLAX&#174;, ClearLax etc.) with full glass of water
+                or Gatorade (non-red), drink all of the contents.
+            </td>
+        </tr>
+        <tr>
+            <td class="whitespace-nowrap py-1.5 pr-6 align-text-top">
+                Time: <span x-text="hoursAfterCapsule(4)"></span>
+            </td>
+            <td class="py-1.5 align-text-top">
+                Enjoy a light lunch, when you are ready, after previous dose of
+                Polyethylene glycol.<br />Eat normally for dinner. No further
+                diet restrictions are necessary.
+            </td>
+        </tr>
+    </table>
+
+    <p class="mb-2">
+        For best results, strictly follow the instructions. The capsule will
+        typically take 8-48 hours to pass. If you haven't passed the capsule at
+        72 hours after capsule ingestion (<span x-text="threeDaysAfterCapsule()"
+        ></span>), contact our office at 562-596-5552.
+    </p>
+    <p class="mb-2">
+        To watch the retrieval video instructions, visit <a
+            href="https://capsovision.com/patient-resources/what-to-expect-with-capsocam/"
+            >https://capsovision.com/patient-resources/what-to-expect-with-capsocam/</a
+        >
+    </p>
+    <p class="mb-5">
+        To avoid a repeat of this study, please adhere to your retrieval
+        instructions until capsule is retrieved. Continue to use the
+        RetrievalPan provided until the capsule is retrieved.
+    </p>
+
+    <h2 class="mb-2 font-semibold">Returning the Capsule</h2>
+    <p class="mb-14">
+        If provided a pre-labeled padded envelope in your take-home kit, place
+        the capsule inside the capsule container. Ensure the lid of the capsule
+        container is closed, put the capsule container into the zip bag and seal
+        it. Place the zip bag with the capsule container inside the envelope,
+        seal and drop the envelope oﬀ at any FedEx drop box or physical FedEx
+        location.
+    </p>
+</div>

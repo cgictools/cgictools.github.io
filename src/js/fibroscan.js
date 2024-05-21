@@ -187,7 +187,11 @@ window.fibroscan = function () {
 
         fuApptMin() {
             if (this.fibroApptInput) {
-                return this.fibroAppt.startOf("day").toISO().substr(0, 16);
+                return this.fibroAppt
+                    .plus({ days: 1 })
+                    .startOf("day")
+                    .toISO()
+                    .substr(0, 16);
             }
         },
 
@@ -417,7 +421,7 @@ window.fibroscan = function () {
                         .replace(/,/g, "");
             }
 
-            return "l/m, " + " Dx: " + this.reason + ". " + prev + " " + fu;
+            return "l/m, " + "Dx: " + this.reason + ". " + prev + " " + fu;
         },
 
         copyLmTS() {

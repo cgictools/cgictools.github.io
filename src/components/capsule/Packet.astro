@@ -1,0 +1,29 @@
+---
+import Consent from './Consent.astro';
+import Prep from './Prep.astro';
+---
+
+<!-- flex container on each page div to center vertically when printing -->
+<div
+    id="consent"
+    class="flex h-screen break-after-page flex-col justify-center">
+    <Consent />
+</div>
+
+<div id="prep" class="flex h-screen flex-col justify-center">
+    <Prep />
+</div>
+
+<footer class="fixed bottom-0 w-full">
+    <div class="mb-0.5 flex flex-row justify-center gap-6 font-bold">
+        <span>Lisa Hertz, MD</span>
+        <span>Kashyap Trivedi, MD</span>
+        <span>Pavan Mankal, MD</span>
+    </div>
+    <div class="flex flex-row justify-center gap-4">
+        <span>https://www.cgicare.com/</span>
+        <span>4772 Katella Ave, Ste. 200, Los Alamitos, CA 90720</span>
+        <span>Phone: (562) 596-5552</span>
+        <span>Fax: (562) 596-5340</span>
+    </div>
+</footer>

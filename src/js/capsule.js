@@ -30,7 +30,7 @@ window.capsule = function () {
 
         reason: "",
 
-        physician: "", // last initial only (i.e. H, T, M)
+        physician: "", // H, T, M
 
         schedFu: "", // yes, no
 
@@ -44,6 +44,10 @@ window.capsule = function () {
             }
 
             if (this.physician === "") {
+                incomplete++;
+            }
+
+            if (this.schedFu === "") {
                 incomplete++;
             }
 
@@ -66,6 +70,14 @@ window.capsule = function () {
             }
         },
 
+        warnPreFu() {
+            if (this.schedFu === "") {
+                this.$refs.preFu.style.color = this.red;
+            } else {
+                this.$refs.preFu.style.color = "black";
+            }
+        },
+
         //
 
         leftMsg: false,
@@ -85,6 +97,38 @@ window.capsule = function () {
             });
         },
 
+        daysBeforeCapsule(d, format) {
+            let date = this.capsuleAppt.minus({ days: d });
+
+            if (format === "long") {
+                return date.toLocaleString(DateTime.DATE_HUGE);
+            } else if (format === "short") {
+                return date.toLocaleString(DateTime.DATE_SHORT);
+            }
+        },
+
+        hoursBeforeCapsule(h, m = 0) {
+            return this.capsuleAppt
+                .minus({ hours: h, minutes: m })
+                .toLocaleString(DateTime.TIME_SIMPLE);
+        },
+
+        hoursAfterCapsule(h, m = 0) {
+            return this.capsuleAppt
+                .plus({ hours: h, minutes: m })
+                .toLocaleString(DateTime.TIME_SIMPLE);
+        },
+
+        threeDaysAfterCapsule() {
+            return this.capsuleAppt.plus({ days: 3 }).toLocaleString({
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+            });
+        },
+
         numDaysOut() {
             let capsuleDay = this.capsuleAppt.startOf("day");
 
@@ -92,12 +136,22 @@ window.capsule = function () {
         },
 
         fuApptRec() {
-            return this.fibroAppt
+            return this.capsuleAppt
                 .plus({ weeks: 3 })
                 .toLocaleString(DateTime.DATE_SHORT);
         },
 
         fuApptInput: null,
+
+        fuApptMin() {
+            if (this.capsuleApptInput) {
+                return this.capsuleAppt
+                    .plus({ days: 1 })
+                    .startOf("day")
+                    .toISO()
+                    .substr(0, 16);
+            }
+        },
 
         get fuAppt() {
             if (this.fuApptInput) {
@@ -112,6 +166,36 @@ window.capsule = function () {
 
         //
 
+        sendInstMethod: "", // email, portal, pickup, mail
+
+        sendInstText: [
+            "Email instructions and attach to patient docs.",
+            "Attach to patient docs and upload to portal.",
+            "Attach to patient docs.",
+            "Attach to patient docs. Send tele/order to print and mail.",
+        ],
+
+        sendInstAction: [
+            "Emailed/attached inst.",
+            "Attached/uploaded inst to portal.",
+            "Attached inst, patient to pickup.",
+            "Attached inst, please print to mail.",
+        ],
+
+        sendInstMessage() {
+            if (this.sendInstMethod === "email") {
+                return this.sendInstText[0];
+            } else if (this.sendInstMethod === "portal") {
+                return this.sendInstText[1];
+            } else if (this.sendInstMethod === "pickup") {
+                return this.sendInstText[2];
+            } else {
+                return this.sendInstText[3];
+            }
+        },
+
+        //
+
         checkDuring() {
             let incomplete = 0;
 
@@ -120,6 +204,10 @@ window.capsule = function () {
             }
 
             if (!this.fuApptInput && this.schedFu === "yes") {
+                incomplete++;
+            }
+
+            if (this.sendInstMethod === "") {
                 incomplete++;
             }
 
@@ -142,6 +230,14 @@ window.capsule = function () {
             }
         },
 
+        warnCallSendInst() {
+            if (this.sendInstMethod === "") {
+                this.$refs.callSendInst.style.color = this.red;
+            } else {
+                this.$refs.callSendInst.style.color = "black";
+            }
+        },
+
         //
 
         greeting() {
@@ -152,6 +248,222 @@ window.capsule = function () {
             } else {
                 return "Good afternoon,";
             }
+        },
+
+        emailBodyArray() {
+            let x = this.emailBodyTemplate;
+
+            // filter out / "remove" matches
+            if (this.schedFu == "no") {
+                // requires i to be second argument in order to be used as index,
+                // even though item is unused
+                x = x
+                    .filter((item, i) => x[i - 1] !== "{fu}")
+                    .filter((item) => item !== "{fu}");
+            }
+
+            return x;
+        },
+
+        // following 2 functions join array elements, returns a string
+        emailBodyHtmlJoin() {
+            return this.emailBodyArray().join("<br />");
+        },
+
+        emailBodyClipJoin() {
+            return this.emailBodyArray().join("\n");
+        },
+
+        // string input, replaces keywords
+        emailBodyReplace(join) {
+            join = join
+                .replace("{greeting}", this.greeting())
+                .replace(
+                    "{capsuleDate}",
+                    this.capsuleAppt.toLocaleString(DateTime.DATE_HUGE),
+                )
+                .replace(
+                    "{capsuleTime}",
+                    this.capsuleAppt.toLocaleString(DateTime.TIME_SIMPLE),
+                )
+                .replace("{staffName}", this.staffName);
+
+            if (this.schedFu === "yes") {
+                join = join
+                    .replace("{fu}", this.emailSnippets.fu)
+                    .replace(
+                        "{fuApptDate}",
+                        this.fuAppt.toLocaleString(DateTime.DATE_HUGE),
+                    )
+                    .replace(
+                        "{fuApptTime}",
+                        this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE),
+                    );
+            }
+
+            return join;
+        },
+
+        emailBodyHtml() {
+            return this.emailBodyReplace(this.emailBodyHtmlJoin());
+        },
+
+        emailBodyClip() {
+            return this.emailBodyReplace(this.emailBodyClipJoin());
+        },
+
+        copyEmailBody() {
+            navigator.clipboard.writeText(this.emailBodyClip());
+        },
+
+        DOS() {
+            return (
+                "DOS " +
+                this.capsuleAppt.toLocaleString({
+                    day: "numeric",
+                    month: "numeric",
+                    year: "2-digit",
+                })
+            );
+        },
+
+        copyDOS() {
+            navigator.clipboard.writeText(this.DOS());
+        },
+
+        timestamp() {
+            let capsule = this.capsuleAppt
+                .toLocaleString({
+                    day: "numeric",
+                    month: "numeric",
+                    year: "2-digit",
+                    hour: "numeric",
+                    minute: "2-digit",
+                })
+                .replace(/,/g, "");
+
+            let fu = ", f/u TBD";
+
+            if (this.schedFu === "yes") {
+                fu =
+                    ", f/u " +
+                    this.fuAppt
+                        .toLocaleString({
+                            day: "numeric",
+                            month: "numeric",
+                            year: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                        })
+                        .replace(/,/g, "");
+            }
+
+            let read = "";
+
+            if (this.physician === "T") {
+                if (this.schedFu === "yes") {
+                    read =
+                        " Sending you tele as reminder to read prior to pt's f/u, thank you.";
+                } else {
+                    read = " Sending you tele as reminder to read, thank you.";
+                }
+            }
+
+            let timestamp = "capsule " + capsule + fu + "." + read;
+
+            return timestamp;
+        },
+
+        copyTimestamp() {
+            navigator.clipboard.writeText(this.timestamp());
+        },
+
+        lmTS() {
+            let fu = "f/u TBD";
+
+            if (this.schedFu === "yes") {
+                fu = "needs f/u";
+            }
+
+            return (
+                "l/m, " +
+                "Dx: " +
+                this.reason +
+                ", Dr. " +
+                this.physician +
+                ", " +
+                fu
+            );
+        },
+
+        copyLmTS() {
+            navigator.clipboard.writeText(this.lmTS());
+        },
+
+        teleReason() {
+            let fu = "TBD";
+
+            if (this.schedFu === "yes") {
+                fu = this.fuAppt.toLocaleString({
+                    month: "numeric",
+                    day: "numeric",
+                    year: "2-digit",
+                });
+            }
+
+            return "read capsule, f/u " + fu;
+        },
+
+        copyTeleReason() {
+            navigator.clipboard.writeText(this.teleReason());
+        },
+
+        apptNotes() {
+            let date = DateTime.local()
+                .setZone("America/Los_Angeles")
+                .toLocaleString({ month: "numeric", day: "numeric" });
+
+            return date + " appt made ";
+        },
+
+        copyApptNotes() {
+            navigator.clipboard.writeText(this.apptNotes());
+        },
+
+        todo() {
+            if (this.physician === "H") {
+                return 'Select Dr. M as "Provider" in appt screen.';
+            } else if (this.physician === "T") {
+                if (this.schedFu === "yes") {
+                    return (
+                        "Date tele for 1 wk prior to f/u (" +
+                        this.fuAppt
+                            .minus({ weeks: 1 })
+                            .toLocaleString(DateTime.DATE_SHORT) +
+                        "). Assign to Dr. T. Create tele if needed."
+                    );
+                } else {
+                    return (
+                        "Date tele for 2 wks after capsule (" +
+                        this.capsuleAppt
+                            .plus({ weeks: 2 })
+                            .toLocaleString(DateTime.DATE_SHORT) +
+                        "). Assign to Dr. T. Create tele if needed."
+                    );
+                }
+            }
+
+            return;
+        },
+
+        //
+
+        instDate() {
+            return this.capsuleAppt.toLocaleString(DateTime.DATE_HUGE);
+        },
+
+        instTime() {
+            return this.capsuleAppt.toLocaleString(DateTime.TIME_SIMPLE);
         },
     };
 };
