@@ -372,7 +372,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 </div>
                                                 <button
                                                     title="Copy email subject"
-                                                    x-on:click="copyEmailSubject()"
+                                                    x-on:click="navigator.clipboard.writeText('Capsule Endoscopy Appointment and Instructions')"
                                                     class="group">
                                                     <CopySVG />
                                                 </button>
