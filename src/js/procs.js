@@ -66,7 +66,7 @@ window.procs = function () {
                     "Please report to Patient Registration in the main lobby.",
                 hourOffset: 1,
                 minOffset: 15,
-                phone: "562-598-1311",
+                // phone: "562-598-1311",
             },
             {
                 id: 4,
@@ -76,7 +76,7 @@ window.procs = function () {
                 checkin: "Please report to the main lobby desk.",
                 hourOffset: 1,
                 minOffset: 0,
-                phone: "562-933-2000",
+                // phone: "562-933-2000",
             },
         ],
 

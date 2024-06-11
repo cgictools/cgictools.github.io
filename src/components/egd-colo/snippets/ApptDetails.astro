@@ -26,6 +26,10 @@
         <td class="pb-1 pr-10 font-bold">Address</td>
         <td class="pb-1"><span x-text="selectedFacility.address"></span></td>
     </tr>
+    <tr x-show="selectedFacility.phone">
+        <td class="pb-1 pr-10 font-bold">Phone</td>
+        <td class="pb-1"><span x-text="selectedFacility.phone"></span></td>
+    </tr>
     <tr x-show="selectedFacility.checkin">
         <td class="pb-1 pr-10 font-bold">Check In</td>
         <td class="pb-1"><span x-text="selectedFacility.checkin"></span></td>
