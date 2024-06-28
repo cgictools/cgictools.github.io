@@ -560,36 +560,59 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 class="pb-2 font-medium">
                                 Procedure
                             </h3>
-                            <template x-if="selectedFacility && !procApptInput">
-                                <p class="pb-1.5">
-                                    Arrive 1 hour
-                                    <span
-                                        x-show="selectedFacility.minOffset !== 0">
-                                        and
-                                        <span
-                                            x-text="selectedFacility.minOffset"
-                                        ></span>
-                                         minutes
-                                    </span>
-                                     prior to the procedure.
-                                </p>
-                            </template>
-                            <input
-                                type="datetime-local"
-                                step="900"
-                                x-bind:min="procApptMin()"
-                                x-on:change="$nextTick(() => { warnCallProcAppt() })"
-                                x-bind:class="procApptInput ? 'text-black' : 'text-zinc-400'"
-                                x-model="procApptInput"
-                                class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
-                            />
-                            <p
-                                x-show="procApptInput && selectedFacility"
-                                x-cloak
-                                class="pt-1.5">
-                                Arrive by <span x-text="procApptArrival()"
-                                ></span>.
-                            </p>
+                            <div class="grid grid-cols-2">
+                                <div>
+                                    <template
+                                        x-if="selectedFacility && !procApptInput">
+                                        <p class="pb-1.5">
+                                            Arrive 1 hour
+                                            <span
+                                                x-show="selectedFacility.minOffset !== 0">
+                                                and
+                                                <span
+                                                    x-text="selectedFacility.minOffset"
+                                                ></span>
+                                                 minutes
+                                            </span>
+                                             prior to the procedure.
+                                        </p>
+                                    </template>
+                                    <input
+                                        type="datetime-local"
+                                        step="900"
+                                        x-bind:min="procApptMin()"
+                                        x-on:change="$nextTick(() => { warnCallProcAppt() })"
+                                        x-bind:class="procApptInput ? 'text-black' : 'text-zinc-400'"
+                                        x-model="procApptInput"
+                                        class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                                    />
+                                    <p
+                                        x-show="procApptInput && selectedFacility"
+                                        x-cloak
+                                        class="pt-1.5">
+                                        Arrive by <span
+                                            x-text="procApptArrival()"></span>.
+                                    </p>
+                                </div>
+                                <div
+                                    x-show="procApptInput && warnTime(procAppt)">
+                                    <p
+                                        class="mb-1"
+                                        x-bind:class="overrideProcTime ? 'text-amber-500' : 'text-red-500'">
+                                        Please verify the selected time.
+                                    </p>
+                                    <label
+                                        for="checkProcTime"
+                                        class="select-none">
+                                        <input
+                                            type="checkbox"
+                                            id="checkProcTime"
+                                            x-model="overrideProcTime"
+                                            class="mr-0.5"
+                                        /> The time is correct.
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div
                             x-show=" procs[0].selected && selectedFacility.short === 'MOSCL' "
@@ -606,21 +629,45 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 class="pb-2 font-medium">
                                 Follow-up
                             </h3>
-                            <div x-show="procApptInput" x-cloak class="pb-1">
-                                <p class="text-zinc-500">
-                                    3 weeks post proc is <span
-                                        x-text="fuApptRec()"></span>
-                                </p>
+                            <div class="grid grid-cols-2">
+                                <div>
+                                    <div
+                                        x-show="procApptInput"
+                                        x-cloak
+                                        class="pb-1">
+                                        <p class="text-zinc-500">
+                                            3 weeks post proc is <span
+                                                x-text="fuApptRec()"></span>
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="datetime-local"
+                                        step="900"
+                                        x-bind:min="fuApptMin()"
+                                        x-on:change="$nextTick(() => { warnCallFuAppt() })"
+                                        x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
+                                        x-model="fuApptInput"
+                                        class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
+                                    />
+                                </div>
+                                <div x-show="fuApptInput && warnTime(fuAppt)">
+                                    <p
+                                        class="mb-1"
+                                        x-bind:class="overrideFuTime ? 'text-amber-500' : 'text-red-500'">
+                                        Please verify the selected time.
+                                    </p>
+                                    <label
+                                        for="checkFuTime"
+                                        class="select-none">
+                                        <input
+                                            type="checkbox"
+                                            id="checkFuTime"
+                                            x-model="overrideFuTime"
+                                            class="mr-0.5"
+                                        /> The time is correct.
+                                    </label>
+                                </div>
                             </div>
-                            <input
-                                type="datetime-local"
-                                step="900"
-                                x-bind:min="fuApptMin()"
-                                x-on:change="$nextTick(() => { warnCallFuAppt() })"
-                                x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
-                                x-model="fuApptInput"
-                                class="rounded border border-zinc-600 py-0.5 pl-2 pr-1 focus:text-black"
-                            />
                         </div>
                         <div>
                             <h3
@@ -755,6 +802,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             </li>
                                             <li
                                                 x-text="selectedFacility.address">
+                                            </li>
+                                            <li x-text="selectedFacility.phone">
                                             </li>
                                             <li
                                                 x-text="selectedFacility.checkin">

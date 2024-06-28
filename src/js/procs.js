@@ -394,7 +394,7 @@ window.procs = function () {
                 .substr(0, 16);
         },
 
-        procAppt() {
+        get procAppt() {
             return DateTime.fromISO(this.procApptInput, {
                 locale: "en-US",
                 zone: "America/Los_Angeles",
@@ -402,7 +402,7 @@ window.procs = function () {
         },
 
         numDaysOut() {
-            let procDay = this.procAppt().startOf("day");
+            let procDay = this.procAppt.startOf("day");
             let today = DateTime.local()
                 .setZone("America/Los_Angeles")
                 .startOf("day");
@@ -411,7 +411,7 @@ window.procs = function () {
         },
 
         procApptDateNumShort() {
-            return this.procAppt().toLocaleString({
+            return this.procAppt.toLocaleString({
                 day: "numeric",
                 month: "numeric",
                 year: "2-digit",
@@ -419,18 +419,16 @@ window.procs = function () {
         },
 
         procApptDate() {
-            return this.procAppt().toLocaleString(
-                DateTime.DATE_MED_WITH_WEEKDAY,
-            );
+            return this.procAppt.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
         procApptTime() {
-            return this.procAppt().toLocaleString(DateTime.TIME_SIMPLE);
+            return this.procAppt.toLocaleString(DateTime.TIME_SIMPLE);
         },
 
         procApptArrival() {
             if (this.selectedFacility) {
-                return this.procAppt()
+                return this.procAppt
                     .minus({
                         hours: this.selectedFacility.hourOffset,
                         minutes: this.selectedFacility.minOffset,
@@ -441,7 +439,7 @@ window.procs = function () {
 
         procApptPickup() {
             if (this.selectedFacility) {
-                return this.procAppt()
+                return this.procAppt
                     .minus({
                         hours: this.selectedFacility.hourOffset,
                         minutes: this.selectedFacility.minOffset,
@@ -452,13 +450,13 @@ window.procs = function () {
         },
 
         daysBeforeProc(d) {
-            return this.procAppt()
+            return this.procAppt
                 .minus({ days: d })
                 .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
         isMorningProc() {
-            let hour = this.procAppt().hour;
+            let hour = this.procAppt.hour;
             let x = false;
 
             if (hour < 11) {
@@ -468,8 +466,9 @@ window.procs = function () {
             return x;
         },
 
+        // used in EGD instructions only
         isAfternoonProc() {
-            let hour = this.procAppt().hour;
+            let hour = this.procAppt.hour;
             let x = false;
 
             if (hour >= 12) {
@@ -481,7 +480,7 @@ window.procs = function () {
 
         // for ez2go
         proc2ndDoseTime() {
-            return this.procAppt()
+            return this.procAppt
                 .minus({
                     hours: this.selectedFacility.hourOffset,
                     minutes: this.selectedFacility.minOffset,
@@ -491,7 +490,7 @@ window.procs = function () {
         },
 
         hoursBeforeProc(h, m = 0) {
-            return this.procAppt()
+            return this.procAppt
                 .minus({
                     hours: h,
                     minutes: m,
@@ -514,12 +513,12 @@ window.procs = function () {
 
         fuApptMin() {
             if (this.procApptInput) {
-                return this.procAppt().startOf("day").toISO().substr(0, 16);
+                return this.procAppt.startOf("day").toISO().substr(0, 16);
             }
         },
 
         fuApptRec() {
-            return this.procAppt()
+            return this.procAppt
                 .plus({ weeks: 3 })
                 .toLocaleString(DateTime.DATE_SHORT);
         },
@@ -576,6 +575,26 @@ window.procs = function () {
             }
         },
 
+        // check appointment times
+
+        warnTime(x) {
+            let hour = x.hour;
+            let min = x.minute;
+
+            if (hour < 7 || hour > 16) {
+                return true;
+            }
+
+            if (min % 15 !== 0) {
+                return true;
+            }
+
+            return false;
+        },
+
+        overrideProcTime: false,
+        overrideFuTime: false,
+
         // checks during call, for the red number
         checkDuring() {
             let incomplete = 0;
@@ -592,7 +611,15 @@ window.procs = function () {
                 incomplete++;
             }
 
+            if (this.procApptInput && this.overrideProcTime === false) {
+                incomplete++;
+            }
+
             if (!this.fuApptInput && !this.fuTBD()) {
+                incomplete++;
+            }
+
+            if (this.fuApptInput && this.overrideFuTime === false) {
                 incomplete++;
             }
 
