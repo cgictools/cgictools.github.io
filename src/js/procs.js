@@ -611,7 +611,11 @@ window.procs = function () {
                 incomplete++;
             }
 
-            if (this.procApptInput && this.overrideProcTime === false) {
+            if (
+                this.procApptInput &&
+                this.warnTime(this.procAppt) &&
+                this.overrideProcTime === false
+            ) {
                 incomplete++;
             }
 
@@ -619,7 +623,11 @@ window.procs = function () {
                 incomplete++;
             }
 
-            if (this.fuApptInput && this.overrideFuTime === false) {
+            if (
+                this.fuApptInput &&
+                this.warnTime(this.fuAppt) &&
+                this.overrideFuTime === false
+            ) {
                 incomplete++;
             }
 
