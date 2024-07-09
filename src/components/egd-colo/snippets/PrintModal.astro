@@ -4,10 +4,12 @@ import PrintSVG from '../../svg/PrintSVG.astro';
 
 <div
     x-show="printModal"
+    x-cloak
     class="fixed left-0 top-0 h-screen w-screen bg-black opacity-75">
 </div>
 <div
     x-show="printModal"
+    x-cloak
     x-on:click.outside="window.location.reload(true)"
     class="fixed left-1/2 top-1/2 z-10 w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded bg-white px-12 py-8">
     <button
