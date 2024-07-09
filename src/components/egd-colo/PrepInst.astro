@@ -61,14 +61,14 @@ import Transpo from './snippets/Transpo.astro';
     class="border-b border-t font-bold"
     x-bind:class=" instructions.length ? 'my-1 py-1' : 'my-1.5 py-1.5' ">
     <span class="uppercase">2 days before your procedure</span> (<span
-        x-text="daysBeforeProc(2)"></span>): follow the moderate/soft diet (see
-    attached).
+        x-text="printModal ? '________________' : daysBeforeProc(2)"></span>):
+    follow the moderate/soft diet (see attached).
 </p>
 <!-- liquid diet -->
 <div x-bind:class=" instructions.length ? 'mb-1' : 'mb-1.5' ">
     <p class="font-bold uppercase">
         1 day before your procedure (<span
-            x-text="daysBeforeProc(1)"
+            x-text="printModal ? '________________' : daysBeforeProc(1)"
             class="normal-case"></span>):
     </p>
     <ul class="px-4" x-bind:class=" instructions.length ? '' : 'py-1' ">
@@ -193,7 +193,23 @@ import Transpo from './snippets/Transpo.astro';
 </div>
 <!-- 2nd dose, early proc -->
 <div
-    x-show="isMorningProc()"
+    x-show="printModal"
+    x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
+    <p>
+        <span x-text="prep + ' 2nd dose:'" class="font-bold uppercase"></span>
+         Repeat the steps of the 1st dose as above. For the start time:
+    </p>
+    <p>
+        If your procedure start time is before 11 AM, start the 2nd dose between
+        6 to 8 PM, no sooner than 3 hours after 1st dose.
+    </p>
+    <p>
+        If your procedure start time is 11 AM or later, start the 2nd dose 6
+        hours prior to the procedure start time (________________).
+    </p>
+</div>
+<div
+    x-show="isMorningProc() && !printModal"
     x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
     <p x-show=" prep === 'ez2go' ">
         <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose <span
@@ -257,12 +273,13 @@ import Transpo from './snippets/Transpo.astro';
     evacuation begins.
 </p>
 <p class="mb-0.5 font-bold uppercase">
-    Day of the procedure (<span x-text="procApptDate()" class="normal-case"
-    ></span>):
+    Day of the procedure (<span
+        x-text="printModal ? '________________' : procApptDate()"
+        class="normal-case"></span>):
 </p>
 <!-- 2nd dose, late proc -->
 <div
-    x-show="!isMorningProc()"
+    x-show="!isMorningProc() && !printModal"
     x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
     <p x-show=" prep === 'ez2go' ">
         <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose
@@ -274,7 +291,7 @@ import Transpo from './snippets/Transpo.astro';
     </p>
     <p x-show=" prep === 'Suprep' ">
         <span class="font-bold"
-            >Suprep 2nd dose, startign at <span x-text="proc2ndDoseTime()"
+            >Suprep 2nd dose, starting at <span x-text="proc2ndDoseTime()"
             ></span>:</span
         > 6 hours prior to your arrival time, repeat the above instructions
         using the other Suprep bottle.
@@ -320,8 +337,9 @@ import Transpo from './snippets/Transpo.astro';
         <span class="font-bold"
             >You may drink clear liquids up to 4 hours before your procedure
             time</span
-        > (4 hours before is <span x-text="hoursBeforeProc(4)" class="underline"
-        ></span>). <span class="font-bold"
+        > (4 hours before is <span
+            x-text="printModal ? '________________' : hoursBeforeProc(4)"
+            class="underline"></span>). <span class="font-bold"
             >After that, <span class="uppercase">nothing by mouth!</span></span
         > You may take necessary medications with a small sip of water.
     </p>

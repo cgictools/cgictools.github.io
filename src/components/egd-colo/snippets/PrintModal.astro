@@ -1,0 +1,140 @@
+---
+import PrintSVG from '../../svg/PrintSVG.astro';
+---
+
+<div
+    x-show="printModal"
+    class="fixed left-0 top-0 h-screen w-screen bg-black opacity-75">
+</div>
+<div
+    x-show="printModal"
+    x-on:click.outside="window.location.reload(true)"
+    class="fixed left-1/2 top-1/2 z-10 w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded bg-white px-12 py-8">
+    <button
+        x-on:click="window.location.reload(true)"
+        class="fixed right-0 top-0 m-2.5 p-0.5">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5">
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+    <h2 class="mb-4 text-lg font-semibold">
+        Print a blank set of instructions
+    </h2>
+    <div class="grid grid-cols-2 divide-x">
+        <div class="grid grid-cols-1 gap-y-6">
+            <div>
+                <h3 class="pb-2 font-medium">Procedure(s)</h3>
+                <ul>
+                    <template x-for="proc in procs" :key="proc.id">
+                        <li class="select-none pb-1 last:pb-0">
+                            <input
+                                type="checkbox"
+                                x-bind:id="proc.short"
+                                x-model="proc.selected"
+                                class="-mr-0.5"
+                            />
+                            <label
+                                x-bind:for="proc.short"
+                                x-text="proc.short"
+                                class="pl-1"></label>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <div x-show="procs[1].selected" x-cloak>
+                <h3 class="pb-2 font-medium">Colo Prep</h3>
+                <select
+                    x-model="prep"
+                    class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                    <option value="" disabled>Select a prep</option>
+                    <template x-for="prep in preps">
+                        <option x-text="prep.name"></option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <h3 class="font-medium">Facility</h3>
+                <select
+                    x-model="facilityIndex"
+                    class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                    <option value="" disabled>Select a facility</option>
+                    <template
+                        x-for="index in [...Array(facilities.length).keys()]">
+                        <option
+                            x-bind:value="index"
+                            x-text="facilities[index].short"></option>
+                    </template>
+                </select>
+            </div>
+        </div>
+        <div>
+            <div class="ml-8">
+                <ul>
+                    <li class="mb-2 flex items-center">
+                        <input
+                            type="checkbox"
+                            id="modalConsent"
+                            x-model="printConsent"
+                            x-bind:disabled="!selectedProcs.length"
+                        />
+                        <label for="modalConsent" class="select-none pl-3">
+                            Consent
+                        </label>
+                    </li>
+                    <li class="mb-2 flex items-center">
+                        <input
+                            type="checkbox"
+                            id="modalCover"
+                            x-model="printCover"
+                            x-bind:disabled="!selectedProcs.length"
+                        />
+                        <label for="modalCover" class="select-none pl-3">
+                            Cover Sheet
+                        </label>
+                    </li>
+                    <li
+                        x-show="procs[1].selected"
+                        class="mb-2 flex items-center">
+                        <input
+                            type="checkbox"
+                            id="modalPrep"
+                            x-model="printPrep"
+                            x-bind:disabled="!prep"
+                        />
+                        <label for="modalPrep" class="select-none pl-3">
+                            Colo Prep
+                        </label>
+                    </li>
+                    <li
+                        x-show="procs[1].selected"
+                        class="mb-3 flex items-center">
+                        <input
+                            type="checkbox"
+                            id="modalDiet"
+                            x-model="printDiet"
+                        />
+                        <label for="modalDiet" class="select-none pl-3">
+                            Moderate Diet
+                        </label>
+                    </li>
+                </ul>
+                <!-- <button class="hover:text-zinc-600">Select all</button> -->
+            </div>
+            <button
+                x-on:click="window.print()"
+                class="fixed bottom-8 right-12 flex items-center gap-x-1 pl-0.5 pr-1.5 hover:text-zinc-600">
+                <PrintSVG />
+                <span>Print</span>
+            </button>
+        </div>
+    </div>
+</div>

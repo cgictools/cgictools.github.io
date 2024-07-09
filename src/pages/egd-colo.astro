@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Instructions from '../components/egd-colo/ProcPacket.astro';
 import PageHeading from '../components/PageHeading.astro';
+import PrintModal from '../components/egd-colo/snippets/PrintModal.astro';
 
 import PointerSVG from '../components/svg/PointerSVG.astro';
 import SubmitSVG from '../components/svg/SubmitSVG.astro';
@@ -18,8 +19,11 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
 <Layout title="EGD/Colo - CGIC Tools">
     <Breadcrumbs text="EGD/colo" />
     <div x-data="procs()">
-        <main class="pb-24 print:hidden">
+        <main
+            class="pb-24 print:hidden"
+            x-bind:class=" printModal ? 'h-screen overflow-hidden' : '' ">
             <PageHeading text="EGD/colo scheduling" />
+            <PrintModal />
             <div class="grid grid-cols-2 divide-x">
                 <section class="col-span-1">
                     <div
@@ -44,21 +48,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-ref="preProc"
                                     x-on:hoverpre.window="warnPreProc()"
                                     class="pb-2 font-medium">
-                                    <!-- remove "pb-2" in h3 if un-commenting the flex for help icon -->
-
-                                     Procedure(s)
+                                    Procedure(s)
                                 </h3>
-                                <!-- <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        class="mb-[1px] h-5 w-5 text-zinc-400">
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </span> -->
                                 <ul>
                                     <template
                                         x-for="proc in procs"
@@ -898,6 +889,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <div
                             x-show="checkPre() === 0 && prepSent === 'no' && (checkDuring() === 0 || leftMsg)"
+                            x-cloak
                             class="mb-8">
                             <h3 class="pb-2 font-medium">
                                 Send <span x-text="prep"></span> Rx
@@ -1145,7 +1137,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                 </section>
             </div>
         </main>
-        <template x-if="checkPre() === 0 && checkDuring() === 0">
+        <template
+            x-if="(checkPre() === 0 && checkDuring() === 0) || printModal">
             <div
                 class="-mx-12 hidden font-['Times_New_Roman'] text-sm leading-4 print:block">
                 <Instructions />

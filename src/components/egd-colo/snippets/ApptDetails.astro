@@ -1,37 +1,84 @@
-<p class="mb-2 text-center">Appointment Details</p>
-<table class="max-w-40 mx-auto mb-8">
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Date</td>
-        <td class="pb-1"><span x-text="procApptDate()"></span></td>
-    </tr>
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Arrival Time</td>
-        <td class="pb-1"><span x-text="procApptArrival()"></span></td>
-    </tr>
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Start Time</td>
-        <td class="pb-1"><span x-text="procApptTime()"></span></td>
-    </tr>
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Pickup Time</td>
-        <td class="pb-1"
-            ><span x-text="procApptPickup()"></span> (approximate)</td
-        >
-    </tr>
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Facility</td>
-        <td class="pb-1"><span x-text="selectedFacility.long"></span></td>
-    </tr>
-    <tr>
-        <td class="pb-1 pr-10 font-bold">Address</td>
-        <td class="pb-1"><span x-text="selectedFacility.address"></span></td>
-    </tr>
-    <tr x-show="selectedFacility.phone">
-        <td class="pb-1 pr-10 font-bold">Phone</td>
-        <td class="pb-1"><span x-text="selectedFacility.phone"></span></td>
-    </tr>
-    <tr x-show="selectedFacility.checkin">
-        <td class="pb-1 pr-10 font-bold">Check In</td>
-        <td class="pb-1"><span x-text="selectedFacility.checkin"></span></td>
-    </tr>
-</table>
+<p class="mb-2" x-bind:class="printModal ? 'font-bold' : 'text-center'">
+    Appointment Details
+</p>
+<template x-if="!printModal">
+    <table class="max-w-40 mx-auto mb-8">
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Date</td>
+            <td class="pb-1"><span x-text="procApptDate()"></span></td>
+        </tr>
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Arrival Time</td>
+            <td class="pb-1"><span x-text="procApptArrival()"></span></td>
+        </tr>
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Start Time</td>
+            <td class="pb-1"><span x-text="procApptTime()"></span></td>
+        </tr>
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Pickup Time</td>
+            <td class="pb-1"
+                ><span x-text="procApptPickup()"></span> (approximate)</td
+            >
+        </tr>
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Facility</td>
+            <td class="pb-1"><span x-text="selectedFacility.long"></span></td>
+        </tr>
+        <tr>
+            <td class="pb-1 pr-10 font-bold">Address</td>
+            <td class="pb-1"><span x-text="selectedFacility.address"></span></td
+            >
+        </tr>
+        <tr x-show="selectedFacility.phone">
+            <td class="pb-1 pr-10 font-bold">Phone</td>
+            <td class="pb-1"><span x-text="selectedFacility.phone"></span></td>
+        </tr>
+        <tr x-show="selectedFacility.checkin">
+            <td class="pb-1 pr-10 font-bold">Check In</td>
+            <td class="pb-1"><span x-text="selectedFacility.checkin"></span></td
+            >
+        </tr>
+    </table>
+</template>
+<template x-if="printModal">
+    <p class="mb-2.5 mt-0.5">
+        Date: ___________________________ Start Time: _________________ Arrival
+        Time: _________________
+    </p>
+</template>
+<template x-if="printModal && !facilityIndex">
+    <table class="mb-4 ml-4">
+        <template x-for="facility in facilities">
+            <tr>
+                <td class="align-text-top"> [ ]</td>
+                <td class="align-text-top">
+                    <span x-text="facility.long" class="font-bold"></span><br />
+                    <span x-text="facility.address"></span> ||
+                    <span x-text="facility.phone"></span><br />
+                     Please arrive <span x-text="facility.hourOffset"></span>
+                     hour <span x-show="facility.minOffset > 0"
+                        >and <span x-text="facility.minOffset"></span> minutes
+                    </span>before the scheduled procedure.
+                </td>
+            </tr>
+        </template>
+    </table>
+</template>
+<template x-if="printModal && facilityIndex">
+    <div class="mb-4">
+        <p x-text="facilities[facilityIndex].long" class="font-bold"></p>
+        <p>
+            Address: <span x-text="facilities[facilityIndex].address"></span>
+        </p>
+        <p>Phone: <span x-text="facilities[facilityIndex].phone"></span></p>
+        <p>
+            Please arrive <span x-text="facilities[facilityIndex].hourOffset"
+            ></span>
+             hour <span x-show="facilities[facilityIndex].minOffset > 0"
+                >and <span x-text="facilities[facilityIndex].minOffset"></span>
+                 minutes
+            </span>before the scheduled procedure.
+        </p>
+    </div>
+</template>

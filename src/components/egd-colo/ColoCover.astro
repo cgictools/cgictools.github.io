@@ -7,7 +7,9 @@ import CxPolicy from './snippets/CxPolicy.astro';
 <div class="mb-4 flex h-24 flex-row justify-center">
     <img src={Logo.src} alt="logo" />
 </div>
-<h1 class="mb-8 text-center font-bold uppercase leading-relaxed">
+<h1
+    class="text-center font-bold uppercase leading-relaxed"
+    x-bind:class="printModal ? 'mb-2' : 'mb-8'">
     Patient Instructions for Colonoscopy
 </h1>
 <ApptDetails />
@@ -59,7 +61,7 @@ import CxPolicy from './snippets/CxPolicy.astro';
     nurse or technician will give you written instructions to follow when you
     get home.
 </p>
-<p class="mb-8">
+<p x-bind:class="printModal ? 'mb-4' : 'mb-8'">
     If you have any questions, please feel free to ask the physician, the GI
     nurse or technician.
 </p>

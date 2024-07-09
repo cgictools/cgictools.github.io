@@ -6,7 +6,11 @@ import Logo from '../../images/logo.png';
     class="flex flex-row justify-between"
     x-bind:class=" selectedProcs.length === 2 ? '' : 'mb-10' ">
     <p>Please sign and bring this page to your procedure.</p>
-    <p>Proc: <span x-text="procApptDateNumShort()"></span></p>
+    <template x-if="!printModal">
+        <p>
+            Proc: <span x-text="procApptDateNumShort()"></span>
+        </p>
+    </template>
 </div>
 
 <div class="my-1 flex h-24 flex-row justify-center">
@@ -132,66 +136,6 @@ import Logo from '../../images/logo.png';
         someone who has tested positive for COVID-19 prior to my scheduled
         procedure.
     </p>
-    <!-- <table class="mb-1.5">
-    <tr class="align-top">
-        <td class="pr-4">
-            <div class="h-4 w-12 border-b border-black"></div>
-            <p class="text-center text-[10px]">Initial</p>
-        </td>
-        <td>
-            <p>
-                Preparation instructions have been reviewed in detail with me
-                and I am in receipt of these instructions.
-            </p>
-        </td>
-    </tr>
-    <tr x-show="selectedFacility.short === 'MOSCL'" class="align-top">
-        <td class="pr-4">
-            <div class="h-4 w-12 border-b border-black"></div>
-            <p class="text-center text-[10px]">Initial</p>
-        </td>
-        <td>
-            <p>
-                I have received the MemorialCare Outpatient Surgical Center Long
-                Beach Patient Rights and Responsibilities/physician ownership
-                disclosure information sheet.
-            </p>
-        </td>
-    </tr>
-    <tr class="align-top">
-        <td class="pr-4">
-            <div class="h-4 w-12 border-b border-black"></div>
-            <p class="text-center text-[10px]">Initial</p>
-        </td>
-        <td>
-            <p>
-                If you are taking a GLP-1 agonist (diabetes/weight loss
-                medication), including, but not limited to, Ozempic, Mounjaro,
-                Wegovy, Zepbound, Trulicity, Rybelsus, Saxenda, Bydureon,
-                Byetta, Victoza, Adlyxin, Tranzeum, Soliqua, or Xultopy,
-                <span class="font-bold">
-                    you must hold it 1 week prior to your procedure.
-                </span>If you fail to do so, your procedure may be cancelled at
-                the facility on the day of the procedure. Please contact our
-                office if you have any questions.
-            </p>
-        </td>
-    </tr>
-    <tr class="align-top">
-        <td class="pr-4">
-            <div class="h-4 w-12 border-b border-black"></div>
-            <p class="text-center text-[10px]">Initial</p>
-        </td>
-        <td>
-            <p>
-                I will inform the office of Dr. Lisa Hertz / Dr. Kashyap Trivedi
-                / Dr. Pavan Mankal in the event I test positive for COVID-19 or
-                am exposed to someone who has tested positive for COVID-19 prior
-                to my scheduled procedure.
-            </p>
-        </td>
-    </tr>
-</table> -->
     <p class="mb-0.5">
         I certify that I have read the above and understand the possible risks
         and complications noted. Possible alternative examinations have been

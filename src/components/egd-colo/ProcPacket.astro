@@ -10,7 +10,7 @@ import PrepInst from './PrepInst.astro';
 <!-- flex container on each page div to center vertically when printing -->
 <div
     id="packetCover"
-    x-show="sendInstMethod !== 'email'"
+    x-show="sendInstMethod !== 'email' && !printModal"
     class="flex h-screen break-after-page flex-col justify-center">
     <div class="mb-12 flex h-28 flex-row justify-center">
         <img src={Logo.src} alt="logo" />
@@ -23,34 +23,38 @@ import PrepInst from './PrepInst.astro';
 
 <div
     id="consent"
-    class="flex h-screen break-after-page flex-col justify-center">
+    x-show="printConsent && selectedProcs.length"
+    class="flex h-screen flex-col justify-center"
+    x-bind:class="(printCover || (printPrep && prep) || (printDiet && procs[1].selected)) ? 'break-after-page' : ''">
     <Consent />
 </div>
 
 <div
     id="EGDCover"
-    x-show="selectedProcs.length === 1 && procs[0].selected"
+    x-show="procs[0].selected && !procs[1].selected && printCover"
     class="flex h-screen flex-col justify-center">
     <EGDCover />
 </div>
 
 <div
     id="coloCover"
-    x-show="procs[1].selected"
-    class="flex h-screen break-after-page flex-col justify-center">
+    x-show="procs[1].selected && printCover"
+    class="flex h-screen flex-col justify-center"
+    x-bind:class="((printPrep && prep) || (printDiet && procs[1].selected)) ? 'break-after-page' : ''">
     <ColoCover />
 </div>
 
 <div
     id="ez2go"
-    x-show="procs[1].selected"
-    class="flex h-screen break-after-page flex-col justify-center">
+    x-show="procs[1].selected && prep && printPrep"
+    class="flex h-screen flex-col justify-center"
+    x-bind:class="(printDiet && procs[1].selected) ? 'break-after-page' : ''">
     <PrepInst />
 </div>
 
 <div
     id="modDiet"
-    x-show="procs[1].selected"
+    x-show="procs[1].selected && printDiet"
     class="flex h-screen flex-col justify-center">
     <ModDiet />
 </div>

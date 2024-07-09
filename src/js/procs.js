@@ -45,7 +45,7 @@ window.procs = function () {
                 address: "3833 Worsham Ave, Ste. 200, Long Beach, CA 90808",
                 hourOffset: 1,
                 minOffset: 0,
-                phone: "562-426-2606",
+                phone: "(562) 426-2606",
             },
             {
                 id: 2,
@@ -55,18 +55,18 @@ window.procs = function () {
                 quote: "",
                 hourOffset: 1,
                 minOffset: 15,
-                phone: "949-335-4966",
+                phone: "(949) 335-4966",
             },
             {
                 id: 3,
                 short: "LAMC",
-                long: "UCI Health - Los Alamitos",
+                long: "UCI Health - Los Alamitos (Los Alamitos Medical Center)",
                 address: "3751 Katella Ave, Los Alamitos, CA 90720",
                 checkin:
                     "Please report to Patient Registration in the main lobby.",
                 hourOffset: 1,
                 minOffset: 15,
-                // phone: "562-598-1311",
+                phone: "(562) 598-1311",
             },
             {
                 id: 4,
@@ -76,7 +76,7 @@ window.procs = function () {
                 checkin: "Please report to the main lobby desk.",
                 hourOffset: 1,
                 minOffset: 0,
-                // phone: "562-933-2000",
+                phone: "(562) 933-0235",
             },
         ],
 
@@ -151,6 +151,13 @@ window.procs = function () {
                 "Prime Surgical Center does offer a ride service at no additional cost. The number to call to arrange transport is (818) 937-9969. You can find more details in the attached pamphlet.",
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
+
+        printModal: false,
+
+        printConsent: true,
+        printCover: true,
+        printPrep: true,
+        printDiet: true,
 
         // JS logic
 
@@ -751,6 +758,8 @@ window.procs = function () {
 
             return x;
         },
+
+        // print blank instructions logic
 
         // following 2 functions join array elements, returns a string
         emailBodyHtmlJoin() {
