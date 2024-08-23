@@ -118,7 +118,7 @@ window.procs = function () {
             "",
             "Your {joinProcs} is scheduled for {procApptDate} at {procApptTime} at {selectedFacility.long} - {selectedFacility.address}. Please arrive by {procApptArrival}.",
             "",
-            "Attached are the consent form and instructions for your prep. Please sign and bring the consent form to your procedure.",
+            "Attached are the consent form and instructions for your prep. Please sign and send the consent form to us via email at cgicare@cgicare.hush.com or bring it to your procedure.",
             "{mosclPacket}",
             "{mosclCovid}",
             "",

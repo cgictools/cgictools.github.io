@@ -5,7 +5,10 @@ import Logo from '../../images/logo.png';
 <div
     class="flex flex-row justify-between"
     x-bind:class=" selectedProcs.length === 2 ? '' : 'mb-10' ">
-    <p>Please sign and bring this page to your procedure.</p>
+    <p>
+        Please sign this page and email to cgicare@cgicare.hush.com or bring to
+        the procedure.
+    </p>
     <template x-if="!printModal">
         <p>
             Proc: <span x-text="procApptDateNumShort()"></span>
