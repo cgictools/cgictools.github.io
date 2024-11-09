@@ -152,6 +152,10 @@ window.procs = function () {
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
+        prep6to8:
+            "6 to 8 PM the night before your procedure (and 3 to 4 hours after 1st dose)",
+        prep11to12: "11 PM to midnight 12 AM the night before your procedure",
+
         printModal: false,
 
         printConsent: true,
@@ -279,6 +283,10 @@ window.procs = function () {
             this.warnPreInst();
         },
 
+        schedFu: "",
+
+        physician: "", // H, T, M
+
         // check pre-call inputs are complete
         checkPre() {
             let incomplete = 0;
@@ -315,6 +323,10 @@ window.procs = function () {
             }
 
             if (this.schedFu === "") {
+                incomplete++;
+            }
+
+            if (this.physician === "") {
                 incomplete++;
             }
 
@@ -384,6 +396,14 @@ window.procs = function () {
                 this.$refs.preFu.style.color = this.red;
             } else {
                 this.$refs.preFu.style.color = "black";
+            }
+        },
+
+        warnPrePhysician() {
+            if (this.physician === "") {
+                this.$refs.prePhysician.style.color = this.red;
+            } else {
+                this.$refs.prePhysician.style.color = "black";
             }
         },
 
@@ -506,7 +526,6 @@ window.procs = function () {
         },
 
         // follow up
-        schedFu: "",
 
         fuTBD() {
             if (this.schedFu === "no") {

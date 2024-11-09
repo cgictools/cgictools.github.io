@@ -376,47 +376,107 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </ul>
                             </div>
                         </div>
-                        <div>
-                            <h3
-                                x-ref="preFu"
-                                x-on:hoverpre.window="warnPreFu()"
-                                class="pb-2 font-medium">
-                                Sched Follow-up?
-                            </h3>
-                            <ul>
-                                <li class="select-none pb-1">
-                                    <label
-                                        for="yesFu"
-                                        x-on:click="$nextTick(() => { warnPreFu() })"
-                                        class="p-1 pr-1.5">
-                                        <input
-                                            type="radio"
-                                            id="yesFu"
-                                            value="yes"
+                        <div class="grid grid-cols-2">
+                            <div>
+                                <h3
+                                    x-ref="preFu"
+                                    x-on:hoverpre.window="warnPreFu()"
+                                    class="pb-2 font-medium">
+                                    Sched Follow-up?
+                                </h3>
+                                <ul>
+                                    <li class="select-none pb-1">
+                                        <label
+                                            for="yesFu"
                                             x-on:click="$nextTick(() => { warnPreFu() })"
-                                            x-model="schedFu"
-                                            class="-ml-1 mr-0.5"
-                                        />
-                                         yes
-                                    </label>
-                                </li>
-                                <li class="select-none">
-                                    <label
-                                        for="noFu"
-                                        x-on:click="$nextTick(() => { warnPreFu() })"
-                                        class="p-1 pr-1.5">
-                                        <input
-                                            type="radio"
-                                            id="noFu"
-                                            value="no"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="yesFu"
+                                                value="yes"
+                                                x-on:click="$nextTick(() => { warnPreFu() })"
+                                                x-model="schedFu"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             yes
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="noFu"
                                             x-on:click="$nextTick(() => { warnPreFu() })"
-                                            x-model="schedFu"
-                                            class="-ml-1 mr-0.5"
-                                        />
-                                         no, TBD</label
-                                    >
-                                </li>
-                            </ul>
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="noFu"
+                                                value="no"
+                                                x-on:click="$nextTick(() => { warnPreFu() })"
+                                                x-model="schedFu"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             no, TBD</label
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3
+                                    x-ref="prePhysician"
+                                    x-on:hoverpre.window="warnPrePhysician()"
+                                    class="pb-2 font-medium">
+                                    Physician
+                                </h3>
+                                <ul class="flex gap-x-6">
+                                    <li class="select-none">
+                                        <label
+                                            for="H"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="H"
+                                                value="H"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. H
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="T"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="T"
+                                                value="T"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. T
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="M"
+                                            x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="M"
+                                                value="M"
+                                                x-on:click="$nextTick(() => { warnPrePhysician() })"
+                                                x-model="physician"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             Dr. M
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </section>
                     <div

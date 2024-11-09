@@ -201,7 +201,12 @@ import Transpo from './snippets/Transpo.astro';
     </p>
     <p>
         If your procedure start time is before 11 AM, start the 2nd dose between
-        6 to 8 PM, no sooner than 3 hours after 1st dose.
+
+
+        <span x-show="physician !== 'M'"
+            >6 to 8 PM, no sooner than 3 hours after 1st dose.</span
+        ><span x-show="physician === 'M'">between 11 PM to midnight 12 AM.</span
+        >
     </p>
     <p>
         If your procedure start time is 11 AM or later, start the 2nd dose 6
@@ -214,36 +219,40 @@ import Transpo from './snippets/Transpo.astro';
     <p x-show=" prep === 'ez2go' ">
         <span class="font-bold uppercase">2nd dose:</span> start your 2nd dose <span
             class="underline"
-            >between 6 to 8 PM the night before your procedure (and 3 to 4 hours
-            after 1st dose)</span
+            >between <span x-text="physician === 'M' ? prep11to12 : prep6to8 "
+            ></span></span
         >. Take the remaining 2 Bisacodyl tablets, and 30 minutes after, start
         drinking 8 oz of the "prep mix" every 10-20 minutes until the bottle
         (28-32 oz) is completed (8 oz glasses every time, every 10-20 min).
     </p>
     <p x-show=" prep === 'Suprep' ">
         <span class="font-bold"
-            >Suprep 2nd dose, starting between 6 to 8 PM the night before your
-            procedure (and 3 to 4 hours after 1st dose):</span
+            >Suprep 2nd dose, starting between <span
+                x-text="physician === 'M' ? prep11to12 : prep6to8 "
+            ></span>:</span
         > Repeat the above instructions using the other Suprep bottle.
     </p>
     <p x-show=" prep === 'Clenpiq' ">
         <span class="font-bold"
-            >Clenpiq 2nd dose, starting between 6 to 8 PM the night before your
-            procedure (and 3 to 4 hours after 1st dose):</span
+            >Clenpiq 2nd dose, starting <span
+                x-text="physician === 'M' ? prep11to12 : prep6to8 "
+            ></span>:</span
         > Drink the other bottle of Clenpiq right from the bottle. Follow with
         <span class="underline">five</span> 8-ounce drinks of clear liquid
         within the next 2 hours.
     </p>
     <p x-show=" prep === 'Sutab' ">
         <span class="font-bold"
-            >Sutab 2nd dose, starting between 6 to 8 PM the night before your
-            procedure (and 3 to 4 hours after 1st dose):</span
+            >Sutab 2nd dose, starting between <span
+                x-text="physician === 'M' ? prep11to12 : prep6to8 "
+            ></span>:</span
         > Repeat the above instructions using the second bottle of tablets.
     </p>
     <p x-show=" prep === 'Golytely' ">
         <span class="font-bold"
-            >2nd dose, starting between 6 to 8 PM the night before your
-            procedure (and 3 to 4 hours after 1st dose):</span
+            >2nd dose, starting between <span
+                x-text="physician === 'M' ? prep11to12 : prep6to8 "
+            ></span>:</span
         > Drink the remaining 1/3 of the solution, an 8-ounce glass every 10 to
         15 minutes until the container is empty. Your stool should look like the
         color of broth.

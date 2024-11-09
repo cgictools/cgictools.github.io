@@ -77,6 +77,47 @@ import PrintSVG from '../../svg/PrintSVG.astro';
                     </template>
                 </select>
             </div>
+            <div>
+                <h3 class="pb-2 font-medium">Physician</h3>
+                <ul class="flex gap-x-6">
+                    <li class="select-none">
+                        <label for="modalH" class="p-1 pr-1.5">
+                            <input
+                                type="radio"
+                                id="modalH"
+                                value="H"
+                                x-model="physician"
+                                class="-ml-1 mr-0.5"
+                            />
+                             Dr. H
+                        </label>
+                    </li>
+                    <li class="select-none">
+                        <label for="modalT" class="p-1 pr-1.5">
+                            <input
+                                type="radio"
+                                id="modalT"
+                                value="T"
+                                x-model="physician"
+                                class="-ml-1 mr-0.5"
+                            />
+                             Dr. T
+                        </label>
+                    </li>
+                    <li class="select-none">
+                        <label for="modalM" class="p-1 pr-1.5">
+                            <input
+                                type="radio"
+                                id="modalM"
+                                value="M"
+                                x-model="physician"
+                                class="-ml-1 mr-0.5"
+                            />
+                             Dr. M
+                        </label>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div>
             <div class="ml-8">
