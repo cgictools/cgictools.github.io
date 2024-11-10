@@ -134,18 +134,22 @@ import Logo from '../../images/logo.png';
         have any questions.
     </p>
     <p class="mb-1.5">
-        I will inform the office of Dr. Lisa Hertz / Dr. Kashyap Trivedi / Dr.
-        Pavan Mankal in the event I test positive for COVID-19 or am exposed to
-        someone who has tested positive for COVID-19 prior to my scheduled
-        procedure.
+        I will inform the office of Dr. <span x-show="physician === 'H'"
+            >Lisa Hertz</span
+        ><span x-show="physician === 'T'">Kashyap Trivedi</span><span
+            x-show="physician === 'M'">Pavan Mankal</span
+        > in the event I test positive for COVID-19 or am exposed to someone who
+        has tested positive for COVID-19 prior to my scheduled procedure.
     </p>
     <p class="mb-0.5">
         I certify that I have read the above and understand the possible risks
         and complications noted. Possible alternative examinations have been
         discussed with me. I consent to the taking of photographs of my
-        intestinal tract for my record. I hereby authorize and permit Dr. Lisa
-        Hertz / Dr. Kashyap Trivedi / Dr. Pavan Mankal and whomever are
-        designated as assistants to perform the following: <span
+        intestinal tract for my record. I hereby authorize and permit Dr. <span
+            x-show="physician === 'H'">Lisa Hertz</span
+        ><span x-show="physician === 'T'">Kashyap Trivedi</span><span
+            x-show="physician === 'M'">Pavan Mankal</span
+        > and whomever are designated as assistants to perform the following: <span
             x-text="procs[1].selected ? 'colonoscopy' : ''"></span><span
             x-text="selectedProcs.length === 2 ? ' and ' : ''"></span><span
             x-text="procs[0].selected ? 'EGD' : ''"></span> with possible
