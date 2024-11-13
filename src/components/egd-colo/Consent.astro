@@ -28,7 +28,7 @@ import Logo from '../../images/logo.png';
         ></span><br />
          Information and Consent Form
     </h1>
-    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         Direct visualization of the <span
             x-text="procs[0].selected ? 'upper' : ''"></span><span
             x-text="selectedProcs.length === 2 ? '/' : ''"></span><span
@@ -43,7 +43,7 @@ import Logo from '../../images/logo.png';
     </p>
     <p
         x-show="procs[1].selected"
-        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         For the <span class="font-bold underline">Colonoscopy</span>, you will
         be sedated using intravenous medication. A flexible, lighted tube called
         a colonoscope will be inserted into the rectum, and the inside lining of
@@ -59,7 +59,7 @@ import Logo from '../../images/logo.png';
     </p>
     <p
         x-show="procs[0].selected"
-        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         For the <span class="font-bold underline">EGD</span>, you will be
         sedated using intravenous medication. A thin, flexible viewing
         instrument called an endoscope will be inserted into the mouth and
@@ -74,7 +74,7 @@ import Logo from '../../images/logo.png';
         100% accurate, and, rarely, polyps, cancers, or other abnormalities of
         the upper GI tract can be missed by EGD.
     </p>
-    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         Minor side-effects of all the above procedures include bruising or
         discomfort at the IV site, gas/cramps or bloating, nausea, (rarely)
         vomiting, or drowsiness after the procedure. Rarely, discomfort may be
@@ -89,7 +89,9 @@ import Logo from '../../images/logo.png';
         The following are rare risks of these procedures, but could be
         potentially life-threatening:
     </p>
-    <ol class="mb-1.5 list-decimal px-4">
+    <ol
+        class="list-decimal px-4"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         <li>
             Injury to the lining of the digestive tract resulting in
             perforation. If this occurs, surgery to close the leak and drain the
@@ -111,18 +113,18 @@ import Logo from '../../images/logo.png';
         <li>Missed pathology.</li>
         <li>Interval development of pathology.</li>
     </ol>
-    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         Preparation instructions have been reviewed in detail with me and I am
         in receipt of these instructions.
     </p>
     <p
         x-show="selectedFacility.short === 'MOSCL'"
-        x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         I have received the MemorialCare Outpatient Surgical Center Long Beach
         Patient Rights and Responsibilities/physician ownership disclosure
         information sheet.
     </p>
-    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-2' : 'mb-1.5' ">
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         If you are taking a GLP-1 agonist (diabetes/weight loss medication),
         including, but not limited to, Ozempic, Mounjaro, Wegovy, Zepbound,
         Trulicity, Rybelsus, Saxenda, Bydureon, Byetta, Victoza, Adlyxin,
@@ -133,7 +135,7 @@ import Logo from '../../images/logo.png';
         facility on the day of the procedure. Please contact our office if you
         have any questions.
     </p>
-    <p class="mb-1.5">
+    <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         I will inform the office of Dr. <span x-show="physician === 'H'"
             >Lisa Hertz</span
         ><span x-show="physician === 'T'">Kashyap Trivedi</span><span
