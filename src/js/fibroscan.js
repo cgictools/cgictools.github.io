@@ -248,6 +248,32 @@ window.fibroscan = function () {
             }
         },
 
+        // reset
+
+        resetForm() {
+            this.reason = "";
+            this.physician = "";
+            this.firstFibro = "";
+            this.prevFibroInput = "";
+            this.schedFu = "";
+            this.preFuApptInput = null;
+            this.leftMsg = false;
+            this.fibroApptInput = null;
+            this.fuApptInput = null;
+
+            this.$refs.preReason.style.color = "black";
+            this.$refs.prePhysician.style.color = "black";
+            this.$refs.preFirstFibro.style.color = "black";
+            this.$refs.prePrevFibroDate.style.border =
+                "1px solid rgb(82, 82, 91)";
+            this.$refs.preFu.style.color = "black";
+            this.$refs.preFuApptInput.style.border =
+                "1px solid rgb(82, 82, 91)";
+
+            this.$refs.callFibroAppt.style.color = "black";
+            this.$refs.callFuAppt.style.color = "black";
+        },
+
         // email
 
         greeting() {

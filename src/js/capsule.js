@@ -239,7 +239,27 @@ window.capsule = function () {
             }
         },
 
-        //
+        // reset
+
+        resetForm() {
+            this.reason = "";
+            this.physician = "";
+            this.schedFu = "";
+            this.leftMsg = false;
+            this.capsuleApptInput = null;
+            this.fuApptInput = null;
+            this.sendInstMethod = "";
+
+            this.$refs.preReason.style.color = "black";
+            this.$refs.prePhysician.style.color = "black";
+            this.$refs.preFu.style.color = "black";
+
+            this.$refs.callCapsuleAppt.style.color = "black";
+            this.$refs.callFuAppt.style.color = "black";
+            this.$refs.callSendInst.style.color = "black";
+        },
+
+        // output
 
         greeting() {
             let hour = DateTime.local().setZone("America/Los_Angeles").hour;

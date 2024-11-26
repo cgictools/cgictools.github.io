@@ -705,6 +705,62 @@ window.procs = function () {
             }
         },
 
+        // reset form
+
+        resetForm() {
+            this.procs[0].selected = false;
+            this.procs[1].selected = false;
+
+            this.sedationTBD = false;
+            this.sedation = "";
+            this.sedationFinal = "";
+
+            this.prep = "";
+            this.prepSent = "";
+
+            this.facilityTBD = false;
+            this.facilityIndex = "";
+            this.facilityIndexFinal = "";
+
+            this.noInst = false;
+            this.instructions = [];
+            this.newInst = "";
+            this.editingInst = null;
+
+            this.schedFu = "";
+
+            this.physician = "";
+
+            this.$refs.preProc.style.color = "black";
+            this.$refs.preSed.style.color = "black";
+            this.$refs.prePrep.style.color = "black";
+            this.$refs.prePrepSent.style.color = "black";
+            this.$refs.preFacility.style.color = "black";
+            this.$refs.preQuote.style.color = "black";
+            this.$refs.preInst.style.color = "black";
+            this.$refs.preFu.style.color = "black";
+            this.$refs.prePhysician.style.color = "black";
+
+            this.leftMsg = false;
+
+            this.procApptInput = null;
+
+            this.fuApptInput = null;
+
+            this.sendInstMethod = "";
+
+            this.overrideProcTime = false;
+            this.overrideFuTime = false;
+
+            this.$refs.callFacility.style.color = "black";
+            this.$refs.callSed.style.color = "black";
+            this.$refs.callProcAppt.style.color = "black";
+            this.$refs.callFuAppt.style.color = "black";
+            this.$refs.callSendInst.style.color = "black";
+
+            this.rxFinal = "";
+        },
+
         // output
 
         rxFinal: "",

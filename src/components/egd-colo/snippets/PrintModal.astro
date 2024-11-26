@@ -10,10 +10,10 @@ import PrintSVG from '../../svg/PrintSVG.astro';
 <div
     x-show="printModal"
     x-cloak
-    x-on:click.outside="window.location.reload(true)"
+    x-on:click.outside="resetForm(); printModal = false"
     class="fixed left-1/2 top-1/2 z-10 w-[48rem] -translate-x-1/2 -translate-y-1/2 rounded bg-white px-12 py-8">
     <button
-        x-on:click="window.location.reload(true)"
+        x-on:click="resetForm(); printModal = false"
         class="fixed right-0 top-0 m-2.5 p-0.5">
         <svg
             xmlns="http://www.w3.org/2000/svg"
