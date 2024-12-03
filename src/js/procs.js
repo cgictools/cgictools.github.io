@@ -759,6 +759,12 @@ window.procs = function () {
             this.$refs.callSendInst.style.color = "black";
 
             this.rxFinal = "";
+
+            this.printModal = false;
+            this.printConsent = true;
+            this.printCover = true;
+            this.printPrep = true;
+            this.printDiet = true;
         },
 
         // output
