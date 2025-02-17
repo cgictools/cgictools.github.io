@@ -6,6 +6,12 @@ window.procs = function () {
         procs: [
             { id: 1, short: "EGD", long: "endoscopy", selected: false },
             { id: 2, short: "colo", long: "colonoscopy", selected: false },
+            // {
+            //     id: 3,
+            //     short: "flex sig",
+            //     long: "flexible sigmoidoscopy",
+            //     selected: false,
+            // },
         ],
 
         preps: [
@@ -118,7 +124,7 @@ window.procs = function () {
             "",
             "Your {joinProcs} is scheduled for {procApptDate} at {procApptTime} at {selectedFacility.long} - {selectedFacility.address}. Please arrive by {procApptArrival}.",
             "",
-            "Attached are the consent form and instructions for your prep. Please sign and send the consent form to us via email at cgicare@cgicare.hush.com or bring it to your procedure.",
+            "Please find attached the consent form and instructions for your prep. Please sign and send the consent form to us via email at cgicare@cgicare.hush.com or bring it to your procedure.",
             "{mosclPacket}",
             "{mosclCovid}",
             "",
@@ -128,7 +134,7 @@ window.procs = function () {
             "{primeOON}",
             "",
             "You will need someone who can be responsible for you to pick you up from the procedure center.",
-            "{primeRide}",
+            // "{primeRide}",
             "",
             "{fu}",
             "",
@@ -147,14 +153,45 @@ window.procs = function () {
             rxPrep: "A prescription for {prep} has been sent to your pharmacy. Please let us know if you have issues filling the prescription.",
             primeOON:
                 "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. Our physicians are in network with your insurance, and the lab/pathologist we use are in-network with most insurances. You may have an out-of-pocket cost for these services based on your in-network benefits. Please see the attached pamphlet for more details on Prime's billing policies.",
-            primeRide:
-                "Prime Surgical Center does offer a ride service at no additional cost. The number to call to arrange transport is (818) 937-9969. You can find more details in the attached pamphlet.",
+            // primeRide:
+            //     "Prime Surgical Center does offer a ride service at no additional cost. The number to call to arrange transport is (818) 937-9969. You can find more details in the attached pamphlet.",
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
-        prep6to8:
-            "6 to 8 PM the night before your procedure (and 3 to 4 hours after 1st dose)",
-        prep11to12: "11 PM to midnight 12 AM the night before your procedure",
+        // prep6to8:
+        //     "6 to 8 PM the night before your procedure (and 3 to 4 hours after 1st dose)",
+        // prep11to12: "11 PM to midnight 12 AM the night before your procedure",
+
+        prepTiming: [
+            {
+                physician: "H",
+                first: "6:00 PM",
+                firstType: "time",
+                secondEarly: "10:00 PM",
+                secondEarlyType: "time",
+                secondLate: 6,
+                secondLateType: "hour",
+            },
+            {
+                physician: "T",
+                first: "3:00 to 5:00 PM",
+                firstType: "time",
+                secondEarly:
+                    "6:00 to 8:00 PM (no sooner than 3 hours after 1st dose)",
+                secondEarlyType: "time",
+                secondLate: 6,
+                secondLateType: "hour",
+            },
+            {
+                physician: "M",
+                first: "3:00 to 5:00 PM",
+                firstType: "time",
+                secondEarly: 6,
+                secondEarlyType: "hour",
+                secondLate: 6,
+                secondLateType: "hour",
+            },
+        ],
 
         printModal: false,
 
@@ -174,6 +211,7 @@ window.procs = function () {
             return this.selectedProcs.map((proc) => proc.long).join(" and ");
         },
 
+        // capitalize first letter of long name
         upperProcs() {
             return this.selectedProcs
                 .map(
@@ -285,13 +323,29 @@ window.procs = function () {
 
         schedFu: "",
 
-        physician: "", // H, T, M
+        // H, T, M
+
+        physicianMain: "",
+        physicianModal: "",
+
+        get physician() {
+            if (this.physicianMain) {
+                return this.physicianMain;
+            }
+            if (this.physicianModal) {
+                return this.physicianModal;
+            }
+        },
 
         // check pre-call inputs are complete
         checkPre() {
             let incomplete = 0;
 
-            if (!this.selectedProcs.length) {
+            if (
+                !this.selectedProcs.length
+                // !this.selectedProcs.length ||
+                // (this.procs[1].selected && this.procs[2].selected)
+            ) {
                 incomplete++;
             }
 
@@ -338,6 +392,8 @@ window.procs = function () {
         warnPreProc() {
             if (!this.selectedProcs.length) {
                 this.$refs.preProc.style.color = this.red;
+                // } else if (this.procs[1].selected && this.procs[2].selected) {
+                //     this.$refs.preProc.style.color = this.red;
             } else {
                 this.$refs.preProc.style.color = "black";
             }
@@ -413,7 +469,6 @@ window.procs = function () {
         procApptInput: null,
 
         procApptMin() {
-            // return DateTime.now().setZone("America/Los_Angeles").startOf("day");
             return DateTime.local()
                 .setZone("America/Los_Angeles")
                 .startOf("day")
@@ -482,7 +537,7 @@ window.procs = function () {
                 .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
-        isMorningProc() {
+        isEarlyProc() {
             let hour = this.procAppt.hour;
             let x = false;
 
@@ -494,6 +549,7 @@ window.procs = function () {
         },
 
         // used in EGD instructions only
+        // TODO add to flex sig
         isAfternoonProc() {
             let hour = this.procAppt.hour;
             let x = false;
@@ -505,17 +561,6 @@ window.procs = function () {
             return x;
         },
 
-        // for ez2go
-        proc2ndDoseTime() {
-            return this.procAppt
-                .minus({
-                    hours: this.selectedFacility.hourOffset,
-                    minutes: this.selectedFacility.minOffset,
-                })
-                .minus({ hours: 6 })
-                .toLocaleString(DateTime.TIME_SIMPLE);
-        },
-
         hoursBeforeProc(h, m = 0) {
             return this.procAppt
                 .minus({
@@ -523,6 +568,77 @@ window.procs = function () {
                     minutes: m,
                 })
                 .toLocaleString(DateTime.TIME_SIMPLE);
+        },
+
+        prepTimeFormat(what, type) {
+            if (type === "time") {
+                return what.includes("to") ? "between " + what : "at " + what;
+            }
+
+            if (type === "hour") {
+                if (this.printModal) {
+                    return (
+                        what + " hours prior to the arrival time (___________)"
+                    );
+                } else {
+                    return (
+                        "at " +
+                        this.hoursBeforeProc(
+                            what + this.selectedFacility.hourOffset,
+                            this.selectedFacility.minOffset,
+                        )
+                    );
+                }
+            }
+        },
+
+        prepTime(dose) {
+            let a = this.prepTiming.find((x) => x.physician === this.physician);
+
+            if (dose === 1) {
+                return this.prepTimeFormat(a.first, a.firstType);
+            }
+
+            if (dose === 2) {
+                if (this.isEarlyProc()) {
+                    return this.prepTimeFormat(
+                        a.secondEarly,
+                        a.secondEarlyType,
+                    );
+                } else {
+                    return this.prepTimeFormat(a.secondLate, a.secondLateType);
+                }
+            }
+
+            return;
+        },
+
+        secondPrepSameTime() {
+            let a = this.prepTiming.find((x) => x.physician === this.physician);
+            let x = false;
+
+            if (
+                a.secondEarly === a.secondLate &&
+                a.secondEarlyType === a.secondLateType
+            ) {
+                x = true;
+            }
+
+            return x;
+        },
+
+        secondPrepModal(time) {
+            let a = this.prepTiming.find((x) => x.physician === this.physician);
+
+            if (time === "early") {
+                return this.prepTimeFormat(a.secondEarly, a.secondEarlyType);
+            }
+
+            if (time === "late") {
+                return this.prepTimeFormat(a.secondLate, a.secondLateType);
+            }
+
+            return;
         },
 
         // follow up
@@ -706,10 +822,10 @@ window.procs = function () {
         },
 
         // reset form
-
         resetForm() {
             this.procs[0].selected = false;
             this.procs[1].selected = false;
+            // this.procs[2].selected = false;
 
             this.sedationTBD = false;
             this.sedation = "";
@@ -729,7 +845,8 @@ window.procs = function () {
 
             this.schedFu = "";
 
-            this.physician = "";
+            this.physicianMain = "";
+            this.physicianModal = "";
 
             this.$refs.preProc.style.color = "black";
             this.$refs.preSed.style.color = "black";
@@ -852,10 +969,6 @@ window.procs = function () {
         },
 
         packetCoverJoin() {
-            // return this.emailBodyArray()
-            //     .splice(this.emailBodyArray().length - 2, 1)
-            //     .splice(0, 1)
-            //     .join("<br />");
             let initial = this.emailBodyArray();
             let length = initial.length;
             initial.splice(length - 2, 1);
@@ -865,29 +978,34 @@ window.procs = function () {
 
         // string input, replaces keywords
         emailBodyReplace(join) {
-            return join
-                .replace("{greeting}", this.greeting())
-                .replace("{joinProcs}", this.joinProcs())
-                .replace("{procApptDate}", this.procApptDate())
-                .replace("{procApptTime}", this.procApptTime())
-                .replace("{selectedFacility.long}", this.selectedFacility.long)
-                .replace(
-                    "{selectedFacility.address}",
-                    this.selectedFacility.address,
-                )
-                .replace("{procApptArrival}", this.procApptArrival())
-                .replace("{mosclPacket}", this.emailSnippets.mosclPacket)
-                .replace("{mosclCovid}", this.mosclCovid[1])
-                .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
-                .replace("{rxPrep}", this.emailSnippets.rxPrep)
-                .replace("{prep}", this.prep)
-                .replace("{primeOON}", this.emailSnippets.primeOON)
-                .replace("{quote}", this.facilities[1].quote)
-                .replace("{primeRide}", this.emailSnippets.primeRide)
-                .replace("{fu}", this.emailSnippets.fu)
-                .replace("{fuApptDate}", this.fuApptDate())
-                .replace("{fuApptTime}", this.fuApptTime())
-                .replace("{staffName}", this.staffName);
+            return (
+                join
+                    .replace("{greeting}", this.greeting())
+                    .replace("{joinProcs}", this.joinProcs())
+                    .replace("{procApptDate}", this.procApptDate())
+                    .replace("{procApptTime}", this.procApptTime())
+                    .replace(
+                        "{selectedFacility.long}",
+                        this.selectedFacility.long,
+                    )
+                    .replace(
+                        "{selectedFacility.address}",
+                        this.selectedFacility.address,
+                    )
+                    .replace("{procApptArrival}", this.procApptArrival())
+                    .replace("{mosclPacket}", this.emailSnippets.mosclPacket)
+                    .replace("{mosclCovid}", this.mosclCovid[1])
+                    .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
+                    .replace("{rxPrep}", this.emailSnippets.rxPrep)
+                    .replace("{prep}", this.prep)
+                    .replace("{primeOON}", this.emailSnippets.primeOON)
+                    .replace("{quote}", this.facilities[1].quote)
+                    // .replace("{primeRide}", this.emailSnippets.primeRide)
+                    .replace("{fu}", this.emailSnippets.fu)
+                    .replace("{fuApptDate}", this.fuApptDate())
+                    .replace("{fuApptTime}", this.fuApptTime())
+                    .replace("{staffName}", this.staffName)
+            );
         },
 
         emailBodyHtml() {

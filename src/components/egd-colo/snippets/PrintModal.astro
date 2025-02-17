@@ -86,7 +86,7 @@ import PrintSVG from '../../svg/PrintSVG.astro';
                                 type="radio"
                                 id="modalH"
                                 value="H"
-                                x-model="physician"
+                                x-model="physicianModal"
                                 class="-ml-1 mr-0.5"
                             />
                              Dr. H
@@ -98,7 +98,7 @@ import PrintSVG from '../../svg/PrintSVG.astro';
                                 type="radio"
                                 id="modalT"
                                 value="T"
-                                x-model="physician"
+                                x-model="physicianModal"
                                 class="-ml-1 mr-0.5"
                             />
                              Dr. T
@@ -110,7 +110,7 @@ import PrintSVG from '../../svg/PrintSVG.astro';
                                 type="radio"
                                 id="modalM"
                                 value="M"
-                                x-model="physician"
+                                x-model="physicianModal"
                                 class="-ml-1 mr-0.5"
                             />
                              Dr. M
@@ -151,7 +151,7 @@ import PrintSVG from '../../svg/PrintSVG.astro';
                             type="checkbox"
                             id="modalPrep"
                             x-model="printPrep"
-                            x-bind:disabled="!prep"
+                            x-bind:disabled="!prep || !physician"
                         />
                         <label for="modalPrep" class="select-none pl-3">
                             Colo Prep

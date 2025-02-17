@@ -45,8 +45,8 @@ import PrepInst from './PrepInst.astro';
 </div>
 
 <div
-    id="ez2go"
-    x-show="procs[1].selected && prep && printPrep"
+    id="coloPrep"
+    x-show="procs[1].selected && prep && printPrep && physician"
     class="flex h-screen flex-col justify-center"
     x-bind:class="(printDiet && procs[1].selected) ? 'break-after-page' : ''">
     <PrepInst />

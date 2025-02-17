@@ -437,7 +437,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 id="H"
                                                 value="H"
                                                 x-on:click="$nextTick(() => { warnPrePhysician() })"
-                                                x-model="physician"
+                                                x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
                                              Dr. H
@@ -453,7 +453,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 id="T"
                                                 value="T"
                                                 x-on:click="$nextTick(() => { warnPrePhysician() })"
-                                                x-model="physician"
+                                                x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
                                              Dr. T
@@ -469,7 +469,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 id="M"
                                                 value="M"
                                                 x-on:click="$nextTick(() => { warnPrePhysician() })"
-                                                x-model="physician"
+                                                x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
                                              Dr. M
@@ -988,6 +988,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg) && (procs[0].selected || (prep === 'ez2go' || (prepSent === 'yes' || rxFinal !== '')))"
                             x-cloak
                             class="grid grid-cols-1 gap-y-8">
+                            <!-- replace above x-show -->
+                            <!-- x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg) && ((procs[0].selected || procs[2].selected) || (prep === 'ez2go' || (prepSent === 'yes' || rxFinal !== '')))" -->
                             <div x-show="!leftMsg">
                                 <h3 class="mb-1 font-medium">Instructions</h3>
                                 <!-- email template -->
