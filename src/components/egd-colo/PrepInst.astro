@@ -215,7 +215,7 @@ import Transpo from './snippets/Transpo.astro';
 </div>
 <!-- 2nd dose, early proc -->
 <div
-    x-show="isEarlyProc() && !printModal"
+    x-show="isEarlyProc() && physician !== 'M' && !printModal"
     x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
     <p x-show=" prep === 'ez2go' ">
         <span class="font-bold uppercase">ez2go 2nd dose:</span>
@@ -284,10 +284,10 @@ import Transpo from './snippets/Transpo.astro';
 </p>
 <!-- 2nd dose, late proc -->
 <div
-    x-show="!isEarlyProc() && !printModal"
+    x-show="(!isEarlyProc() || physician === 'M') && !printModal"
     x-bind:class=" instructions.length ? 'mb-0.5' : 'mb-1' ">
     <p x-show=" prep === 'ez2go' ">
-        <span class="font-bold uppercase">2nd dose:</span>
+        <span class="font-bold uppercase">ez2go 2nd dose:</span>
         <span class="underline"
             >Start your 2nd dose
             <span x-text="prepTime(2)"></span></span
