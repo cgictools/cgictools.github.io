@@ -172,13 +172,22 @@ window.procs = function () {
                 secondLate: 6,
                 secondLateType: "hour",
             },
+            // {
+            //     physician: "T",
+            //     first: "3:00 to 5:00 PM",
+            //     firstType: "time",
+            //     secondEarly:
+            //         "6:00 to 8:00 PM (no sooner than 3 hours after 1st dose)",
+            //     secondEarlyType: "time",
+            //     secondLate: 6,
+            //     secondLateType: "hour",
+            // },
             {
                 physician: "T",
                 first: "3:00 to 5:00 PM",
                 firstType: "time",
-                secondEarly:
-                    "6:00 to 8:00 PM (no sooner than 3 hours after 1st dose)",
-                secondEarlyType: "time",
+                secondEarly: 6,
+                secondEarlyType: "hour",
                 secondLate: 6,
                 secondLateType: "hour",
             },
