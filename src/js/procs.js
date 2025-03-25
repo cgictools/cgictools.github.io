@@ -154,7 +154,7 @@ window.procs = function () {
             primeOON:
                 "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. Our physicians are in network with your insurance, and the lab/pathologist we use are in-network with most insurances. You may have an out-of-pocket cost for these services based on your in-network benefits.",
             primeINN:
-                "Your quoted out-of-pocket ammount is ${quote}, which includes the Prime Surgical Center facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. You may have an out-of-pocket cost for these services based on your in-network benefits.",
+                "Your quoted out-of-pocket amount is ${quote}, which includes the Prime Surgical Center facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. You may have an out-of-pocket cost for these services based on your in-network benefits.",
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
