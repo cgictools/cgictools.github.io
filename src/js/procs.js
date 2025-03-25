@@ -59,6 +59,7 @@ window.procs = function () {
                 long: "Prime Surgical Center of Newport Beach",
                 address: "351 Hospital Rd, Ste. 110, Newport Beach, CA 92663",
                 quote: "",
+                INN: false,
                 hourOffset: 1,
                 minOffset: 15,
                 phone: "(949) 335-4966",
@@ -131,10 +132,9 @@ window.procs = function () {
             "{ez2goKit}",
             "{rxPrep}",
             "",
-            "{primeOON}",
+            "{prime}",
             "",
             "You will need someone who can be responsible for you to pick you up from the procedure center.",
-            // "{primeRide}",
             "",
             "{fu}",
             "",
@@ -152,9 +152,9 @@ window.procs = function () {
                 "For your ez2go prep, you can purchase the ingredients over the counter at your local pharmacy [238g PEG 3350 (Miralax) powder, 4 5mg Bisacodyl tablets, 1 bottle Magnesium citrate]. Or, you can pick up our pre-packaged kit for $25 at our office (4772 Katella Ave, Ste. 200, Los Alamitos, CA 90720). In addition, you will need two 28-32 oz bottles of Gatorade (or any other electrolyte solution). This cannot be red, orange, or purple.",
             rxPrep: "A prescription for {prep} has been sent to your pharmacy. Please let us know if you have issues filling the prescription.",
             primeOON:
-                "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. Our physicians are in network with your insurance, and the lab/pathologist we use are in-network with most insurances. You may have an out-of-pocket cost for these services based on your in-network benefits. Please see the attached pamphlet for more details on Prime's billing policies.",
-            // primeRide:
-            //     "Prime Surgical Center does offer a ride service at no additional cost. The number to call to arrange transport is (818) 937-9969. You can find more details in the attached pamphlet.",
+                "Please note that Prime Surgical Center is out-of-network with your insurance. Your quoted out-of-pocket amount is ${quote}, which includes the facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount, regardless of the amount your insurance is willing to pay. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. Our physicians are in network with your insurance, and the lab/pathologist we use are in-network with most insurances. You may have an out-of-pocket cost for these services based on your in-network benefits.",
+            primeINN:
+                "Your quoted out-of-pocket ammount is ${quote}, which includes the Prime Surgical Center facility and anesthesia fees. Prime will not send you a bill to collect more than your quoted amount. Note that this quote DOES NOT include our physician fees or potential lab/pathologist fees if biopsies are taken. You may have an out-of-pocket cost for these services based on your in-network benefits.",
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
@@ -926,9 +926,8 @@ window.procs = function () {
                 // requires i to be second argument in order to be used as index,
                 // even though item is unused
                 x = x
-                    .filter((item, i) => x[i - 1] !== "{primeOON}")
-                    .filter((item) => item !== "{primeOON}")
-                    .filter((item) => item !== "{primeRide}");
+                    .filter((item, i) => x[i - 1] !== "{prime}")
+                    .filter((item) => item !== "{prime}");
 
                 if (!this.procs[0].selected) {
                     x = x.filter((item) => item !== "{mosclCovid}");
@@ -939,9 +938,8 @@ window.procs = function () {
                     .filter((item) => item !== "{mosclCovid}");
             } else {
                 x = x
-                    .filter((item, i) => x[i - 1] !== "{primeOON}")
-                    .filter((item) => item !== "{primeOON}")
-                    .filter((item) => item !== "{primeRide}")
+                    .filter((item, i) => x[i - 1] !== "{prime}")
+                    .filter((item) => item !== "{prime}")
                     .filter((item) => item !== "{mosclPacket}")
                     .filter((item) => item !== "{mosclCovid}");
             }
@@ -987,6 +985,39 @@ window.procs = function () {
 
         // string input, replaces keywords
         emailBodyReplace(join) {
+            if (this.facilities[1].INN) {
+                return (
+                    join
+                        .replace("{greeting}", this.greeting())
+                        .replace("{joinProcs}", this.joinProcs())
+                        .replace("{procApptDate}", this.procApptDate())
+                        .replace("{procApptTime}", this.procApptTime())
+                        .replace(
+                            "{selectedFacility.long}",
+                            this.selectedFacility.long,
+                        )
+                        .replace(
+                            "{selectedFacility.address}",
+                            this.selectedFacility.address,
+                        )
+                        .replace("{procApptArrival}", this.procApptArrival())
+                        .replace(
+                            "{mosclPacket}",
+                            this.emailSnippets.mosclPacket,
+                        )
+                        .replace("{mosclCovid}", this.mosclCovid[1])
+                        .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
+                        .replace("{rxPrep}", this.emailSnippets.rxPrep)
+                        .replace("{prep}", this.prep)
+                        .replace("{prime}", this.emailSnippets.primeINN)
+                        .replace("{quote}", this.facilities[1].quote)
+                        // .replace("{primeRide}", this.emailSnippets.primeRide)
+                        .replace("{fu}", this.emailSnippets.fu)
+                        .replace("{fuApptDate}", this.fuApptDate())
+                        .replace("{fuApptTime}", this.fuApptTime())
+                        .replace("{staffName}", this.staffName)
+                );
+            }
             return (
                 join
                     .replace("{greeting}", this.greeting())
@@ -1007,7 +1038,7 @@ window.procs = function () {
                     .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
                     .replace("{rxPrep}", this.emailSnippets.rxPrep)
                     .replace("{prep}", this.prep)
-                    .replace("{primeOON}", this.emailSnippets.primeOON)
+                    .replace("{prime}", this.emailSnippets.primeOON)
                     .replace("{quote}", this.facilities[1].quote)
                     // .replace("{primeRide}", this.emailSnippets.primeRide)
                     .replace("{fu}", this.emailSnippets.fu)
