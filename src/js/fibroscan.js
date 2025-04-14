@@ -175,7 +175,7 @@ window.fibroscan = function () {
                 .toLocaleString(DateTime.TIME_SIMPLE);
         },
 
-        numDaysOut() {
+        get numDaysOut() {
             let fibroDay = this.fibroAppt.startOf("day");
 
             return fibroDay.diff(this.today, "days").toObject().days;
@@ -185,7 +185,7 @@ window.fibroscan = function () {
 
         fuApptInput: null,
 
-        fuApptMin() {
+        get fuApptMin() {
             if (this.fibroApptInput) {
                 return this.fibroAppt
                     .plus({ days: 1 })
@@ -195,7 +195,7 @@ window.fibroscan = function () {
             }
         },
 
-        fuApptRec() {
+        get fuApptRec() {
             return this.fibroAppt
                 .plus({ weeks: 2 })
                 .toLocaleString(DateTime.DATE_SHORT);
@@ -276,14 +276,10 @@ window.fibroscan = function () {
 
         // email
 
-        greeting() {
-            let hour = DateTime.local().setZone("America/Los_Angeles").hour;
-
-            if (hour < 12) {
-                return "Good morning,";
-            } else {
-                return "Good afternoon,";
-            }
+        get greeting() {
+            return DateTime.local().setZone("America/Los_Angeles").hour < 12
+                ? "Good morning,"
+                : "Good afternoon,";
         },
 
         emailBodyArray() {
@@ -313,7 +309,7 @@ window.fibroscan = function () {
         // string input, replaces keywords
         emailBodyReplace(join) {
             join = join
-                .replace("{greeting}", this.greeting())
+                .replace("{greeting}", this.greeting)
                 .replace(
                     "{fibroDate}",
                     this.fibroAppt.toLocaleString(DateTime.DATE_HUGE),
@@ -355,7 +351,7 @@ window.fibroscan = function () {
 
         // timestamps
 
-        DOS() {
+        get DOS() {
             return (
                 "DOS " +
                 this.fibroAppt.toLocaleString({
@@ -367,7 +363,7 @@ window.fibroscan = function () {
         },
 
         copyDOS() {
-            navigator.clipboard.writeText(this.DOS());
+            navigator.clipboard.writeText(this.DOS);
         },
 
         timestamp() {
@@ -454,7 +450,7 @@ window.fibroscan = function () {
             navigator.clipboard.writeText(this.lmTS());
         },
 
-        apptNotes() {
+        get apptNotes() {
             let date = DateTime.local()
                 .setZone("America/Los_Angeles")
                 .toLocaleString({ month: "numeric", day: "numeric" });
@@ -463,7 +459,7 @@ window.fibroscan = function () {
         },
 
         copyApptNotes() {
-            navigator.clipboard.writeText(this.apptNotes());
+            navigator.clipboard.writeText(this.apptNotes);
         },
 
         apptReason() {

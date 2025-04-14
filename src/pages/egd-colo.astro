@@ -35,7 +35,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         <div>
                             <span
                                 x-text="checkPre()"
-                                x-on:mouseover="$dispatch('hoverpre')"
+                                x-on:mouseover="warnAllPreFields()"
                                 x-bind:class="checkPre() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
                                 class="rounded-full px-4 py-1 text-sm"></span>
                         </div>
@@ -44,10 +44,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         <div class="grid grid-cols-2">
                             <div>
                                 <!-- <span class="flex items-end space-x-1 pb-2"> -->
-                                <h3
-                                    x-ref="preProc"
-                                    x-on:hoverpre.window="warnPreProc()"
-                                    class="pb-2 font-medium">
+                                <h3 x-ref="preProc" class="pb-2 font-medium">
                                     Procedure(s)
                                 </h3>
                                 <ul>
@@ -73,10 +70,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                             <div>
                                 <div class="flex flex-row gap-4 pb-2">
-                                    <h3
-                                        x-ref="preSed"
-                                        x-on:hoverpre.window="warnPreSed()"
-                                        class="font-medium">
+                                    <h3 x-ref="preSed" class="font-medium">
                                         Sedation
                                     </h3>
                                     <div class="select-none">
@@ -141,10 +135,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             x-cloak
                             class="grid grid-cols-2">
                             <div>
-                                <h3
-                                    x-ref="prePrep"
-                                    x-on:hoverpre.window="warnPrePrep()"
-                                    class="pb-2 font-medium">
+                                <h3 x-ref="prePrep" class="pb-2 font-medium">
                                     Colo Prep
                                 </h3>
                                 <select
@@ -164,7 +155,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 x-cloak>
                                 <h3
                                     x-ref="prePrepSent"
-                                    x-on:hoverpre.window="warnPrePrepSent()"
                                     class="pb-2 font-medium">
                                     Was <span x-text="prep"></span> Rx Sent?
                                 </h3>
@@ -210,7 +200,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <div class="flex flex-row gap-4 pb-2">
                                         <h3
                                             x-ref="preFacility"
-                                            x-on:hoverpre.window="warnPreFacility()"
                                             class="font-medium">
                                             Facility
                                         </h3>
@@ -257,7 +246,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-cloak>
                                     <h3
                                         x-ref="preQuote"
-                                        x-on:hoverpre.window="warnPreQuote()"
                                         class="pb-2 font-medium">
                                         PRIME Quote
                                     </h3>
@@ -292,10 +280,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <div>
                             <div class="flex flex-row gap-4 pb-2">
-                                <h3
-                                    x-ref="preInst"
-                                    x-on:hoverpre.window="warnPreInst()"
-                                    class="font-medium">
+                                <h3 x-ref="preInst" class="font-medium">
                                     Additional instructions
                                 </h3>
                                 <div class="select-none">
@@ -393,10 +378,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <div class="grid grid-cols-2">
                             <div>
-                                <h3
-                                    x-ref="preFu"
-                                    x-on:hoverpre.window="warnPreFu()"
-                                    class="pb-2 font-medium">
+                                <h3 x-ref="preFu" class="pb-2 font-medium">
                                     Sched Follow-up?
                                 </h3>
                                 <ul>
@@ -437,7 +419,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <div>
                                 <h3
                                     x-ref="prePhysician"
-                                    x-on:hoverpre.window="warnPrePhysician()"
                                     class="pb-2 font-medium">
                                     Physician
                                 </h3>
@@ -537,7 +518,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             x-show="facilityIndex === '1' || facilityTBD"
                             x-cloak>
                             <h3 class="pb-2 font-medium">
-                                Discuss PRIME OON Status
+                                Discuss PRIME Quote
                             </h3>
                             <p>
                                 Prime's quoted amount is $<span
@@ -646,7 +627,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <input
                                         type="datetime-local"
                                         step="900"
-                                        x-bind:min="procApptMin()"
+                                        x-bind:min="procApptMin"
                                         x-on:change="$nextTick(() => { warnCallProcAppt() })"
                                         x-bind:class="procApptInput ? 'text-black' : 'text-zinc-400'"
                                         x-model="procApptInput"
@@ -656,8 +637,8 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         x-show="procApptInput && selectedFacility"
                                         x-cloak
                                         class="pt-1.5">
-                                        Arrive by <span
-                                            x-text="procApptArrival()"></span>.
+                                        Arrive by <span x-text="procApptArrival"
+                                        ></span>.
                                     </p>
                                 </div>
                                 <div
@@ -688,7 +669,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </h3>
                             <p x-text="mosclCovid[0]"></p>
                         </div>
-                        <div x-show="!fuTBD()">
+                        <div x-show="!fuTBD">
                             <h3
                                 x-ref="callFuAppt"
                                 x-on:hovercall.window="warnCallFuAppt()"
@@ -703,13 +684,13 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         class="pb-1">
                                         <p class="text-zinc-500">
                                             3 weeks post proc is <span
-                                                x-text="fuApptRec()"></span>
+                                                x-text="fuApptRec"></span>
                                         </p>
                                     </div>
                                     <input
                                         type="datetime-local"
                                         step="900"
-                                        x-bind:min="fuApptMin()"
+                                        x-bind:min="fuApptMin"
                                         x-on:change="$nextTick(() => { warnCallFuAppt() })"
                                         x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
                                         x-model="fuApptInput"
@@ -831,7 +812,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     </h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
-                                    <span x-text="joinProcs()"></span>
+                                    <span x-text="joinProcs"></span>
                                 </td>
                             </tr>
                             <tr
@@ -842,7 +823,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <h3 class="font-medium">Sedation</h3>
                                 </td>
                                 <td class="pb-2 align-text-top">
-                                    <span x-text="selectedSedation()"></span>
+                                    <span x-text="selectedSedation"></span>
                                 </td>
                             </tr>
                             <tr x-show="prep" x-cloak>
@@ -894,14 +875,13 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </td>
                                 <td class="pb-2 align-text-top">
                                     <p class="pb-1">
-                                        <span x-text="procApptDate()"></span> at
+                                        <span x-text="procApptDate"></span> at
 
-
-                                        <span x-text="procApptTime()"></span>
+                                        <span x-text="procApptTime"></span>
                                     </p>
-                                    <p x-show="procApptArrival()">
-                                        Arrive by <span
-                                            x-text="procApptArrival()"></span>
+                                    <p x-show="procApptArrival">
+                                        Arrive by <span x-text="procApptArrival"
+                                        ></span>
                                     </p>
                                 </td>
                             </tr>
@@ -916,7 +896,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <p x-text="mosclCovid[1]"></p>
                                 </td>
                             </tr>
-                            <tr x-show="fuApptInput || fuTBD()" x-cloak>
+                            <tr x-show="fuApptInput || fuTBD" x-cloak>
                                 <td
                                     class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3 class="font-medium">Follow-up</h3>
@@ -924,12 +904,12 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 <td class="pb-2 align-text-top">
                                     <template x-if="fuApptInput">
                                         <p>
-                                            <span x-text="fuApptDate()"></span>
-                                             at <span x-text="fuApptTime()"
+                                            <span x-text="fuApptDate"></span>
+                                             at <span x-text="fuApptTime"
                                             ></span>
                                         </p>
                                     </template>
-                                    <template x-if="fuTBD()">
+                                    <template x-if="fuTBD">
                                         <p>
                                             Follow-up to be determined based on
                                             results of procedure.
@@ -1011,7 +991,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 <div x-show="sendInstMethod === 'email'">
                                     <p
                                         class="mb-2 text-blue-600"
-                                        x-text="sendInstMessage()">
+                                        x-text="sendInstMessage">
                                     </p>
                                     <div
                                         class="rounded-md border border-zinc-300">
@@ -1037,7 +1017,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                         Subject:
                                                     </h3>
                                                     <p
-                                                        x-text="emailSubject()"
+                                                        x-text="emailSubject"
                                                         x-on:click="copyEmailSubject()"
                                                         class="cursor-pointer text-sm text-zinc-700 hover:text-black">
                                                     </p>
@@ -1089,7 +1069,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-show="sendInstMethod !== 'email'"
                                     class="flex flex-row items-center justify-between gap-2">
                                     <p
-                                        x-text="sendInstMessage()"
+                                        x-text="sendInstMessage"
                                         class="text-blue-600">
                                     </p>
                                     <button
@@ -1114,7 +1094,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                         <td class="pb-2 align-text-top">
                                             <p
-                                                x-text="DOS()"
+                                                x-text="DOS"
                                                 x-on:click="copyDOS()"
                                                 class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
@@ -1151,7 +1131,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                         <td class="pb-2 align-text-top">
                                             <p
-                                                x-text="apptNotes()"
+                                                x-text="apptNotes"
                                                 x-on:click="copyApptNotes()"
                                                 class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
@@ -1166,11 +1146,11 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                             <!-- staff to do -->
                             <div
-                                x-show="!leftMsg && numDaysOut() < 14"
+                                x-show="!leftMsg && numDaysOut < 14"
                                 class="text-red-500">
                                 <h3 class="mb-2 font-medium">Add-On Proc</h3>
                                 <table class="ml-2">
-                                    <tr x-show="numDaysOut() < 7">
+                                    <tr x-show="numDaysOut < 7">
                                         <td
                                             class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
                                             Fax Docs
@@ -1184,7 +1164,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             ></span>.
                                         </td>
                                     </tr>
-                                    <tr x-show="numDaysOut() < 14">
+                                    <tr x-show="numDaysOut < 14">
                                         <td
                                             class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
                                             Ins Verif
@@ -1196,7 +1176,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                     </tr>
                                     <tr
-                                        x-show="numDaysOut() < 14 && selectedFacility.short === 'PRIME'">
+                                        x-show="numDaysOut < 14 && selectedFacility.short === 'PRIME'">
                                         <td
                                             class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
                                             Prime Sched

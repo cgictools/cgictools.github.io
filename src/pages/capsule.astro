@@ -228,13 +228,13 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <div x-show="capsuleApptInput" x-cloak class="pb-1">
                                 <p class="text-zinc-500">
                                     3 weeks post proc is <span
-                                        x-text="fuApptRec()"></span>
+                                        x-text="fuApptRec"></span>
                                 </p>
                             </div>
                             <input
                                 type="datetime-local"
                                 step="900"
-                                x-bind:min="fuApptMin()"
+                                x-bind:min="fuApptMin"
                                 x-on:change="$nextTick(() => { warnCallFuAppt() })"
                                 x-bind:class="fuApptInput ? 'text-black' : 'text-zinc-400'"
                                 x-model="fuApptInput"
@@ -337,7 +337,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 <div x-show="sendInstMethod === 'email'">
                                     <p
                                         class="mb-2 text-blue-600"
-                                        x-text="sendInstMessage()">
+                                        x-text="sendInstMessage">
                                     </p>
                                     <div
                                         class="rounded-md border border-zinc-300">
@@ -417,7 +417,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     x-show="sendInstMethod !== 'email'"
                                     class="flex flex-row items-center justify-between gap-2">
                                     <p
-                                        x-text="sendInstMessage()"
+                                        x-text="sendInstMessage"
                                         class="text-blue-600">
                                     </p>
                                     <button
@@ -442,7 +442,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                         <td class="pb-2 align-text-top">
                                             <p
-                                                x-text="DOS()"
+                                                x-text="DOS"
                                                 x-on:click="copyDOS()"
                                                 class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
@@ -494,7 +494,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         </td>
                                         <td class="pb-2 align-text-top">
                                             <p
-                                                x-text="apptNotes()"
+                                                x-text="apptNotes"
                                                 x-on:click="copyApptNotes()"
                                                 class="cursor-pointer text-zinc-700 hover:text-black">
                                             </p>
@@ -524,11 +524,11 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                             <!-- staff to do -->
                             <div
-                                x-show="!leftMsg && numDaysOut() < 14"
+                                x-show="!leftMsg && numDaysOut < 14"
                                 class="text-red-500">
                                 <h3 class="mb-2 font-medium">Add-On Proc</h3>
                                 <table class="ml-2">
-                                    <tr x-show="numDaysOut() < 14">
+                                    <tr x-show="numDaysOut < 14">
                                         <td
                                             class="whitespace-nowrap pb-2 pr-6 align-text-top font-medium">
                                             Ins Verif

@@ -216,12 +216,12 @@ window.procs = function () {
             return this.procs.filter((proc) => proc.selected);
         },
 
-        joinProcs() {
+        get joinProcs() {
             return this.selectedProcs.map((proc) => proc.long).join(" and ");
         },
 
         // capitalize first letter of long name
-        upperProcs() {
+        get upperProcs() {
             return this.selectedProcs
                 .map(
                     (proc) =>
@@ -235,12 +235,8 @@ window.procs = function () {
         sedation: "",
         sedationFinal: "",
 
-        selectedSedation() {
-            if (this.sedationTBD) {
-                return this.sedationFinal;
-            } else {
-                return this.sedation;
-            }
+        get selectedSedation() {
+            return this.sedationTBD ? this.sedationFinal : this.sedation;
         },
 
         // colon preps
@@ -346,130 +342,100 @@ window.procs = function () {
             }
         },
 
-        // check pre-call inputs are complete
+        // Check pre-call inputs are complete
         checkPre() {
-            let incomplete = 0;
-
-            if (
-                !this.selectedProcs.length
-                // !this.selectedProcs.length ||
-                // (this.procs[1].selected && this.procs[2].selected)
-            ) {
-                incomplete++;
-            }
-
-            if (this.sedation === "" && !this.sedationTBD) {
-                incomplete++;
-            }
-
-            if (this.procs[1].selected) {
-                if (this.prep === "") {
-                    incomplete++;
-                } else if (this.prep !== "ez2go" && this.prepSent === "") {
-                    incomplete++;
-                }
-            }
-
-            if (this.facilityIndex === "" && !this.facilityTBD) {
-                incomplete++;
-            }
-
-            if (
+            const conditions = [
+                !this.selectedProcs.length, // !this.selectedProcs.length || (this.procs[1].selected && this.procs[2].selected)
+                this.sedation === "" && !this.sedationTBD,
+                this.procs[1].selected &&
+                    (this.prep === "" ||
+                        (this.prep !== "ez2go" && this.prepSent === "")),
+                this.facilityIndex === "" && !this.facilityTBD,
                 (this.facilityIndex === "1" || this.facilityTBD) &&
-                this.facilities[1].quote === ""
-            ) {
-                incomplete++;
-            }
+                    this.facilities[1].quote === "",
+                !this.instructions.length && !this.noInst,
+                this.schedFu === "",
+                this.physicianMain === "",
+            ];
 
-            if (!this.instructions.length && !this.noInst) {
-                incomplete++;
-            }
-
-            if (this.schedFu === "") {
-                incomplete++;
-            }
-
-            if (this.physician === "") {
-                incomplete++;
-            }
-
-            return incomplete;
+            return conditions.filter(Boolean).length;
         },
 
         red: "#dc2626",
 
-        warnPreProc() {
-            if (!this.selectedProcs.length) {
-                this.$refs.preProc.style.color = this.red;
-                // } else if (this.procs[1].selected && this.procs[2].selected) {
-                //     this.$refs.preProc.style.color = this.red;
-            } else {
-                this.$refs.preProc.style.color = "black";
+        setWarningColor(ref, condition) {
+            if (this.$refs[ref]) {
+                this.$refs[ref].style.color = condition ? this.red : "black";
             }
+        },
+
+        getPreWarnings() {
+            return {
+                preProc: !this.selectedProcs.length,
+                preSed: this.sedation === "" && !this.sedationTBD,
+                prePrep: this.prep === "",
+                prePrepSent: this.prep !== "ez2go" && this.prepSent === "",
+                preFacility: this.facilityIndex === "" && !this.facilityTBD,
+                preQuote:
+                    this.facilityIndex === "1" &&
+                    this.facilities[1].quote === "",
+                preInst: !this.instructions.length && !this.noInst,
+                preFu: this.schedFu === "",
+                prePhysician: this.physicianMain === "",
+            };
+        },
+
+        warnAllPreFields() {
+            const warnings = this.getPreWarnings();
+
+            Object.entries(warnings).forEach(([ref, condition]) =>
+                this.setWarningColor(ref, condition),
+            );
+        },
+
+        warnPreProc() {
+            this.setWarningColor("preProc", this.getPreWarnings().preProc);
         },
 
         warnPreSed() {
-            if (this.sedation === "" && !this.sedationTBD) {
-                this.$refs.preSed.style.color = this.red;
-            } else {
-                this.$refs.preSed.style.color = "black";
-            }
+            this.setWarningColor("preSed", this.getPreWarnings().preSed);
         },
 
         warnPrePrep() {
-            if (this.prep === "") {
-                this.$refs.prePrep.style.color = this.red;
-            } else {
-                this.$refs.prePrep.style.color = "black";
-            }
+            this.setWarningColor("prePrep", this.getPreWarnings().prePrep);
         },
 
         warnPrePrepSent() {
-            if (this.prepSent === "") {
-                this.$refs.prePrepSent.style.color = this.red;
-            } else if (this.prepSent === "yes") {
-                this.$refs.prePrepSent.style.color = "black";
-            }
+            this.setWarningColor(
+                "prePrepSent",
+                this.getPreWarnings().prePrepSent,
+            );
         },
 
         warnPreFacility() {
-            if (this.facilityIndex === "" && !this.facilityTBD) {
-                this.$refs.preFacility.style.color = this.red;
-            } else {
-                this.$refs.preFacility.style.color = "black";
-            }
+            this.setWarningColor(
+                "preFacility",
+                this.getPreWarnings().preFacility,
+            );
         },
 
         warnPreQuote() {
-            if (this.facilities[1].quote === "") {
-                this.$refs.preQuote.style.color = this.red;
-            } else {
-                this.$refs.preQuote.style.color = "black";
-            }
+            this.setWarningColor("preQuote", this.getPreWarnings().preQuote);
         },
 
         warnPreInst() {
-            if (!this.instructions.length && !this.noInst) {
-                this.$refs.preInst.style.color = this.red;
-            } else {
-                this.$refs.preInst.style.color = "black";
-            }
+            this.setWarningColor("preInst", this.getPreWarnings().preInst);
         },
 
         warnPreFu() {
-            if (this.schedFu === "") {
-                this.$refs.preFu.style.color = this.red;
-            } else {
-                this.$refs.preFu.style.color = "black";
-            }
+            this.setWarningColor("preFu", this.getPreWarnings().preFu);
         },
 
         warnPrePhysician() {
-            if (this.physician === "") {
-                this.$refs.prePhysician.style.color = this.red;
-            } else {
-                this.$refs.prePhysician.style.color = "black";
-            }
+            this.setWarningColor(
+                "prePhysician",
+                this.getPreWarnings().prePhysician,
+            );
         },
 
         leftMsg: false,
@@ -477,7 +443,7 @@ window.procs = function () {
         // procedure date, proc appt
         procApptInput: null,
 
-        procApptMin() {
+        get procApptMin() {
             return DateTime.local()
                 .setZone("America/Los_Angeles")
                 .startOf("day")
@@ -492,7 +458,7 @@ window.procs = function () {
             });
         },
 
-        numDaysOut() {
+        get numDaysOut() {
             let procDay = this.procAppt.startOf("day");
             let today = DateTime.local()
                 .setZone("America/Los_Angeles")
@@ -501,7 +467,7 @@ window.procs = function () {
             return procDay.diff(today, "days").toObject().days;
         },
 
-        procApptDateNumShort() {
+        get procApptDateNumShort() {
             return this.procAppt.toLocaleString({
                 day: "numeric",
                 month: "numeric",
@@ -509,15 +475,15 @@ window.procs = function () {
             });
         },
 
-        procApptDate() {
+        get procApptDate() {
             return this.procAppt.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
-        procApptTime() {
+        get procApptTime() {
             return this.procAppt.toLocaleString(DateTime.TIME_SIMPLE);
         },
 
-        procApptArrival() {
+        get procApptArrival() {
             if (this.selectedFacility) {
                 return this.procAppt
                     .minus({
@@ -528,7 +494,7 @@ window.procs = function () {
             }
         },
 
-        procApptPickup() {
+        get procApptPickup() {
             if (this.selectedFacility) {
                 return this.procAppt
                     .minus({
@@ -546,28 +512,14 @@ window.procs = function () {
                 .toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
-        isEarlyProc() {
-            let hour = this.procAppt.hour;
-            let x = false;
-
-            if (hour < 11) {
-                x = true;
-            }
-
-            return x;
+        get isEarlyProc() {
+            return this.procAppt.hour < 11 ? true : false;
         },
 
         // used in EGD instructions only
         // TODO add to flex sig
-        isAfternoonProc() {
-            let hour = this.procAppt.hour;
-            let x = false;
-
-            if (hour >= 12) {
-                x = true;
-            }
-
-            return x;
+        get isAfternoonProc() {
+            return this.procAppt.hour >= 12 ? true : false;
         },
 
         hoursBeforeProc(h, m = 0) {
@@ -609,7 +561,7 @@ window.procs = function () {
             }
 
             if (dose === 2) {
-                if (this.isEarlyProc()) {
+                if (this.isEarlyProc) {
                     return this.prepTimeFormat(
                         a.secondEarly,
                         a.secondEarlyType,
@@ -652,7 +604,7 @@ window.procs = function () {
 
         // follow up
 
-        fuTBD() {
+        get fuTBD() {
             if (this.schedFu === "no") {
                 return true;
             } else if (this.schedFu === "yes") {
@@ -662,13 +614,13 @@ window.procs = function () {
 
         fuApptInput: null,
 
-        fuApptMin() {
+        get fuApptMin() {
             if (this.procApptInput) {
                 return this.procAppt.startOf("day").toISO().substr(0, 16);
             }
         },
 
-        fuApptRec() {
+        get fuApptRec() {
             return this.procAppt
                 .plus({ weeks: 3 })
                 .toLocaleString(DateTime.DATE_SHORT);
@@ -681,7 +633,7 @@ window.procs = function () {
             });
         },
 
-        fuApptDateNumShort() {
+        get fuApptDateNumShort() {
             return this.fuAppt.toLocaleString({
                 day: "numeric",
                 month: "numeric",
@@ -689,11 +641,11 @@ window.procs = function () {
             });
         },
 
-        fuApptDate() {
+        get fuApptDate() {
             return this.fuAppt.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
         },
 
-        fuApptTime() {
+        get fuApptTime() {
             return this.fuAppt.toLocaleString(DateTime.TIME_SIMPLE);
         },
 
@@ -714,7 +666,7 @@ window.procs = function () {
             "Attached inst, please print to mail.",
         ],
 
-        sendInstMessage() {
+        get sendInstMessage() {
             if (this.sendInstMethod === "email") {
                 return this.sendInstText[0];
             } else if (this.sendInstMethod === "portal") {
@@ -748,89 +700,59 @@ window.procs = function () {
 
         // checks during call, for the red number
         checkDuring() {
-            let incomplete = 0;
-
-            if (this.facilityTBD && this.facilityIndexFinal === "") {
-                incomplete++;
-            }
-
-            if (this.sedationTBD && this.sedationFinal === "") {
-                incomplete++;
-            }
-
-            if (!this.procApptInput) {
-                incomplete++;
-            }
-
-            if (
+            const conditions = [
+                this.facilityTBD && this.facilityIndexFinal === "",
+                this.sedationTBD && this.sedationFinal === "",
+                !this.procApptInput,
                 this.procApptInput &&
-                this.warnTime(this.procAppt) &&
-                this.overrideProcTime === false
-            ) {
-                incomplete++;
-            }
-
-            if (!this.fuApptInput && !this.fuTBD()) {
-                incomplete++;
-            }
-
-            if (
+                    this.warnTime(this.procAppt) &&
+                    this.overrideProcTime === false,
+                !this.fuApptInput && !this.fuTBD,
                 this.fuApptInput &&
-                this.warnTime(this.fuAppt) &&
-                this.overrideFuTime === false
-            ) {
-                incomplete++;
-            }
+                    this.warnTime(this.fuAppt) &&
+                    this.overrideFuTime === false,
+                this.sendInstMethod === "",
+            ];
 
-            if (this.sendInstMethod === "") {
-                incomplete++;
-            }
-
-            return incomplete;
+            return conditions.filter(Boolean).length;
         },
 
         // warnings for each subsection in call section, for highlighting h3's in red
         warnCallFacility() {
-            if (this.facilityTBD && this.facilityIndexFinal === "") {
-                this.$refs.callFacility.style.color = this.red;
-            } else {
-                this.$refs.callFacility.style.color = "black";
-            }
+            this.setWarningColor(
+                "callFacility",
+                this.facilityTBD && this.facilityIndexFinal === "",
+            );
         },
 
         warnCallSed() {
-            if (this.sedationTBD && this.sedationFinal === "") {
-                this.$refs.callSed.style.color = this.red;
-            } else {
-                this.$refs.callSed.style.color = "black";
-            }
+            this.setWarningColor(
+                "callSed",
+                this.sedationTBD && this.sedationFinal === "",
+            );
         },
 
         warnCallProcAppt() {
-            if (!this.procApptInput) {
-                this.$refs.callProcAppt.style.color = this.red;
-            } else {
-                this.$refs.callProcAppt.style.color = "black";
-            }
+            this.setWarningColor("callProcAppt", !this.procApptInput);
         },
 
         warnCallFuAppt() {
-            if (!this.fuApptInput) {
-                this.$refs.callFuAppt.style.color = this.red;
-            } else {
-                this.$refs.callFuAppt.style.color = "black";
-            }
+            this.setWarningColor("callFuAppt", !this.fuApptInput);
         },
 
         warnCallSendInst() {
-            if (this.sendInstMethod === "") {
-                this.$refs.callSendInst.style.color = this.red;
-            } else {
-                this.$refs.callSendInst.style.color = "black";
-            }
+            this.setWarningColor("callSendInst", this.sendInstMethod === "");
         },
 
         // reset form
+        resetWarnings(refs) {
+            refs.forEach((ref) => {
+                if (this.$refs[ref]) {
+                    this.$refs[ref].style.color = "black";
+                }
+            });
+        },
+
         resetForm() {
             this.procs[0].selected = false;
             this.procs[1].selected = false;
@@ -857,15 +779,17 @@ window.procs = function () {
             this.physicianMain = "";
             this.physicianModal = "";
 
-            this.$refs.preProc.style.color = "black";
-            this.$refs.preSed.style.color = "black";
-            this.$refs.prePrep.style.color = "black";
-            this.$refs.prePrepSent.style.color = "black";
-            this.$refs.preFacility.style.color = "black";
-            this.$refs.preQuote.style.color = "black";
-            this.$refs.preInst.style.color = "black";
-            this.$refs.preFu.style.color = "black";
-            this.$refs.prePhysician.style.color = "black";
+            this.resetWarnings([
+                "preProc",
+                "preSed",
+                "prePrep",
+                "prePrepSent",
+                "preFacility",
+                "preQuote",
+                "preInst",
+                "preFu",
+                "prePhysician",
+            ]);
 
             this.leftMsg = false;
 
@@ -878,11 +802,13 @@ window.procs = function () {
             this.overrideProcTime = false;
             this.overrideFuTime = false;
 
-            this.$refs.callFacility.style.color = "black";
-            this.$refs.callSed.style.color = "black";
-            this.$refs.callProcAppt.style.color = "black";
-            this.$refs.callFuAppt.style.color = "black";
-            this.$refs.callSendInst.style.color = "black";
+            this.resetWarnings([
+                "callFacility",
+                "callSed",
+                "callProcAppt",
+                "callFuAppt",
+                "callSendInst",
+            ]);
 
             this.rxFinal = "";
 
@@ -897,25 +823,21 @@ window.procs = function () {
 
         rxFinal: "",
 
-        emailSubject() {
+        get emailSubject() {
             return this.emailSubjectTemplate.replace(
                 "{upperProcs}",
-                this.upperProcs(),
+                this.upperProcs,
             );
         },
 
         copyEmailSubject() {
-            navigator.clipboard.writeText(this.emailSubject());
+            navigator.clipboard.writeText(this.emailSubject);
         },
 
-        greeting() {
-            let hour = DateTime.local().setZone("America/Los_Angeles").hour;
-
-            if (hour < 12) {
-                return "Good morning,";
-            } else {
-                return "Good afternoon,";
-            }
+        get greeting() {
+            return DateTime.local().setZone("America/Los_Angeles").hour < 12
+                ? "Good morning,"
+                : "Good afternoon,";
         },
 
         emailBodyArray() {
@@ -955,7 +877,7 @@ window.procs = function () {
                 x = x.filter((item) => item !== "{ez2goKit}");
             }
 
-            if (this.fuTBD()) {
+            if (this.fuTBD) {
                 x = x
                     .filter((item, i) => x[i - 1] !== "{fu}")
                     .filter((item) => item !== "{fu}");
@@ -988,10 +910,10 @@ window.procs = function () {
             if (this.facilities[1].INN) {
                 return (
                     join
-                        .replace("{greeting}", this.greeting())
-                        .replace("{joinProcs}", this.joinProcs())
-                        .replace("{procApptDate}", this.procApptDate())
-                        .replace("{procApptTime}", this.procApptTime())
+                        .replace("{greeting}", this.greeting)
+                        .replace("{joinProcs}", this.joinProcs)
+                        .replace("{procApptDate}", this.procApptDate)
+                        .replace("{procApptTime}", this.procApptTime)
                         .replace(
                             "{selectedFacility.long}",
                             this.selectedFacility.long,
@@ -1000,7 +922,7 @@ window.procs = function () {
                             "{selectedFacility.address}",
                             this.selectedFacility.address,
                         )
-                        .replace("{procApptArrival}", this.procApptArrival())
+                        .replace("{procApptArrival}", this.procApptArrival)
                         .replace(
                             "{mosclPacket}",
                             this.emailSnippets.mosclPacket,
@@ -1013,17 +935,17 @@ window.procs = function () {
                         .replace("{quote}", this.facilities[1].quote)
                         // .replace("{primeRide}", this.emailSnippets.primeRide)
                         .replace("{fu}", this.emailSnippets.fu)
-                        .replace("{fuApptDate}", this.fuApptDate())
-                        .replace("{fuApptTime}", this.fuApptTime())
+                        .replace("{fuApptDate}", this.fuApptDate)
+                        .replace("{fuApptTime}", this.fuApptTime)
                         .replace("{staffName}", this.staffName)
                 );
             }
             return (
                 join
-                    .replace("{greeting}", this.greeting())
-                    .replace("{joinProcs}", this.joinProcs())
-                    .replace("{procApptDate}", this.procApptDate())
-                    .replace("{procApptTime}", this.procApptTime())
+                    .replace("{greeting}", this.greeting)
+                    .replace("{joinProcs}", this.joinProcs)
+                    .replace("{procApptDate}", this.procApptDate)
+                    .replace("{procApptTime}", this.procApptTime)
                     .replace(
                         "{selectedFacility.long}",
                         this.selectedFacility.long,
@@ -1032,7 +954,7 @@ window.procs = function () {
                         "{selectedFacility.address}",
                         this.selectedFacility.address,
                     )
-                    .replace("{procApptArrival}", this.procApptArrival())
+                    .replace("{procApptArrival}", this.procApptArrival)
                     .replace("{mosclPacket}", this.emailSnippets.mosclPacket)
                     .replace("{mosclCovid}", this.mosclCovid[1])
                     .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
@@ -1042,8 +964,8 @@ window.procs = function () {
                     .replace("{quote}", this.facilities[1].quote)
                     // .replace("{primeRide}", this.emailSnippets.primeRide)
                     .replace("{fu}", this.emailSnippets.fu)
-                    .replace("{fuApptDate}", this.fuApptDate())
-                    .replace("{fuApptTime}", this.fuApptTime())
+                    .replace("{fuApptDate}", this.fuApptDate)
+                    .replace("{fuApptTime}", this.fuApptTime)
                     .replace("{staffName}", this.staffName)
             );
         },
@@ -1065,16 +987,16 @@ window.procs = function () {
         },
 
         // timestamps
-        DOS() {
-            return "DOS " + this.procApptDateNumShort();
+        get DOS() {
+            return "DOS " + this.procApptDateNumShort;
         },
 
         copyDOS() {
-            navigator.clipboard.writeText(this.DOS());
+            navigator.clipboard.writeText(this.DOS);
         },
 
-        procTS() {
-            let DOS = ", DOS " + this.procApptDateNumShort();
+        get procTS() {
+            let DOS = ", DOS " + this.procApptDateNumShort;
 
             if (this.procs[1].selected) {
                 return (
@@ -1082,38 +1004,38 @@ window.procs = function () {
                     " " +
                     this.prep.toLowerCase() +
                     " " +
-                    this.selectedSedation().substring(0, 3) +
+                    this.selectedSedation.substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
                     DOS +
                     " " +
-                    this.procApptTime() +
+                    this.procApptTime +
                     ". "
                 );
             } else {
                 return (
                     this.selectedProcs.map((proc) => proc.short).join("/") +
                     " " +
-                    this.selectedSedation().substring(0, 3) +
+                    this.selectedSedation.substring(0, 3) +
                     " " +
                     this.selectedFacility.short +
                     DOS +
                     " " +
-                    this.procApptTime() +
+                    this.procApptTime +
                     ". "
                 );
             }
         },
 
-        fuTS() {
-            if (!this.fuTBD()) {
-                return "f/u sched for " + this.fuApptDateNumShort() + ". ";
+        get fuTS() {
+            if (!this.fuTBD) {
+                return "f/u sched for " + this.fuApptDateNumShort + ". ";
             } else {
                 return "f/u TBD. ";
             }
         },
 
-        actionTS() {
+        get actionTS() {
             if (this.sendInstMethod === "email") {
                 return this.sendInstAction[0];
             } else if (this.sendInstMethod === "portal") {
@@ -1138,15 +1060,10 @@ window.procs = function () {
 
             if (this.instructions.length && !this.noInst) {
                 return (
-                    this.procTS() +
-                    this.fuTS() +
-                    this.actionTS() +
-                    rx +
-                    " " +
-                    addInst
+                    this.procTS + this.fuTS + this.actionTS + rx + " " + addInst
                 );
             } else {
-                return this.procTS() + this.fuTS() + this.actionTS() + rx;
+                return this.procTS + this.fuTS + this.actionTS + rx;
             }
         },
 
@@ -1174,7 +1091,7 @@ window.procs = function () {
                     " " +
                     (this.sedationTBD
                         ? "(MAC or twi)"
-                        : this.selectedSedation().substring(0, 3)) +
+                        : this.selectedSedation.substring(0, 3)) +
                     " " +
                     (this.facilityTBD
                         ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
@@ -1183,7 +1100,7 @@ window.procs = function () {
                         ? "-$" + this.facilities[1].quote
                         : "") +
                     ". " +
-                    (this.fuTBD() ? "f/u TBD." : "Needs f/u.") +
+                    (this.fuTBD ? "f/u TBD." : "Needs f/u.") +
                     " " +
                     rx +
                     " " +
@@ -1196,7 +1113,7 @@ window.procs = function () {
                     " " +
                     (this.sedationTBD
                         ? "(MAC or twi)"
-                        : this.selectedSedation().substring(0, 3)) +
+                        : this.selectedSedation.substring(0, 3)) +
                     " " +
                     (this.facilityTBD
                         ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
@@ -1205,7 +1122,7 @@ window.procs = function () {
                         ? "-$" + this.facilities[1].quote
                         : "") +
                     ". " +
-                    (this.fuTBD() ? "f/u TBD." : "Needs f/u.") +
+                    (this.fuTBD ? "f/u TBD." : "Needs f/u.") +
                     " " +
                     rx +
                     " " +
@@ -1218,7 +1135,7 @@ window.procs = function () {
             navigator.clipboard.writeText(this.lmTS());
         },
 
-        apptNotes() {
+        get apptNotes() {
             let date = DateTime.local()
                 .setZone("America/Los_Angeles")
                 .toLocaleString({ month: "numeric", day: "numeric" });
@@ -1231,27 +1148,7 @@ window.procs = function () {
         },
 
         copyApptNotes() {
-            navigator.clipboard.writeText(this.apptNotes());
-        },
-
-        // messages for add-on procs
-        addOnCount() {
-            let count = 0;
-
-            if (this.numDaysOut() < 7) {
-                count++;
-            }
-
-            if (this.numDaysOut() < 14) {
-                count++;
-            }
-
-            if (
-                this.numDaysOut() < 14 &&
-                this.selectedFacility.short === "PRIME"
-            ) {
-                count++;
-            }
+            navigator.clipboard.writeText(this.apptNotes);
         },
     };
 };

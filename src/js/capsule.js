@@ -130,13 +130,13 @@ window.capsule = function () {
             });
         },
 
-        numDaysOut() {
+        get numDaysOut() {
             let capsuleDay = this.capsuleAppt.startOf("day");
 
             return capsuleDay.diff(this.today, "days").toObject().days;
         },
 
-        fuApptRec() {
+        get fuApptRec() {
             return this.capsuleAppt
                 .plus({ weeks: 3 })
                 .toLocaleString(DateTime.DATE_SHORT);
@@ -144,7 +144,7 @@ window.capsule = function () {
 
         fuApptInput: null,
 
-        fuApptMin() {
+        get fuApptMin() {
             if (this.capsuleApptInput) {
                 return this.capsuleAppt
                     .plus({ days: 1 })
@@ -183,7 +183,7 @@ window.capsule = function () {
             "Attached inst, please print to mail.",
         ],
 
-        sendInstMessage() {
+        get sendInstMessage() {
             if (this.sendInstMethod === "email") {
                 return this.sendInstText[0];
             } else if (this.sendInstMethod === "portal") {
@@ -261,14 +261,10 @@ window.capsule = function () {
 
         // output
 
-        greeting() {
-            let hour = DateTime.local().setZone("America/Los_Angeles").hour;
-
-            if (hour < 12) {
-                return "Good morning,";
-            } else {
-                return "Good afternoon,";
-            }
+        get greeting() {
+            return DateTime.local().setZone("America/Los_Angeles").hour < 12
+                ? "Good morning,"
+                : "Good afternoon,";
         },
 
         emailBodyArray() {
@@ -298,7 +294,7 @@ window.capsule = function () {
         // string input, replaces keywords
         emailBodyReplace(join) {
             join = join
-                .replace("{greeting}", this.greeting())
+                .replace("{greeting}", this.greeting)
                 .replace(
                     "{capsuleDate}",
                     this.capsuleAppt.toLocaleString(DateTime.DATE_HUGE),
@@ -337,7 +333,7 @@ window.capsule = function () {
             navigator.clipboard.writeText(this.emailBodyClip());
         },
 
-        DOS() {
+        get DOS() {
             return (
                 "DOS " +
                 this.capsuleAppt.toLocaleString({
@@ -349,7 +345,7 @@ window.capsule = function () {
         },
 
         copyDOS() {
-            navigator.clipboard.writeText(this.DOS());
+            navigator.clipboard.writeText(this.DOS);
         },
 
         timestamp() {
@@ -439,7 +435,7 @@ window.capsule = function () {
             navigator.clipboard.writeText(this.teleReason());
         },
 
-        apptNotes() {
+        get apptNotes() {
             let date = DateTime.local()
                 .setZone("America/Los_Angeles")
                 .toLocaleString({ month: "numeric", day: "numeric" });
@@ -448,7 +444,7 @@ window.capsule = function () {
         },
 
         copyApptNotes() {
-            navigator.clipboard.writeText(this.apptNotes());
+            navigator.clipboard.writeText(this.apptNotes);
         },
 
         todo() {
