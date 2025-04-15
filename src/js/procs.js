@@ -158,10 +158,6 @@ window.procs = function () {
             fu: "Your post-procedure follow up is scheduled for {fuApptDate} at {fuApptTime}.",
         },
 
-        // prep6to8:
-        //     "6 to 8 PM the night before your procedure (and 3 to 4 hours after 1st dose)",
-        // prep11to12: "11 PM to midnight 12 AM the night before your procedure",
-
         prepTiming: [
             {
                 physician: "H",
@@ -172,22 +168,12 @@ window.procs = function () {
                 secondLate: 6,
                 secondLateType: "hour",
             },
-            // {
-            //     physician: "T",
-            //     first: "3:00 to 5:00 PM",
-            //     firstType: "time",
-            //     secondEarly:
-            //         "6:00 to 8:00 PM (no sooner than 3 hours after 1st dose)",
-            //     secondEarlyType: "time",
-            //     secondLate: 6,
-            //     secondLateType: "hour",
-            // },
             {
                 physician: "T",
                 first: "3:00 to 5:00 PM",
                 firstType: "time",
-                secondEarly: 6,
-                secondEarlyType: "hour",
+                secondEarly: 6, // used to be "6:00 to 8:00 PM (no sooner than 3 hours after 1st dose)"
+                secondEarlyType: "hour", // used to be "time"
                 secondLate: 6,
                 secondLateType: "hour",
             },
@@ -574,18 +560,13 @@ window.procs = function () {
             return;
         },
 
-        secondPrepSameTime() {
+        isSecondPrepTimeConstant() {
             let a = this.prepTiming.find((x) => x.physician === this.physician);
-            let x = false;
 
-            if (
-                a.secondEarly === a.secondLate &&
+            return a.secondEarly === a.secondLate &&
                 a.secondEarlyType === a.secondLateType
-            ) {
-                x = true;
-            }
-
-            return x;
+                ? true
+                : false;
         },
 
         secondPrepModal(time) {

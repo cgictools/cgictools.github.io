@@ -1,0 +1,37 @@
+<p x-show=" prep === 'ez2go' ">
+    <span class="font-bold uppercase">ez2go 2nd dose:</span>
+    <span class="underline"
+        >Start your 2nd dose
+        <span x-text="prepTime(2)"></span></span
+    >. Take the remaining 2 Bisacodyl tablets, and 30 minutes after, start
+    drinking 8 oz of the "prep mix" every 10-20 minutes until the bottle (28-32
+    oz) is completed (8 oz glasses every time, every 10-20 min).
+</p>
+<p x-show=" prep === 'Suprep' ">
+    <span class="font-bold"
+        ><span class="uppercase">Suprep 2nd dose</span>, starting <span
+            x-text="prepTime(2)"></span>:</span
+    > Repeat the above instructions using the other Suprep bottle.
+</p>
+<p x-show=" prep === 'Clenpiq' ">
+    <span class="font-bold"
+        ><span class="uppercase">Clenpiq 2nd dose</span>, starting <span
+            x-text="prepTime(2)"></span>:</span
+    > Drink the other bottle of Clenpiq right from the bottle. Follow with <span
+        class="underline">five</span
+    > 8-ounce drinks of clear liquid within the next 2 hours.
+</p>
+<p x-show=" prep === 'Sutab' ">
+    <span class="font-bold"
+        ><span class="uppercase">Sutab 2nd dose</span>, starting <span
+            x-text="prepTime(2)"></span>:</span
+    > Repeat the above instructions using the second bottle of tablets.
+</p>
+<p x-show=" prep === 'Golytely' ">
+    <span class="font-bold"
+        ><span class="uppercase">Golytely 2nd dose</span>, starting <span
+            x-text="prepTime(2)"></span>:</span
+    > Drink the remaining 1/3 of the solution, an 8-ounce glass every 10 to 15
+    minutes until the container is empty. Your stool should look like the color
+    of broth.
+</p>
