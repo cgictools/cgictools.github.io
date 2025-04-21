@@ -1,0 +1,93 @@
+---
+import Logo from '../../images/logo.png';
+import ApptDetails from './snippets/ApptDetails.astro';
+import AddInst from './snippets/AddInst.astro';
+import OTCMeds from './snippets/OTCMeds.astro';
+import RxMeds from './snippets/RxMeds.astro';
+import Transpo from './snippets/Transpo.astro';
+import CxPolicy from './snippets/CxPolicy.astro';
+---
+
+<div x-show="selectedFacility" class="mb-4 flex h-24 flex-row justify-center">
+    <img src={Logo.src} alt="logo" />
+</div>
+<h1 class="mb-3 text-center font-bold uppercase leading-relaxed">
+    Patient Instructions for <span x-text="procs[0].selected ? 'EGD/' : '' "
+    ></span>Flexible Sigmoidoscopy
+</h1>
+<ApptDetails />
+<div class="mb-1.5">
+    <div class="mb-1">
+        <OTCMeds />
+    </div>
+    <div>
+        <RxMeds />
+    </div>
+    <div x-show="instructions.length" class="mt-1">
+        <AddInst />
+    </div>
+</div>
+<!-- day before proc -->
+<di class="mb-1.5">
+    <p class="font-bold uppercase">
+        1 day before the examination (<span
+            x-text="printModal ? '________________' : daysBeforeProc(1)"
+        ></span>):
+    </p>
+    <ul class="ml-2 list-disc pl-4">
+        <li>You may eat a light breakfast and lunch.</li>
+        <li>
+            After lunch, take two tablespoons of Milk of Magnesia. Then <span
+                class="font-bold uppercase">no solid food</span
+            > until after the procedure.
+        </li>
+        <li>
+            Have a dinner consisting of <span class="font-bold uppercase"
+                >clear liquids only</span
+            >.
+        </li>
+        <li class="list-none">
+            <span class="font-bold underline"
+                >Acceptable clear liquids include</span
+            >: Jell-O (not red), clear chicken broth or bouillon, apple juice,
+            white grape juice, Gatorade, and clear sodas such as 7-up, Sprite
+            and ginger-ale. Tea and coffee with sugar, Equal or Sweet n Low is
+            allowed but limit caffeinated beverages to two servings. <span
+                class="font-bold uppercase">No milk or dairy products.</span
+            >
+        </li>
+    </ul>
+</di>
+<!-- day of proc  -->
+<div class="mb-1.5">
+    <p class="font-bold uppercase">
+        The day of the examination (<span
+            x-text="printModal ? '________________' : daysBeforeProc(0)"
+        ></span>):
+    </p>
+    <ul class="ml-2 list-disc pl-4">
+        <li>
+            Take any necessary medications as discussed previously with the
+            doctor. Nothing more by mouth until after the exam. NOTE: If you are
+            scheduled for an afternoon appointment, you may have a clear liquid
+            breakfast up to 5 hours before the appointment time.
+        </li>
+        <!-- TODO: make above dynamic -->
+        <li class="font-bold">
+            Administer two Fleet enemas about one hour before leaving your home.
+        </li>
+        <li>
+            Refer to above for the GI Lab location. Wear comfortable clothing.
+            Approximate time in GI lab is 2-3 hours.
+        </li>
+    </ul>
+</div>
+<div class="mb-1.5" x-show="selectedSedation !== 'no sedation'">
+    <Transpo />
+</div>
+<p class="mb-4">
+    If you have any questions regarding the above information, please call our
+    office. If you are unable to keep this appointment, please notify our office
+    at (562) 596-5552 as soon as possible.
+</p>
+<CxPolicy />

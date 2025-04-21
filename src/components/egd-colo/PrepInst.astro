@@ -15,13 +15,14 @@ import Transpo from './snippets/Transpo.astro';
 <!-- heading text -->
 <div class="mb-1">
     <h1 class="mb-2 pt-2 text-center font-bold uppercase">
-        Preparation for the Colonoscopy<br />
+        Preparation for the <span x-text="procs[0].selected ? 'EGD/' : '' "
+        ></span>Colonoscopy<br />
         <span x-text="prep"></span><br />
          (<span x-text="prepGeneric" class="normal-case"></span>)
     </h1>
     <h2 class="font-bold">
         Please read these instructions thoroughly at least one week prior to
-        your procedure. Please call us with any questions.
+        your procedure. Please call with any questions.
     </h2>
 </div>
 <!-- ez2go kit  -->
@@ -31,12 +32,12 @@ import Transpo from './snippets/Transpo.astro';
     x-bind:class=" instructions.length ? 'mb-1 pb-1' : 'mb-1.5 pb-1.5' ">
     <span class="font-bold uppercase">Purchase</span> ez2go laxatives
     (ingredients available over the counter, or kit available at our office).
-    Includes: <span class="underline">PEG 3350 ("Miralax")</span> (238 g
+    You will need: <span class="underline">PEG 3350 ("Miralax")</span> (238 g
     bottle), <span class="underline">Bisacodyl</span> tablets (4 each of 5 mg
-    tablets), and <span class="underline">magnesium citrate</span> (1 packet).
-    Also purchase two 28-32 oz bottles of
-    <span class="underline">Gatorade</span> (or low sugar G2 if you are
-    diabetic) (or any other electrolyte solution).
+    tablets), and <span class="underline">magnesium citrate</span> (1 packet or
+    10 oz bottle). Also purchase two 28-32 oz bottles of
+    <span class="underline">electrolyte solution</span> (such as Gatorade, or
+    low sugar G2 if you are diabetic).
     <span class="font-bold">No red, orange, or purple drinks!</span>
 </p>
 <!-- Golytely cannot be replaced with ez2go -->
@@ -63,7 +64,7 @@ import Transpo from './snippets/Transpo.astro';
     x-bind:class=" instructions.length ? 'my-1 py-1' : 'my-1.5 py-1.5' ">
     <span class="uppercase">2 days before your procedure</span> (<span
         x-text="printModal ? '________________' : daysBeforeProc(2)"></span>):
-    follow the moderate/soft diet (see attached).
+    follow the moderate/soft diet (see next page).
 </p>
 <!-- liquid diet -->
 <div x-bind:class=" instructions.length ? 'mb-1' : 'mb-1.5' ">
@@ -83,6 +84,7 @@ import Transpo from './snippets/Transpo.astro';
             >
              until after your procedure.
         </li>
+        <!-- TODO: combine above 2 points? -->
         <li>
             <span class="font-bold uppercase underline">No red</span>
              colored drinks. <span class="italic"
@@ -183,6 +185,7 @@ import Transpo from './snippets/Transpo.astro';
         </p>
     </div>
 </div>
+<!-- 2nd dose instructions for when printing from modal (when pt is not yet scheduled) -->
 <div
     x-show="printModal"
     x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
@@ -265,6 +268,6 @@ import Transpo from './snippets/Transpo.astro';
         clothing. Approximate time in GI lab is 2-3 hours.
     </p>
 </div>
-<div class="mb-8">
+<div class="mb-8" x-show="selectedSedation !== 'no sedation'">
     <Transpo />
 </div>

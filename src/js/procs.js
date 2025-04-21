@@ -6,12 +6,12 @@ window.procs = function () {
         procs: [
             { id: 1, short: "EGD", long: "endoscopy", selected: false },
             { id: 2, short: "colo", long: "colonoscopy", selected: false },
-            // {
-            //     id: 3,
-            //     short: "flex sig",
-            //     long: "flexible sigmoidoscopy",
-            //     selected: false,
-            // },
+            {
+                id: 3,
+                short: "flex sig",
+                long: "flexible sigmoidoscopy",
+                selected: false,
+            },
         ],
 
         preps: [
@@ -37,10 +37,6 @@ window.procs = function () {
                 name: "Golytely",
                 generic: "PEG 3350 / electrolytes",
             },
-            // {
-            //     name: "Plenvu",
-            //     generic: "PEG 3350 / electrolytes",
-            // },
         ],
 
         facilities: [
@@ -123,7 +119,7 @@ window.procs = function () {
         emailBodyTemplate: [
             "{greeting}",
             "",
-            "Your {joinProcs} is scheduled for {procApptDate} at {procApptTime} at {selectedFacility.long} - {selectedFacility.address}. Please arrive by {procApptArrival}.",
+            "Your {joinProcs} is scheduled for {procApptDate}. Please arrive by {procApptArrival} at {selectedFacility.long} - {selectedFacility.address}.",
             "",
             "Please find attached the consent form and instructions for your prep. Please sign and send the consent form to us via email at cgicare@cgicare.hush.com or bring it to your procedure.",
             "{mosclPacket}",
@@ -206,12 +202,11 @@ window.procs = function () {
             return this.selectedProcs.map((proc) => proc.long).join(" and ");
         },
 
-        // capitalize first letter of long name
+        // capitalize the first letter of each word of procedure's long name
         get upperProcs() {
             return this.selectedProcs
-                .map(
-                    (proc) =>
-                        proc.long[0].toUpperCase() + proc.long.substring(1),
+                .map((proc) =>
+                    proc.long.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase()),
                 )
                 .join(" & ");
         },
@@ -246,7 +241,7 @@ window.procs = function () {
                     return this.facilities[this.facilityIndex];
                 }
             } else {
-                return {};
+                return false;
             }
         },
 
@@ -315,7 +310,6 @@ window.procs = function () {
         schedFu: "",
 
         // H, T, M
-
         physicianMain: "",
         physicianModal: "",
 
@@ -329,24 +323,6 @@ window.procs = function () {
         },
 
         // Check pre-call inputs are complete
-        checkPre() {
-            const conditions = [
-                !this.selectedProcs.length, // !this.selectedProcs.length || (this.procs[1].selected && this.procs[2].selected)
-                this.sedation === "" && !this.sedationTBD,
-                this.procs[1].selected &&
-                    (this.prep === "" ||
-                        (this.prep !== "ez2go" && this.prepSent === "")),
-                this.facilityIndex === "" && !this.facilityTBD,
-                (this.facilityIndex === "1" || this.facilityTBD) &&
-                    this.facilities[1].quote === "",
-                !this.instructions.length && !this.noInst,
-                this.schedFu === "",
-                this.physicianMain === "",
-            ];
-
-            return conditions.filter(Boolean).length;
-        },
-
         red: "#dc2626",
 
         setWarningColor(ref, condition) {
@@ -357,23 +333,34 @@ window.procs = function () {
 
         getPreWarnings() {
             return {
-                preProc: !this.selectedProcs.length,
+                preProc:
+                    !this.selectedProcs.length ||
+                    (this.procs[1].selected && this.procs[2].selected),
                 preSed: this.sedation === "" && !this.sedationTBD,
-                prePrep: this.prep === "",
-                prePrepSent: this.prep !== "ez2go" && this.prepSent === "",
+                prePrep: this.procs[1].selected && this.prep === "",
+                prePrepSent:
+                    this.procs[1].selected &&
+                    this.prep !== "ez2go" &&
+                    this.prepSent === "",
                 preFacility: this.facilityIndex === "" && !this.facilityTBD,
                 preQuote:
                     this.facilityIndex === "1" &&
                     this.facilities[1].quote === "",
                 preInst: !this.instructions.length && !this.noInst,
                 preFu: this.schedFu === "",
-                prePhysician: this.physicianMain === "",
+                prePhysician:
+                    this.physicianMain === "" ||
+                    (this.facilityIndex === "1" && this.physicianMain !== "T"),
             };
+        },
+
+        checkPre() {
+            const warnings = this.getPreWarnings();
+            return Object.values(warnings).filter(Boolean).length;
         },
 
         warnAllPreFields() {
             const warnings = this.getPreWarnings();
-
             Object.entries(warnings).forEach(([ref, condition]) =>
                 this.setWarningColor(ref, condition),
             );
@@ -661,68 +648,63 @@ window.procs = function () {
 
         // check appointment times
 
-        warnTime(x) {
-            let hour = x.hour;
-            let min = x.minute;
-
-            if (hour < 7 || hour > 16) {
-                return true;
-            }
-
-            if (min % 15 !== 0) {
-                return true;
-            }
-
-            return false;
+        warnTime(appt) {
+            return appt.hour < 7 || appt.hour > 16 || appt.minute % 15 !== 0
+                ? true
+                : false;
         },
 
         overrideProcTime: false,
         overrideFuTime: false,
 
         // checks during call, for the red number
-        checkDuring() {
-            const conditions = [
-                this.facilityTBD && this.facilityIndexFinal === "",
-                this.sedationTBD && this.sedationFinal === "",
-                !this.procApptInput,
-                this.procApptInput &&
-                    this.warnTime(this.procAppt) &&
-                    this.overrideProcTime === false,
-                !this.fuApptInput && !this.fuTBD,
-                this.fuApptInput &&
-                    this.warnTime(this.fuAppt) &&
-                    this.overrideFuTime === false,
-                this.sendInstMethod === "",
-            ];
+        getDuringWarnings() {
+            return {
+                callFacility:
+                    this.facilityTBD && this.facilityIndexFinal === "",
+                callSed: this.sedationTBD && this.sedationFinal === "",
+                callProcAppt: !this.procApptInput,
+                callFuAppt: !this.fuTBD && !this.fuApptInput,
+                callSendInst: this.sendInstMethod === "",
+            };
+        },
 
-            return conditions.filter(Boolean).length;
+        checkDuring() {
+            const warnings = this.getDuringWarnings();
+            return Object.values(warnings).filter(Boolean).length;
         },
 
         // warnings for each subsection in call section, for highlighting h3's in red
         warnCallFacility() {
             this.setWarningColor(
                 "callFacility",
-                this.facilityTBD && this.facilityIndexFinal === "",
+                this.getDuringWarnings().callFacility,
             );
         },
 
         warnCallSed() {
-            this.setWarningColor(
-                "callSed",
-                this.sedationTBD && this.sedationFinal === "",
-            );
+            this.setWarningColor("callSed", this.getDuringWarnings().callSed);
         },
 
         warnCallProcAppt() {
-            this.setWarningColor("callProcAppt", !this.procApptInput);
+            this.setWarningColor(
+                "callProcAppt",
+                this.getDuringWarnings().callProcAppt,
+            );
         },
 
         warnCallFuAppt() {
-            this.setWarningColor("callFuAppt", !this.fuApptInput);
+            this.setWarningColor(
+                "callFuAppt",
+                this.getDuringWarnings().callFuAppt,
+            );
         },
 
         warnCallSendInst() {
-            this.setWarningColor("callSendInst", this.sendInstMethod === "");
+            this.setWarningColor(
+                "callSendInst",
+                this.getDuringWarnings().callSendInst,
+            );
         },
 
         // reset form
@@ -735,9 +717,7 @@ window.procs = function () {
         },
 
         resetForm() {
-            this.procs[0].selected = false;
-            this.procs[1].selected = false;
-            // this.procs[2].selected = false;
+            this.procs.forEach((proc) => (proc.selected = false));
 
             this.sedationTBD = false;
             this.sedation = "";
@@ -879,76 +859,42 @@ window.procs = function () {
         },
 
         packetCoverJoin() {
+            // ? remove name and morning/afternoon greeting from email body array, then join, for packet cover
             let initial = this.emailBodyArray();
-            let length = initial.length;
-            initial.splice(length - 2, 1);
+            initial.splice(initial.length - 2, 1);
             initial.splice(0, 1);
             return initial.join("<br />");
         },
 
         // string input, replaces keywords
         emailBodyReplace(join) {
-            if (this.facilities[1].INN) {
-                return (
-                    join
-                        .replace("{greeting}", this.greeting)
-                        .replace("{joinProcs}", this.joinProcs)
-                        .replace("{procApptDate}", this.procApptDate)
-                        .replace("{procApptTime}", this.procApptTime)
-                        .replace(
-                            "{selectedFacility.long}",
-                            this.selectedFacility.long,
-                        )
-                        .replace(
-                            "{selectedFacility.address}",
-                            this.selectedFacility.address,
-                        )
-                        .replace("{procApptArrival}", this.procApptArrival)
-                        .replace(
-                            "{mosclPacket}",
-                            this.emailSnippets.mosclPacket,
-                        )
-                        .replace("{mosclCovid}", this.mosclCovid[1])
-                        .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
-                        .replace("{rxPrep}", this.emailSnippets.rxPrep)
-                        .replace("{prep}", this.prep)
-                        .replace("{prime}", this.emailSnippets.primeINN)
-                        .replace("{quote}", this.facilities[1].quote)
-                        // .replace("{primeRide}", this.emailSnippets.primeRide)
-                        .replace("{fu}", this.emailSnippets.fu)
-                        .replace("{fuApptDate}", this.fuApptDate)
-                        .replace("{fuApptTime}", this.fuApptTime)
-                        .replace("{staffName}", this.staffName)
-                );
-            }
-            return (
-                join
-                    .replace("{greeting}", this.greeting)
-                    .replace("{joinProcs}", this.joinProcs)
-                    .replace("{procApptDate}", this.procApptDate)
-                    .replace("{procApptTime}", this.procApptTime)
-                    .replace(
-                        "{selectedFacility.long}",
-                        this.selectedFacility.long,
-                    )
-                    .replace(
-                        "{selectedFacility.address}",
-                        this.selectedFacility.address,
-                    )
-                    .replace("{procApptArrival}", this.procApptArrival)
-                    .replace("{mosclPacket}", this.emailSnippets.mosclPacket)
-                    .replace("{mosclCovid}", this.mosclCovid[1])
-                    .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
-                    .replace("{rxPrep}", this.emailSnippets.rxPrep)
-                    .replace("{prep}", this.prep)
-                    .replace("{prime}", this.emailSnippets.primeOON)
-                    .replace("{quote}", this.facilities[1].quote)
-                    // .replace("{primeRide}", this.emailSnippets.primeRide)
-                    .replace("{fu}", this.emailSnippets.fu)
-                    .replace("{fuApptDate}", this.fuApptDate)
-                    .replace("{fuApptTime}", this.fuApptTime)
-                    .replace("{staffName}", this.staffName)
-            );
+            return join
+                .replace("{greeting}", this.greeting)
+                .replace("{joinProcs}", this.joinProcs)
+                .replace("{procApptDate}", this.procApptDate)
+                .replace("{procApptTime}", this.procApptTime)
+                .replace("{selectedFacility.long}", this.selectedFacility.long)
+                .replace(
+                    "{selectedFacility.address}",
+                    this.selectedFacility.address,
+                )
+                .replace("{procApptArrival}", this.procApptArrival)
+                .replace("{mosclPacket}", this.emailSnippets.mosclPacket)
+                .replace("{mosclCovid}", this.mosclCovid[1])
+                .replace("{ez2goKit}", this.emailSnippets.ez2goKit)
+                .replace("{rxPrep}", this.emailSnippets.rxPrep)
+                .replace("{prep}", this.prep)
+                .replace(
+                    "{prime}",
+                    this.facilities[1].INN
+                        ? this.emailSnippets.primeINN
+                        : this.emailSnippets.primeOON,
+                )
+                .replace("{quote}", this.facilities[1].quote)
+                .replace("{fu}", this.emailSnippets.fu)
+                .replace("{fuApptDate}", this.fuApptDate)
+                .replace("{fuApptTime}", this.fuApptTime)
+                .replace("{staffName}", this.staffName);
         },
 
         emailBodyHtml() {
@@ -977,43 +923,27 @@ window.procs = function () {
         },
 
         get procTS() {
-            let DOS = ", DOS " + this.procApptDateNumShort;
-
-            if (this.procs[1].selected) {
-                return (
-                    this.selectedProcs.map((proc) => proc.short).join("/") +
-                    " " +
-                    this.prep.toLowerCase() +
-                    " " +
-                    this.selectedSedation.substring(0, 3) +
-                    " " +
-                    this.selectedFacility.short +
-                    DOS +
-                    " " +
-                    this.procApptTime +
-                    ". "
-                );
-            } else {
-                return (
-                    this.selectedProcs.map((proc) => proc.short).join("/") +
-                    " " +
-                    this.selectedSedation.substring(0, 3) +
-                    " " +
-                    this.selectedFacility.short +
-                    DOS +
-                    " " +
-                    this.procApptTime +
-                    ". "
-                );
-            }
+            return (
+                this.selectedProcs.map((proc) => proc.short).join("/") +
+                " " +
+                (this.procs[1].selected ? this.prep.toLowerCase() + " " : "") +
+                (this.selectedSedation === "no sedation"
+                    ? this.selectedSedation.substring(0, 6)
+                    : this.selectedSedation.substring(0, 3)) +
+                " " +
+                this.selectedFacility.short +
+                ", DOS " +
+                this.procApptDateNumShort +
+                " " +
+                this.procApptTime +
+                ". "
+            );
         },
 
         get fuTS() {
-            if (!this.fuTBD) {
-                return "f/u sched for " + this.fuApptDateNumShort + ". ";
-            } else {
-                return "f/u TBD. ";
-            }
+            return !this.fuTBD
+                ? "f/u sched for " + this.fuApptDateNumShort + ". "
+                : "f/u TBD. ";
         },
 
         get actionTS() {
@@ -1039,13 +969,13 @@ window.procs = function () {
 
             let addInst = this.instructions.map((inst) => inst.body).join(" ");
 
-            if (this.instructions.length && !this.noInst) {
-                return (
-                    this.procTS + this.fuTS + this.actionTS + rx + " " + addInst
-                );
-            } else {
-                return this.procTS + this.fuTS + this.actionTS + rx;
-            }
+            return (
+                this.procTS +
+                this.fuTS +
+                this.actionTS +
+                rx +
+                (this.instructions.length && !this.noInst ? " " + addInst : "")
+            );
         },
 
         copyTimestamp() {
@@ -1063,53 +993,30 @@ window.procs = function () {
 
             let addInst = this.instructions.map((inst) => inst.body).join(" ");
 
-            if (this.procs[1].selected) {
-                return (
-                    "l/m. " +
-                    this.selectedProcs.map((proc) => proc.short).join("/") +
-                    " " +
-                    this.prep.toLowerCase() +
-                    " " +
-                    (this.sedationTBD
-                        ? "(MAC or twi)"
-                        : this.selectedSedation.substring(0, 3)) +
-                    " " +
-                    (this.facilityTBD
-                        ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
-                        : this.selectedFacility.short) +
-                    (this.facilityIndex === "1" && !this.facilityTBD
-                        ? "-$" + this.facilities[1].quote
-                        : "") +
-                    ". " +
-                    (this.fuTBD ? "f/u TBD." : "Needs f/u.") +
-                    " " +
-                    rx +
-                    " " +
-                    addInst
-                );
-            } else {
-                return (
-                    "l/m. " +
-                    this.selectedProcs.map((proc) => proc.short).join("/") +
-                    " " +
-                    (this.sedationTBD
-                        ? "(MAC or twi)"
-                        : this.selectedSedation.substring(0, 3)) +
-                    " " +
-                    (this.facilityTBD
-                        ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
-                        : this.selectedFacility.short) +
-                    (this.facilityIndex === "1" && !this.facilityTBD
-                        ? "-$" + this.facilities[1].quote
-                        : "") +
-                    ". " +
-                    (this.fuTBD ? "f/u TBD." : "Needs f/u.") +
-                    " " +
-                    rx +
-                    " " +
-                    addInst
-                );
-            }
+            return (
+                "l/m. " +
+                this.selectedProcs.map((proc) => proc.short).join("/") +
+                " " +
+                (this.procs[1].selected ? this.prep.toLowerCase() + " " : "") +
+                (this.sedationTBD
+                    ? "(MAC or twi)"
+                    : this.selectedSedation === "no sedation"
+                      ? this.selectedSedation.substring(0, 6)
+                      : this.selectedSedation.substring(0, 3)) +
+                " " +
+                (this.facilityTBD
+                    ? "(MOSCL or PRIME-$" + this.facilities[1].quote + ")"
+                    : this.selectedFacility.short) +
+                (this.facilityIndex === "1" && !this.facilityTBD
+                    ? "-$" + this.facilities[1].quote
+                    : "") +
+                ". " +
+                (this.fuTBD ? "f/u TBD." : "Needs f/u.") +
+                " " +
+                rx +
+                " " +
+                addInst
+            );
         },
 
         copyLmTS() {
@@ -1121,11 +1028,9 @@ window.procs = function () {
                 .setZone("America/Los_Angeles")
                 .toLocaleString({ month: "numeric", day: "numeric" });
 
-            if (this.procs[1].selected) {
-                return date + " appt made, " + this.prep.toLowerCase() + " ";
-            } else {
-                return date + " appt made ";
-            }
+            return this.procs[1].selected
+                ? date + " appt made, " + this.prep.toLowerCase() + " "
+                : date + " appt made ";
         },
 
         copyApptNotes() {

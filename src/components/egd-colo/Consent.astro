@@ -22,12 +22,15 @@ import Logo from '../../images/logo.png';
 
 <div class="text-sm leading-none">
     <h1 class="mb-2 text-center font-bold uppercase leading-normal">
-        <span x-text="procs[1].selected ? 'Colonoscopy' : ''"></span><span
-            x-text="selectedProcs.length === 2 ? ' / ' : ''"></span><span
+        <span
             x-text="procs[0].selected ? 'EGD (Esophagogastroduodenoscopy)' : ''"
+        ></span><span x-text="selectedProcs.length === 2 ? ' / ' : ''"
+        ></span><span x-text="procs[1].selected ? 'Colonoscopy' : ''"
+        ></span><span x-text="procs[2].selected ? 'Flexible Sigmoidoscopy' : ''"
         ></span><br />
          Information and Consent Form
     </h1>
+    <!-- TODO integrate flex sig into this paragraph -->
     <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         Direct visualization of the <span
             x-text="procs[0].selected ? 'upper' : ''"></span><span
@@ -42,37 +45,57 @@ import Logo from '../../images/logo.png';
         review the possible risks of the procedure.
     </p>
     <p
-        x-show="procs[1].selected"
-        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
-        For the <span class="font-bold underline">Colonoscopy</span>, you will
-        be sedated using intravenous medication. A flexible, lighted tube called
-        a colonoscope will be inserted into the rectum, and the inside lining of
-        your colon will be carefully inspected. A small piece of tissue (a
-        “biopsy”) may be removed for examination under the microscope. Growths
-        (“polyps”) that may develop in the intestinal tract will be removed
-        using biopsy or electrocautery. Electrocautery may also be used to
-        coagulate any bleeding lesions. If there is a narrowed area in the G.I.
-        tract, it may need to be dilated. Colonoscopy is considered the best
-        method for detecting abnormalities of the colon. No test is 100%
-        accurate, and, rarely, polyps, cancers, or other abnormalities of the
-        colon can be missed by colonoscopy.
-    </p>
-    <p
         x-show="procs[0].selected"
         x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
-        For the <span class="font-bold underline">EGD</span>, you will be
-        sedated using intravenous medication. A thin, flexible viewing
-        instrument called an endoscope will be inserted into the mouth and
-        gently advanced down the throat to carefully inspect the inside lining
-        of your esophagus, stomach, and duodenum. A small piece of tissue (a
-        “biopsy”) may be removed for examination under the microscope. Growths
-        ("polyps") that may develop in the intestinal tract will be removed
-        using biopsy or electrocautery. Electrocautery may also be used to
-        coagulate any bleeding lesions. If there is a narrowed area in the G.I.
-        tract, it may need to be dilated. EGD is considered the best method for
-        detecting abnormalities of the upper gastrointestinal tract. No test is
-        100% accurate, and, rarely, polyps, cancers, or other abnormalities of
-        the upper GI tract can be missed by EGD.
+        For the <span class="font-bold underline">EGD</span>, you will <span
+            x-text="selectedSedation === 'no sedation' ? 'not be sedated' : 'be sedated using intravenous medication' "
+        ></span>. A thin, flexible viewing instrument called an endoscope will
+        be inserted into the mouth and gently advanced down the throat to
+        carefully inspect the inside lining of your esophagus, stomach, and
+        duodenum. A small piece of tissue (a “biopsy”) may be removed for
+        examination under the microscope. Growths ("polyps") that may develop in
+        the intestinal tract will be removed using biopsy or electrocautery.
+        Electrocautery may also be used to coagulate any bleeding lesions. If
+        there is a narrowed area in the G.I. tract, it may need to be dilated.
+        EGD is considered the best method for detecting abnormalities of the
+        upper gastrointestinal tract. No test is 100% accurate, and, rarely,
+        polyps, cancers, or other abnormalities of the upper GI tract can be
+        missed by EGD.
+    </p>
+    <p
+        x-show="procs[1].selected"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
+        For the <span class="font-bold capitalize underline">colonoscopy</span>,
+        you will <span
+            x-text="selectedSedation === 'no sedation' ? 'not be sedated' : 'be sedated using intravenous medication' "
+        ></span>. A flexible, lighted tube called a colonoscope will be inserted
+        into the rectum, and the inside lining of your colon will be carefully
+        inspected. A small piece of tissue (a “biopsy”) may be removed for
+        examination under the microscope. Growths (“polyps”) that may develop in
+        the intestinal tract will be removed using biopsy or electrocautery.
+        Electrocautery may also be used to coagulate any bleeding lesions. If
+        there is a narrowed area in the G.I. tract, it may need to be dilated.
+        Colonoscopy is considered the best method for detecting abnormalities of
+        the colon. No test is 100% accurate, and, rarely, polyps, cancers, or
+        other abnormalities of the colon can be missed by colonoscopy.
+    </p>
+    <p
+        x-show="procs[2].selected"
+        x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
+        For the <span class="font-bold capitalize underline"
+            >flexible sigmoidoscopy</span
+        >, you will <span
+            x-text="selectedSedation === 'no sedation' ? 'not be sedated' : 'be sedated using intravenous medication' "
+        ></span>. A flexible, lighted tube called a sigmoidoscope will be
+        inserted into the anus and gently advanced into the rectum and lower
+        part of the colon to carefully inspect the inside lining. A small piece
+        of tissue (a “biopsy”) may be removed for examination under the
+        microscope. Growths (“polyps”) are typically not removed during flexible
+        sigmoidoscopy, and if found, your doctor may recommend a colonoscopy for
+        complete evaluation. Flexible sigmoidoscopy is considered an effective
+        method for detecting abnormalities of the lower colon. No test is 100%
+        accurate, and, rarely, polyps, cancers, or other abnormalities of the
+        lower colon can be missed by flexible sigmoidoscopy.
     </p>
     <p x-bind:class=" selectedProcs.length === 2 ? 'mb-1' : 'mb-1.5' ">
         Minor side-effects of all the above procedures include bruising or

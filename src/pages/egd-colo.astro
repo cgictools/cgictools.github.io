@@ -107,7 +107,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                              twilight
                                         </label>
                                     </li>
-                                    <li class="select-none">
+                                    <li class="select-none pb-1">
                                         <label
                                             for="MAC"
                                             x-on:click="$nextTick(() => { warnPreSed() })"
@@ -122,6 +122,23 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 class="-ml-1 mr-0.5"
                                             />
                                              MAC
+                                        </label>
+                                    </li>
+                                    <li class="select-none">
+                                        <label
+                                            for="none"
+                                            x-on:click="$nextTick(() => { warnPreSed() })"
+                                            class="p-1 pr-1.5">
+                                            <input
+                                                type="radio"
+                                                id="none"
+                                                name="sedation"
+                                                value="no sedation"
+                                                x-on:click="$nextTick(() => { warnPreSed() })"
+                                                x-model="sedation"
+                                                class="-ml-1 mr-0.5"
+                                            />
+                                             no sedation
                                         </label>
                                     </li>
                                 </ul>
@@ -225,7 +242,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                         x-on:change="$nextTick(() => { warnPreFacility() })"
                                         x-bind:disabled="facilityTBD"
                                         x-show="!facilityTBD"
-                                        class="rounded bg-zinc-200 px-2 py-1 hover:bg-zinc-300">
+                                        class="rounded bg-zinc-200 px-2 py-1.5 hover:bg-zinc-300">
                                         <option value="" disabled
                                             >Select a facility</option
                                         >
@@ -259,7 +276,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-on:keyup.enter="$refs.PrimeQuote.blur()"
                                             x-on:keyup.escape="facilities[1].quote = '' ; $nextTick(() => { $refs.PrimeQuote.blur() }); $nextTick(() => { warnPreQuote() })"
                                             x-model="facilities[1].quote"
-                                            class="w-28 rounded border border-zinc-400 px-2 pb-[1px] pt-0.5"
+                                            class="font w-28 rounded border border-zinc-400 px-2 pb-[1px] pt-0.5"
                                         />
                                         <label
                                             for="primeINN"
@@ -803,7 +820,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <DocumentSVG />
                         </div>
                         <table class="ml-2">
-                            <tr x-show="selectedProcs.length" x-cloak>
+                            <tr
+                                x-show="selectedProcs.length && !(procs[1].selected && procs[2].selected)"
+                                x-cloak>
                                 <td
                                     class="whitespace-nowrap pb-2 pr-6 align-text-top">
                                     <h3
@@ -980,7 +999,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                         </div>
                         <!-- grid -->
                         <div
-                            x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg) && (procs[0].selected || (prep === 'ez2go' || (prepSent === 'yes' || rxFinal !== '')))"
+                            x-show="checkPre() === 0 && (checkDuring() === 0 || leftMsg) && (!procs[1].selected || (prep === 'ez2go' || (prepSent === 'yes' || rxFinal !== '')))"
                             x-cloak
                             class="grid grid-cols-1 gap-y-8">
                             <!-- replace above x-show -->

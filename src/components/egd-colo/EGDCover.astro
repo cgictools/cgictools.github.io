@@ -15,25 +15,25 @@ import CxPolicy from './snippets/CxPolicy.astro';
     Patient Instructions for EGD
 </h1>
 <ApptDetails />
-<h2 class="mb-2 font-bold uppercase">
-    Preparation for the Upper Endoscopy (EGD)
-</h2>
 <div class="mb-2">
-    <div class="mb-1">
-        <OTCMeds />
-    </div>
-    <div>
-        <RxMeds />
-    </div>
-    <div x-show="instructions.length" class="mt-1">
-        <AddInst />
-    </div>
+    <OTCMeds />
 </div>
 <div class="mb-2">
+    <RxMeds />
+</div>
+<div x-show="instructions.length" class="mb-2">
+    <AddInst />
+</div>
+<div class="mb-2">
+    <p class="mb-1 font-bold uppercase">
+        The day of the examination (<span
+            x-text="printModal ? '________________' : daysBeforeProc(0)"
+        ></span>):
+    </p>
     <p class="mb-1">
-        <span class="font-bold uppercase">The day of the examination:</span>
-         Nothing to eat or drink after 12:00 A.M., midnight, until after your
-        procedure. <span x-show="isAfternoonProc"
+        Nothing to eat <span x-text=" isAfternoonProc ? '' : 'or drink ' "
+        ></span>after 12:00 A.M., midnight, until after your procedure. <span
+            x-show="isAfternoonProc"
             >Because your appointment is in the afternoon, you can have clear
             liquids up to 5 hours before the appointment time (up to <span
                 x-text="hoursBeforeProc(5)"></span>).</span
@@ -45,10 +45,10 @@ import CxPolicy from './snippets/CxPolicy.astro';
         lab is 2-3 hours.
     </p>
 </div>
-<div class="mb-2">
+<div class="mb-2" x-show="selectedSedation !== 'no sedation'">
     <Transpo />
 </div>
-<p class="mb-4">
+<p class="mb-6">
     If you have any questions regarding the above information, please call our
     office. If you are unable to keep this appointment, please notify our office
     at (562) 596-5552 as soon as possible.

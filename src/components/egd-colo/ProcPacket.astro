@@ -2,6 +2,7 @@
 import Logo from '../../images/logo.png';
 import Consent from './Consent.astro';
 import EGDCover from './EGDCover.astro';
+import FlexSigCover from './FlexSigCover.astro';
 import ColoCover from './ColoCover.astro';
 import ModDiet from './ModDiet.astro';
 import PrepInst from './PrepInst.astro';
@@ -31,9 +32,16 @@ import PrepInst from './PrepInst.astro';
 
 <div
     id="EGDCover"
-    x-show="procs[0].selected && !procs[1].selected && printCover"
+    x-show="procs[0].selected && (!procs[1].selected || !procs[2].selected) && printCover"
     class="flex h-screen flex-col justify-center">
     <EGDCover />
+</div>
+
+<div
+    id="flexSigCover"
+    x-show="!procs[1].selected && procs[2].selected && printCover"
+    class="flex h-screen flex-col justify-center">
+    <FlexSigCover />
 </div>
 
 <div

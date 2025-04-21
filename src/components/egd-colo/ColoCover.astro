@@ -10,7 +10,8 @@ import CxPolicy from './snippets/CxPolicy.astro';
 <h1
     class="text-center font-bold uppercase leading-relaxed"
     x-bind:class="printModal ? 'mb-2' : 'mb-8'">
-    Patient Instructions for Colonoscopy
+    Patient Instructions for <span x-text="procs[0].selected ? 'EGD/' : '' "
+    ></span>Colonoscopy
 </h1>
 <ApptDetails />
 <h2 class="mb-2 font-bold uppercase">What is a colonoscopy?</h2>
