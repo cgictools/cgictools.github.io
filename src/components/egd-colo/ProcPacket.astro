@@ -32,7 +32,7 @@ import PrepInst from './PrepInst.astro';
 
 <div
     id="EGDCover"
-    x-show="procs[0].selected && (!procs[1].selected || !procs[2].selected) && printCover"
+    x-show="procs[0].selected && !procs[1].selected && !procs[2].selected && printCover"
     class="flex h-screen flex-col justify-center">
     <EGDCover />
 </div>
@@ -46,7 +46,7 @@ import PrepInst from './PrepInst.astro';
 
 <div
     id="coloCover"
-    x-show="procs[1].selected && printCover"
+    x-show="procs[1].selected && !procs[2].selected && printCover"
     class="flex h-screen flex-col justify-center"
     x-bind:class="((printPrep && prep) || (printDiet && procs[1].selected)) ? 'break-after-page' : ''">
     <ColoCover />
