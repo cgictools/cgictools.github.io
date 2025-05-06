@@ -518,7 +518,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <span
                                 x-show="checkPre() === 0 && !leftMsg"
                                 x-cloak
-                                x-on:mouseover="$dispatch('hovercall')"
+                                x-on:mouseover="warnAllDuringFields()"
                                 x-text="checkDuring()"
                                 x-bind:class="checkDuring() === 0 ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'"
                                 class="rounded-full px-4 py-1 text-sm"></span>
@@ -568,7 +568,6 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <div x-show="facilityTBD" x-cloak>
                                 <h3
                                     x-ref="callFacility"
-                                    x-on:hovercall.window="warnCallFacility()"
                                     class="pb-2 font-medium">
                                     Facility
                                 </h3>
@@ -588,10 +587,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 </select>
                             </div>
                             <div x-show="sedationTBD" x-cloak>
-                                <h3
-                                    x-ref="callSed"
-                                    x-on:hovercall.window="warnCallSed()"
-                                    class="pb-2 font-medium">
+                                <h3 x-ref="callSed" class="pb-2 font-medium">
                                     Sedation
                                 </h3>
                                 <ul>
@@ -633,10 +629,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                         </div>
                         <div>
-                            <h3
-                                x-ref="callProcAppt"
-                                x-on:hovercall.window="warnCallProcAppt()"
-                                class="pb-2 font-medium">
+                            <h3 x-ref="callProcAppt" class="pb-2 font-medium">
                                 Procedure
                             </h3>
                             <div class="grid grid-cols-2">
@@ -702,10 +695,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <p x-text="mosclCovid[0]"></p>
                         </div>
                         <div x-show="!fuTBD">
-                            <h3
-                                x-ref="callFuAppt"
-                                x-on:hovercall.window="warnCallFuAppt()"
-                                class="pb-2 font-medium">
+                            <h3 x-ref="callFuAppt" class="pb-2 font-medium">
                                 Follow-up
                             </h3>
                             <div class="grid grid-cols-2">
@@ -749,10 +739,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             </div>
                         </div>
                         <div>
-                            <h3
-                                x-ref="callSendInst"
-                                x-on:hovercall.window="warnCallSendInst"
-                                class="pb-2 font-medium">
+                            <h3 x-ref="callSendInst" class="pb-2 font-medium">
                                 Send Instructions
                             </h3>
                             <ul class="flex flex-row gap-8">

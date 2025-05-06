@@ -674,6 +674,13 @@ window.procs = function () {
             return Object.values(warnings).filter(Boolean).length;
         },
 
+        warnAllDuringFields() {
+            const warnings = this.getDuringWarnings();
+            Object.entries(warnings).forEach(([ref, condition]) =>
+                this.setWarningColor(ref, condition),
+            );
+        },
+
         // warnings for each subsection in call section, for highlighting h3's in red
         warnCallFacility() {
             this.setWarningColor(
@@ -1126,6 +1133,9 @@ window.procs = function () {
 
                 this.importCode = "";
                 this.formLoaded = true;
+
+                this.warnAllPreFields();
+                this.warnAllDuringFields();
             } catch (e) {
                 console.warn("Failed to load form code:", e);
             }
