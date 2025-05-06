@@ -18,7 +18,8 @@ import Transpo from './snippets/Transpo.astro';
         Preparation for the <span x-text="procs[0].selected ? 'EGD/' : '' "
         ></span>Colonoscopy<br />
         <span x-text="prep"></span><br />
-         (<span x-text="prepGeneric" class="normal-case"></span>)
+        (<span x-text="procs[1].selected ? prepGeneric : ''" class="normal-case"
+        ></span>)
     </h1>
     <h2 class="font-bold">
         Please read these instructions thoroughly at least one week prior to
@@ -30,24 +31,24 @@ import Transpo from './snippets/Transpo.astro';
     x-show=" prep === 'ez2go' "
     class="border-b"
     x-bind:class=" instructions.length ? 'mb-1 pb-1' : 'mb-1.5 pb-1.5' ">
-    <span class="font-bold uppercase">Purchase</span> ez2go laxatives
-    (ingredients available over the counter, or kit available at our office).
-    You will need: <span class="underline">PEG 3350 ("Miralax")</span> (238 g
-    bottle), <span class="underline">Bisacodyl</span> tablets (4 each of 5 mg
-    tablets), and <span class="underline">magnesium citrate</span> (1 packet or
-    10 oz bottle). Also purchase two 28-32 oz bottles of
-    <span class="underline">electrolyte solution</span> (such as Gatorade, or
-    low sugar G2 if you are diabetic).
+    <span class="font-bold uppercase">Purchase</span> ez2go laxatives (ingredients
+    available over the counter, or kit available at our office). You will need: <span
+        class="underline">PEG 3350 ("Miralax")</span
+    > (238 g bottle), <span class="underline">Bisacodyl</span> tablets (4 each of
+    5 mg tablets), and <span class="underline">magnesium citrate</span> (1 packet
+    or 10 oz bottle). Also purchase two 28-32 oz bottles of
+    <span class="underline">electrolyte solution</span> (such as Gatorade, or low
+    sugar G2 if you are diabetic).
     <span class="font-bold">No red, orange, or purple drinks!</span>
 </p>
 <!-- Golytely cannot be replaced with ez2go -->
 <p
     x-show=" prep !== 'Golytely' && prep !== 'ez2go' "
     class="mb-1 border-b pb-1">
-    Let us know if the <span x-text="prep"></span> is too expensive, or if you
-    are unable to get it for any other reason. We have an alternate
-    over-the-counter prep available in our office for $25 and a different set of
-    instructions to go along with it.
+    Let us know if the <span x-text="prep"></span> is too expensive, or if you are
+    unable to get it for any other reason. We have an alternate over-the-counter
+    prep available in our office for $25 and a different set of instructions to go
+    along with it.
 </p>
 <div class="mb-1">
     <OTCMeds />
@@ -82,12 +83,12 @@ import Transpo from './snippets/Transpo.astro';
         <li>
             <span class="font-bold uppercase underline">Clear liquids only</span
             >
-             until after your procedure.
+            until after your procedure.
         </li>
         <!-- TODO: combine above 2 points? -->
         <li>
             <span class="font-bold uppercase underline">No red</span>
-             colored drinks. <span class="italic"
+            colored drinks. <span class="italic"
                 >No orange juice, milk or dairy products, or alcohol.</span
             >
         </li>
@@ -96,8 +97,8 @@ import Transpo from './snippets/Transpo.astro';
         <span class="underline">Acceptable clear liquids include</span>: Jell-O
         (not red), clear chicken broth or bouillon, apple juice, white grape
         juice, Gatorade, and clear sodas such as 7-up, Sprite, and ginger-ale.
-        Tea and <span class="underline">black</span> coffee with sweetener or
-        sugar are allowed but limit caffeinated beverages to two (2) servings. <span
+        Tea and <span class="underline">black</span> coffee with sweetener or sugar
+        are allowed but limit caffeinated beverages to two (2) servings. <span
             class="font-bold underline"
             >The more liquid you drink, the better the prep</span
         >, and the better you will feel. You are not "fasting".
@@ -126,37 +127,36 @@ import Transpo from './snippets/Transpo.astro';
         <span class="font-bold"
             ><span class="uppercase">Suprep 1st dose</span>, starting <span
                 x-text="prepTime(1)"></span> the day before your procedure:</span
-        > Pour one 6-ounce bottle of Suprep liquid into the mixing container.
-        Add cool drinking water or berry flavored Propel water to the 16-ounce
-        line on the container and mix. Drink all the liquid in the container.
-        Over the next hour, drink 2 more 16-ounce containers of water.
+        > Pour one 6-ounce bottle of Suprep liquid into the mixing container. Add
+        cool drinking water or berry flavored Propel water to the 16-ounce line on
+        the container and mix. Drink all the liquid in the container. Over the next
+        hour, drink 2 more 16-ounce containers of water.
     </p>
     <p x-show=" prep === 'Clenpiq' ">
         <span class="font-bold"
             ><span class="uppercase">Clenpiq 1st dose</span>, starting <span
                 x-text="prepTime(1)"></span> the day before your procedure:</span
         >
-         Drink 1 bottle of Clenpiq right from the bottle. <span
+        Drink 1 bottle of Clenpiq right from the bottle. <span
             class="font-bold underline"
             >Do not mix or dilute with other liquids</span
-        >. Follow with <span class="underline">five</span> 8-ounce drinks of
-        clear liquid at your own pace within the next 5 hours. You may use the
-        drinking cup provided. If you have severe discomfort or bloating, stop
-        drinking for a while or wait longer between drinking each glass until
-        the discomfort goes away.
+        >. Follow with <span class="underline">five</span> 8-ounce drinks of clear
+        liquid at your own pace within the next 5 hours. You may use the drinking
+        cup provided. If you have severe discomfort or bloating, stop drinking for
+        a while or wait longer between drinking each glass until the discomfort goes
+        away.
     </p>
     <p x-show=" prep === 'Sutab' ">
         <span class="font-bold"
             ><span class="uppercase">Sutab 1st dose</span>, starting <span
                 x-text="prepTime(1)"></span> the day before your procedure:</span
-        > Open 1 bottle of 12 tablets. Fill the provided container with
-        16-ounces of water (to the fill line). Swallow each tablet with a sip of
-        water and drink the entire amount over 15 to 20 minutes. Approximately 1
-        hour after the last tablet is swallowed, fill the provided container a
-        second time with 16-ounces of water (to the fill line) and drink the
-        entire amount over 30 minutes. Approximately 30 minutes after finishing
-        the second container of water, drink another 16-ounces of water over 30
-        minutes.
+        > Open 1 bottle of 12 tablets. Fill the provided container with 16-ounces
+        of water (to the fill line). Swallow each tablet with a sip of water and
+        drink the entire amount over 15 to 20 minutes. Approximately 1 hour after
+        the last tablet is swallowed, fill the provided container a second time with
+        16-ounces of water (to the fill line) and drink the entire amount over 30
+        minutes. Approximately 30 minutes after finishing the second container of
+        water, drink another 16-ounces of water over 30 minutes.
     </p>
     <div x-show=" prep === 'Golytely' ">
         <p class="mb-0.5">
@@ -172,16 +172,15 @@ import Transpo from './snippets/Transpo.astro';
                 ><span class="uppercase">1st dose</span>, starting <span
                     x-text="prepTime(1)"></span> the day before your procedure:</span
             > Begin drinking the solution. Drink an 8-ounce glass every 10 to 15
-            minutes until you have finished 2/3 of the container. Drink each
-            glass quickly or use a straw to bypass the taste buds. Bowel
-            movements should begin approximately one hour after the first glass
-            of the solution. They will continue for several hours after you
-            finish drinking the last glass. Feelings of bloating, abdominal
-            fullness, and nausea are common after the first glasses of the
-            solution. This is temporary and should subside once bowel movements
-            begin. If you have severe discomfort or bloating, stop drinking the
-            solution for a while or wait longer between drinking each glass
-            until the discomfort goes away.
+            minutes until you have finished 2/3 of the container. Drink each glass
+            quickly or use a straw to bypass the taste buds. Bowel movements should
+            begin approximately one hour after the first glass of the solution. They
+            will continue for several hours after you finish drinking the last glass.
+            Feelings of bloating, abdominal fullness, and nausea are common after
+            the first glasses of the solution. This is temporary and should subside
+            once bowel movements begin. If you have severe discomfort or bloating,
+            stop drinking the solution for a while or wait longer between drinking
+            each glass until the discomfort goes away.
         </p>
     </div>
 </div>
@@ -191,7 +190,7 @@ import Transpo from './snippets/Transpo.astro';
     x-bind:class=" instructions.length ? 'mt-0.5' : 'mt-1' ">
     <p>
         <span x-text="prep + ' 2nd dose:'" class="font-bold uppercase"></span>
-         Repeat the steps of the 1st dose as above.
+        Repeat the steps of the 1st dose as above.
     </p>
     <div x-show="!isSecondPrepTimeConstant()">
         <p>

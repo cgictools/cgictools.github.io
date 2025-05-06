@@ -24,6 +24,21 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
             x-bind:class=" printModal ? 'h-screen overflow-hidden' : '' ">
             <PageHeading text="EGD/colo scheduling" />
             <PrintModal />
+            <div class="-mt-2 pb-6">
+                <input
+                    type="text"
+                    placeholder="Paste export code"
+                    class="w-80 rounded border border-zinc-300 px-2 py-1 font-mono text-sm"
+                    x-model="importCode"
+                    x-on:input="importFormData(importCode)"
+                />
+                <span
+                    x-show="formLoaded"
+                    x-transition
+                    class="pl-4 text-sm text-green-700">
+                    ✓ Form loaded!
+                </span>
+            </div>
             <div class="grid grid-cols-2 divide-x">
                 <section class="col-span-1">
                     <div
@@ -85,7 +100,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedationTBD"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             pt to choose
+                                            pt to choose
                                         </label>
                                     </div>
                                 </div>
@@ -104,7 +119,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedation"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             twilight
+                                            twilight
                                         </label>
                                     </li>
                                     <li class="select-none pb-1">
@@ -121,7 +136,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedation"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             MAC
+                                            MAC
                                         </label>
                                     </li>
                                     <li class="select-none">
@@ -138,7 +153,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedation"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             no sedation
+                                            no sedation
                                         </label>
                                     </li>
                                 </ul>
@@ -189,7 +204,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="prepSent"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             yes
+                                            yes
                                         </label>
                                     </li>
                                     <li class="select-none pb-1">
@@ -205,7 +220,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="prepSent"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             no
+                                            no
                                         </label>
                                     </li>
                                 </ul>
@@ -233,7 +248,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                     x-model="facilityTBD"
                                                     class="-ml-1 mr-0.5"
                                                 />
-                                                 MOSCL vs PRIME
+                                                MOSCL vs PRIME
                                             </label>
                                         </div>
                                     </div>
@@ -289,7 +304,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="facilities[1].INN"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             In-Network
+                                            In-Network
                                         </label>
                                     </span>
                                 </div>
@@ -312,7 +327,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="noInst"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         none
+                                        none
                                     </label>
                                 </div>
                             </div>
@@ -412,7 +427,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="schedFu"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             yes
+                                            yes
                                         </label>
                                     </li>
                                     <li class="select-none">
@@ -428,7 +443,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="schedFu"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             no, TBD</label
+                                            no, TBD</label
                                         >
                                     </li>
                                 </ul>
@@ -453,7 +468,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             Dr. H
+                                            Dr. H
                                         </label>
                                     </li>
                                     <li class="select-none">
@@ -469,7 +484,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             Dr. T
+                                            Dr. T
                                         </label>
                                     </li>
                                     <li class="select-none">
@@ -485,7 +500,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="physicianMain"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             Dr. M
+                                            Dr. M
                                         </label>
                                     </li>
                                 </ul>
@@ -524,7 +539,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                 x-model="leftMsg"
                                 class="-ml-1 mr-0.5"
                             />
-                             No answer, left message
+                            No answer, left message
                         </label>
                     </div>
                     <section
@@ -540,7 +555,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <p>
                                 Prime's quoted amount is $<span
                                     x-text="facilities[1].quote"></span>
-                                 (facility
+                                (facility
                                 <span
                                     x-text=" sedation === 'MAC' || sedationTBD ? ' + anesthesia fees' : 'fee' "
                                 ></span>).
@@ -594,7 +609,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedationFinal"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             twilight
+                                            twilight
                                         </label>
                                     </li>
                                     <li class="select-none">
@@ -611,7 +626,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-model="sedationFinal"
                                                 class="-ml-1 mr-0.5"
                                             />
-                                             MAC
+                                            MAC
                                         </label>
                                     </li>
                                 </ul>
@@ -636,9 +651,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 <span
                                                     x-text="selectedFacility.minOffset"
                                                 ></span>
-                                                 minutes
+                                                minutes
                                             </span>
-                                             prior to the procedure.
+                                            prior to the procedure.
                                         </p>
                                     </template>
                                     <input
@@ -755,7 +770,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="sendInstMethod"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         email
+                                        email
                                     </label>
                                 </li>
                                 <li class="select-none">
@@ -772,7 +787,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="sendInstMethod"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         portal
+                                        portal
                                     </label>
                                 </li>
                                 <li class="select-none">
@@ -789,7 +804,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="sendInstMethod"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         pickup
+                                        pickup
                                     </label>
                                 </li>
                                 <li class="select-none">
@@ -806,7 +821,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="sendInstMethod"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         mail
+                                        mail
                                     </label>
                                 </li>
                             </ul>
@@ -879,7 +894,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 Quote: $<span
                                                     x-text="facilities[1].quote"
                                                 ></span>
-                                                 (facility <span
+                                                (facility <span
                                                     x-text=" sedation === 'MAC' ? '+ anesthesia fees)' : 'fee)' "
                                                 ></span>
                                             </li>
@@ -924,8 +939,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                     <template x-if="fuApptInput">
                                         <p>
                                             <span x-text="fuApptDate"></span>
-                                             at <span x-text="fuApptTime"
-                                            ></span>
+                                            at <span x-text="fuApptTime"></span>
                                         </p>
                                     </template>
                                     <template x-if="fuTBD">
@@ -962,7 +976,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                             <ShareSVG />
                         </div>
                         <div
-                            x-show="checkPre() === 0 && prepSent === 'no' && (checkDuring() === 0 || leftMsg)"
+                            x-show="checkPre() === 0 && procs[1].selected && prep !== 'ez2go' && prepSent === 'no' && (checkDuring() === 0 || leftMsg)"
                             x-cloak
                             class="mb-8">
                             <h3 class="pb-2 font-medium">
@@ -978,7 +992,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="rxFinal"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         Sent Rx
+                                        Sent Rx
                                     </label>
                                 </li>
                                 <li class="select-none pb-1">
@@ -992,7 +1006,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                             x-model="rxFinal"
                                             class="-ml-1 mr-0.5"
                                         />
-                                         Will send message/forward tele
+                                        Will send message/forward tele
                                     </label>
                                 </li>
                             </ul>
@@ -1131,7 +1145,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                                                 x-show="!leftMsg"
                                                 x-text="timestamp()"
                                                 x-on:click="copyTimestamp()"
-                                                class="cursor-pointer text-zinc-700 hover:text-black">
+                                                class="cursor-pointer break-all text-zinc-700 hover:text-black">
                                             </p>
                                             <p
                                                 x-show="leftMsg"

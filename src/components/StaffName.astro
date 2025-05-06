@@ -5,8 +5,8 @@
         placeholder="Type your name"
         x-ref="nametag"
         x-on:keyup.enter="$refs.nametag.blur()"
-        x-bind:class="staffName === 'mt-0.5' ? 'rounded border border-zinc-400' : ''"
+        x-bind:class="staffName === '' ? 'rounded border border-zinc-300' : ''"
         x-model="staffName"
-        class="w-32 px-1 py-0.5"
+        class="w-48 px-2 py-0.5"
     />
 </div>

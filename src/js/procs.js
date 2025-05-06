@@ -222,7 +222,7 @@ window.procs = function () {
 
         // colon preps
         prep: "",
-        prepSent: "",
+        prepSent: "", // "yes" or "no"
 
         get prepGeneric() {
             return this.preps.find((prep) => prep.name === this.prep).generic;
@@ -778,11 +778,14 @@ window.procs = function () {
             this.printCover = true;
             this.printPrep = true;
             this.printDiet = true;
+
+            this.importCode = "";
+            this.formLoaded = false;
         },
 
         // output
 
-        rxFinal: "",
+        rxFinal: "", // "sent" or "forward"
 
         get emailSubject() {
             return this.emailSubjectTemplate.replace(
@@ -967,14 +970,15 @@ window.procs = function () {
                 rx = " Please send " + this.prep + ".";
             }
 
-            let addInst = this.instructions.map((inst) => inst.body).join(" ");
+            let exportCode = this.exportFormData();
 
             return (
                 this.procTS +
                 this.fuTS +
                 this.actionTS +
                 rx +
-                (this.instructions.length && !this.noInst ? " " + addInst : "")
+                " CODE: " +
+                exportCode
             );
         },
 
@@ -1036,5 +1040,95 @@ window.procs = function () {
         copyApptNotes() {
             navigator.clipboard.writeText(this.apptNotes);
         },
+
+        exportFormData() {
+            // Encode prep and sedation as index values
+            const prepIndex = this.preps.findIndex((p) => p.name === this.prep);
+            const sedationList = ["", "MAC", "twilight", "no sedation"];
+            const sedationIndex = sedationList.indexOf(this.selectedSedation);
+
+            const data = [
+                1, // version
+                this.procs.map((p) => (p.selected ? 1 : 0)).join(""), // procs
+                sedationIndex, // sedation index
+                prepIndex, // prep index
+                this.prepSent === "yes" ? 1 : 0, // prepSent
+                this.facilityTBD ? this.facilityIndexFinal : this.facilityIndex, // facilityIndex
+                this.facilities[1].quote || "", // quote
+                this.facilities[1].INN ? 1 : 0, // INN
+                this.noInst ? 1 : 0, // noInst
+                this.instructions.map((i) => i.body).join("~~"), // instructions
+                this.schedFu || "", // schedFu
+                this.physicianMain || "", // physicianMain
+                this.procApptInput || "", // procApptInput
+                this.fuApptInput || "", // fuApptInput
+            ];
+            // Remove trailing empty fields for compactness
+            while (data[data.length - 1] === "") data.pop();
+            return data.join("|");
+        },
+
+        importFormData(code) {
+            try {
+                const padded = code.trim().split("|");
+                const version = padded[0];
+                if (version !== "1") {
+                    console.warn("Unsupported export code version:", version);
+                    return;
+                }
+                // Pad to at least 14 fields for backward compatibility
+                while (padded.length < 14) padded.push("");
+
+                const [
+                    _,
+                    procsBinary,
+                    sedationIndex,
+                    prepIndex,
+                    prepSent,
+                    facilityIndex,
+                    quote,
+                    INN,
+                    noInst,
+                    instructionsRaw,
+                    schedFu,
+                    physicianMain,
+                    procApptInput,
+                    fuApptInput,
+                ] = padded;
+
+                // Decode sedation and prep from indexes
+                const sedationList = ["", "MAC", "twilight", "no sedation"];
+                const sedationVal = sedationList[+sedationIndex] || "";
+
+                this.procs.forEach(
+                    (p, i) => (p.selected = procsBinary[i] === "1"),
+                );
+                this.sedation = sedationVal;
+                this.prep = this.preps[+prepIndex]?.name || "";
+                this.prepSent = prepSent === "1" ? "yes" : "no";
+                this.facilityIndex = facilityIndex;
+                this.facilities[1].quote = quote;
+                this.facilities[1].INN = INN === "1";
+                this.noInst = noInst === "1";
+                this.instructions = instructionsRaw
+                    ? instructionsRaw.split("~~").map((body) => ({
+                          id: Date.now() + Math.random(),
+                          body,
+                      }))
+                    : [];
+                this.schedFu = schedFu;
+                this.physicianMain = physicianMain;
+                this.procApptInput = procApptInput;
+                this.fuApptInput = fuApptInput;
+
+                this.importCode = "";
+                this.formLoaded = true;
+            } catch (e) {
+                console.warn("Failed to load form code:", e);
+            }
+        },
+
+        importCode: "",
+        formLoaded: false,
     };
 };
