@@ -830,7 +830,10 @@ window.procs = function () {
                     .filter((item) => item !== "{mosclCovid}");
             }
 
-            if (this.prep === "") {
+            if (
+                this.prep === "" ||
+                (this.prep === "ez2go" && this.sendInstMethod === "pickup")
+            ) {
                 x = x
                     .filter((item, i) => x[i - 1] !== "{rxPrep}")
                     .filter((item) => item !== "{ez2goKit}")
