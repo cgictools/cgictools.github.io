@@ -1080,6 +1080,8 @@ window.procs = function () {
 
         importFormData(code) {
             try {
+                this.resetForm();
+
                 const padded = code.trim().split("|");
                 const version = padded[0];
                 if (version !== "1") {

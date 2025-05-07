@@ -23,7 +23,9 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
             class="pb-24 print:hidden"
             x-bind:class=" printModal ? 'h-screen overflow-hidden' : '' ">
             <PageHeading text="EGD/colo scheduling" />
-            <PrintModal />
+            <div x-show="printModal" x-cloak>
+                <PrintModal />
+            </div>
             <div class="-mt-2 pb-6">
                 <input
                     type="text"
@@ -35,6 +37,7 @@ import PaperclipSVG from '../components/svg/PaperclipSVG.astro';
                 <span
                     x-show="formLoaded"
                     x-transition
+                    x-cloak
                     class="pl-4 text-sm text-green-700">
                     ✓ Form loaded!
                 </span>
